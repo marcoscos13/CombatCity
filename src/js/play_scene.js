@@ -1,158 +1,132 @@
 'use strict';
 
-// var PlayScene = {
-//   create: function () {
-//     var logo = this.game.add.sprite(
-//       this.game.world.centerX, this.game.world.centerY, 'logo');
-//     logo.anchor.setTo(0.5, 0.5);
-//   }
-// };
+//'Clases'
 
-var game = new Phaser.Game(800, 700, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
+    //Clase Collider y sus métodos
+    var Collider = function (game, posX, posY) {
+        Phaser.Sprite.call(this, game, posX, posY, 'tanque');
+        this.anchor.setTo(0.5, 0.5);
+        //this.rotateSpeed = rotateSpeed;
+        this.smoothed = false;
+        var randomScale = 0.1 + Math.random();
+        this.scale.setTo(2, 2);
+        game.add.existing(this);
+    
+    };
+    
+    Collider.prototype = Object.create(Phaser.Sprite.prototype);
+    Collider.prototype.constructor = Collider;
+    
+    Collider.prototype.update = function() { //Lo llama el Update 'general'
+        //this.angle += this.rotateSpeed;
+    };
 
-function preload() {
-
-    game.load.image('phaser', '../images/tanque.png');
-    game.load.image('bullet', 'assets/misc/bullet0.png');
-    game.load.image('veggies', '../images/muro.png');
-
-}
-
-var sprite;
-var bullets;
-var bloque;
-var cursors;
-
-var contador = 0;
-
-var velocidad = 150;
-var bulletTime = 0;
-var bullet;
-
-function create() {
-
-
-// enable crisp rendering
-game.renderer.renderSession.roundPixels = true;  
-Phaser.Canvas.setImageRenderingCrisp(this.game.canvas); 
-
-    game.stage.backgroundColor = '#2d2d2d';
-
-    //  This will check Group vs. Group collision (bullets vs. veggies!)
-
-    bloque = game.add.group();
-    bloque.enableBody = true;
-    bloque.physicsBodyType = Phaser.Physics.ARCADE;
-
-     for (var i = 0; i < 13; i++){
-      for (var j = 0; j < 13; j++){
-        var c = bloque.create(j*48 + 96, 48 * i, 'veggies');
-        c.scale.setTo(3,3);
-        c.smoothed = false;
-        c.name = 'veg' + i;
-        c.body.immovable = true;
-      }
+    //Clase Block y sus métodos
+    var Block = function (game, posX, posY){
+        Collider.call(game, posX, posY);
     }
 
-    bullets = game.add.group();
-    bullets.enableBody = true;
-    bullets.physicsBodyType = Phaser.Physics.ARCADE;
+    Block.prototype = Object.create(Collider.prototype);
+    Block.prototype.constructor = Block;
 
-    for (var i = 0; i < 20; i++)
-    {
-        var b = bullets.create(0, 0, 'bullet');
-        b.name = 'bullet' + i;
-        b.exists = false;
-        b.visible = false;
-        b.checkWorldBounds = true;
-        b.events.onOutOfBounds.add(resetBullet, this);
+    //Clase Movable y sus métodos
+    var Movable = function (game, posX, posY, vel, dir){
+        Collider.call(game, posX, posY);
     }
 
-    sprite = game.add.sprite(400, 550, 'phaser');
-    sprite.scale.setTo(3,3);
-    sprite.smoothed = false;
-    sprite.anchor.x = 0.5;
-    sprite.anchor.y = 0.5;
-    game.physics.enable(sprite, Phaser.Physics.ARCADE);
+    Movable.prototype = Object.create(Collider.prototype);
+    Movable.prototype.constructor = Movable;
 
-    cursors = game.input.keyboard.createCursorKeys();
-    game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
-
-}
-
-function update() {
-
-    //  As we don't need to exchange any velocities or motion we can the 'overlap' check instead of 'collide'
-    game.physics.arcade.overlap(bullets, bloque, collisionHandler, null, this);
-
-    sprite.body.velocity.x = 0;
-    sprite.body.velocity.y = 0;
-
-    if (cursors.left.isDown)
-    {
-        sprite.body.velocity.x = -velocidad;
-        sprite.body.rotation = 270;
-    }
-    else if (cursors.right.isDown)
-    {
-        sprite.body.velocity.x = velocidad;
-        sprite.body.rotation = 90;
-    }
-    else if (cursors.down.isDown)
-    {
-        sprite.body.velocity.y = velocidad;
-        sprite.body.rotation = 180;
-    }
-    else if (cursors.up.isDown)
-    {
-        sprite.body.velocity.y = -velocidad;
-        sprite.body.rotation = 0;
+    //Clase Bullet y sus métodos
+    var Bullet = function (game, posX, posY, vel, dir){
+        Movable.call(game, posX, posY, vel, dir);
     }
 
-    if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-    {
-        fireBullet();
+    Bullet.prototype = Object.create(Movable.prototype);
+    Bullet.prototype.constructor = Bullet;
+
+    //Clase Shooter y sus métodos
+    var Shooter = function(game, posX, posY, vel, dir){
+        Movable.call(game, posX, posY, vel, dir);
     }
 
-}
+    Shooter.prototype = Object.create(Movable.prototype);
+    Shooter.prototype.constructor = Shooter;
 
-function fireBullet () {
+    //Clase Player y sus métodos
+    var Player = function(game, posX, posY, vel, dir){
+        Shooter.call(game, posX, posY, vel, dir);
+    }
 
-    if (game.time.now > bulletTime)
-    {
-        bullet = bullets.getFirstExists(false);
+    Player.prototype = Object.create(Shooter.prototype);
+    Player.prototype.constructor = Player;
 
-        if (bullet)
+    Player.prototype.update = function(){
+        game.physics.arcade.overlap(bullets, bloque, collisionHandler, null, this);
+        
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
+        
+        if (cursors.left.isDown)
         {
-            bullet.reset(sprite.x + 6, sprite.y - 8);
-            bullet.body.velocity.y = -300;
-            bulletTime = game.time.now + 150;
+            this.body.velocity.x = -this.velocidad;
+            this.body.rotation = 270;
+        }
+        else if (cursors.right.isDown)
+        {
+            this.body.velocity.x = this.velocidad;
+            this.body.rotation = 90;
+        }
+        else if (cursors.down.isDown)
+        {
+            this.body.velocity.y = this.velocidad;
+            this.body.rotation = 180;
+        }
+        else if (cursors.up.isDown)
+        {
+            this.body.velocity.y = -this.velocidad;
+            this.body.rotation = 0;
+        }
+        
+        if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+        {
+            this.fireBullet();
         }
     }
 
-}
+    Player.prototype.fireBullet = function(){
 
-//  Called if the bullet goes out of the screen
-function resetBullet (bullet) {
-
-    bullet.kill();
-
-}
-
-//  Called if the bullet hits one of the veg sprites
-function collisionHandler (bullet, veg) {
-
-    if (contador < 50){
-        contador++;
-        bullet.kill();
-        veg.kill();
+        if (game.time.now > bulletTime)
+        {
+            bullet = bullets.getFirstExists(false);
+    
+            if (bullet)
+            {
+                bullet.reset(sprite.x + 6, sprite.y - 8);
+                bullet.body.velocity.y = -300;
+                bulletTime = game.time.now + 150;
+            }
+        }
+        
     }
-    else{
-        bullet.kill();
-        veg.kill();
-        contador = 0;
+
+    //Clase Enemy y sus métodos
+    var Enemy = function(game, posX, posY, vel, dir){
+        Shooter.call(game, posX, posY, vel, dir);
     }
-}
 
+    Enemy.prototype = Object.create(Shooter.prototype);
+    Enemy.prototype.constructor = Enemy;
 
-module.exports = PlayScene;
+//Game Code
+    
+    var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create });
+    
+    function preload() {
+        game.load.image('tanque', '../images/tanque.png');
+    }
+    
+    function create() {
+        new Collider(game, 500, 500);
+    }
+    
