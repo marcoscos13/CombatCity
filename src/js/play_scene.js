@@ -2,6 +2,7 @@
 
 var player;
 var cursors;
+var bloque;
 
 var PlayScene = {
     create: function(){
@@ -28,15 +29,18 @@ var PlayScene = {
         playerWeapon.fireRate = 500; //FireRate 
         playerWeapon.fireLimit = 1;
         player = new Player(this.game, playerPos, playerScale, playerVel, playerDir, playerWeapon,  cursors, 'tank');
+        player.body.collideWorldBounds = true;
 
         //Creación de Bloques
         var BloquePos = new Par(400, 500);
-        var bloque = new Collider(this.game, BloquePos, playerScale, 'bullet');
+        bloque = new Collider(this.game, BloquePos, playerScale, 'bullet');
+        bloque.body.immovable = true;
+        bloque.body.collideWorldBounds = true;
 
     },
     
     update: function(){
-           
+        this.game.physics.arcade.collide(player, bloque);
     }
 };
 
@@ -57,6 +61,7 @@ function Par(x, y)
 ////Clase Collider y sus métodos
 var Collider = function (game, pos, scale, sprite) {
     Phaser.Sprite.call(this, game, pos._x, pos._y, sprite);
+    game.physics.enable(this, Phaser.Physics.ARCADE); //Activa las fisicas arcade para este objeto
     this.anchor.setTo(0.5, 0.5);
     this.enableBody = true;
     this.physicsBodyType = Phaser.Physics.ARCADE;
@@ -135,31 +140,38 @@ Player.prototype.constructor = Player;
 Player.prototype.update = function(){
     if (this._cursors.left.isDown)
     {
-        this.x -= this._velocity._x;
+        this.body.velocity.y = 0;
+        this.body.velocity.x = -300;
         this._direction._x = -1;
         this._direction._y = 0;
         this.angle = 180;
     }
     else if (this._cursors.right.isDown)
     {
-        this.x += this._velocity._x;
+        this.body.velocity.y = 0;
+        this.body.velocity.x = 300;
         this._direction._x = 1;
         this._direction._y = 0;
         this.angle = 0;
     }
     else if (this._cursors.down.isDown)
     {
-        this.y += this._velocity._y;
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 300;
         this._direction._x = 0;
         this._direction._y = 1;
         this.angle = 90;
     }
     else if (this._cursors.up.isDown)
     {
-        this.y -= this._velocity._y;
+        this.body.velocity.x = 0;
+        this.body.velocity.y = -300;
         this._direction._x = 0;
         this._direction._y = -1;
         this.angle = 270;
+    }else{
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
     }
 
     if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
