@@ -26,6 +26,7 @@ var PlayScene = {
         playerWeapon.bulletAngleOffset = 90; //Ángulo
         playerWeapon.bulletSpeed = 600; //Velocidad
         playerWeapon.fireRate = 500; //FireRate 
+        playerWeapon.fireLimit = 1;
         player = new Player(this.game, playerPos, playerScale, playerVel, playerDir, playerWeapon,  cursors, 'tank');
 
         //Creación de Bloques
@@ -98,9 +99,14 @@ Bullet.prototype.constructor = Bullet;
 ////Clase Shooter y sus métodos
 var Shooter = function(game, pos, scale, vel, dir, weapon, sprite){
     Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
+    var self = this;
     this._weapon = weapon;
     this._weapon.trackSprite(this, 0, 0);
     this._weapon.trackRotation = true;
+    this._weapon.onKill = new Phaser.Signal();
+    this._weapon.onKill.add(function() {
+        self._weapon.resetShots();
+    });
 }
 
 Shooter.prototype = Object.create(Movable.prototype);
