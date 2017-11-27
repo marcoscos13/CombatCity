@@ -34,6 +34,12 @@ function Par(x, y)
 /////CLASES/////
 ////////////////
 
+////Clase Block
+
+var Block = function(){
+    
+}
+
 ////Clase Collider y sus métodos
 var Collider = function (game, pos, scale, sprite) {
     Phaser.Sprite.call(this, game, pos._x, pos._y, sprite);
