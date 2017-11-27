@@ -99,14 +99,14 @@ Bullet.prototype.constructor = Bullet;
 var Shooter = function(game, pos, scale, vel, dir, weapon, sprite){
     Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
     this._weapon = weapon;
-    //this._weapon.trackSprite(this, 0, 0);
+    this._weapon.trackSprite(this, 0, 0);
 }
 
 Shooter.prototype = Object.create(Movable.prototype);
 Shooter.prototype.constructor = Shooter;
 Shooter.prototype.fire_bullet = function()
 { //Función para disparar
-    //this._weapon.fire();
+    this._weapon.fire();
 }
 
 Shooter.prototype.set_fireRate = function(newRate){
