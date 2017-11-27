@@ -29,10 +29,11 @@ var PlayScene = {
         player = new Player(this.game, playerPos, playerScale, playerVel, playerDir, playerWeapon,  cursors, 'tank');
 
         //Creación de Bloques
-        var BloquePos = new Par(400, 500);
+        var BloquePos = new Par(400, 0);
         var bloque = new Collider(this.game, BloquePos, playerScale, 'bullet');
-        var BloquePos2 = new Par(448, 500);
-        var bloque2 = new Collider(this.game, BloquePos2, playerScale, 'bullet');
+        
+        bloque.body.gravity.y = 300;
+
 
     },
     
@@ -55,16 +56,16 @@ function Par(x, y)
 /////CLASES/////
 ////////////////
 
-////Clase Block
-
 ////Clase Collider y sus métodos
 var Collider = function (game, pos, scale, sprite) {
     Phaser.Sprite.call(this, game, pos._x, pos._y, sprite);
+    game.physics.enable(this, Phaser.Physics.ARCADE);
     this.anchor.setTo(0.5, 0.5);
     this.enableBody = true;
     this.physicsBodyType = Phaser.Physics.ARCADE;
     this.smoothed = false;
     this.scale.setTo(scale._x, scale._y);
+    this.body.gravity.y = 300;
     game.add.existing(this);
 };
 
@@ -136,28 +137,28 @@ Player.prototype.update = function(){
         this.x -= this._velocity._x;
         this._direction._x = -1;
         this._direction._y = 0;
-        this.angle = 270;
+        this.angle = 180;
     }
     else if (this._cursors.right.isDown)
     {
         this.x += this._velocity._x;
         this._direction._x = 1;
         this._direction._y = 0;
-        this.angle = 90;
+        this.angle = 0;
     }
     else if (this._cursors.down.isDown)
     {
         this.y += this._velocity._y;
         this._direction._x = 0;
         this._direction._y = 1;
-        this.angle = 180;
+        this.angle = 90;
     }
     else if (this._cursors.up.isDown)
     {
         this.y -= this._velocity._y;
         this._direction._x = 0;
         this._direction._y = -1;
-        this.angle = 0;
+        this.angle = 270;
     }
 
     if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
