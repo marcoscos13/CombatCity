@@ -1,7 +1,7 @@
 'use strict';
 
 var PlayScene = require('./play_scene.js');
-
+var TestScene = require('./test_scene.js');
 
 var BootScene = {
   preload: function () {
@@ -38,7 +38,8 @@ window.onload = function () {
 
   game.state.add('boot', BootScene);
   game.state.add('preloader', PreloaderScene);
-  game.state.add('play', PlayScene);
+  game.state.add('play', PlayScene); //Escena de juego
+  //game.state.add('play', TestScene); //Escena de testing
 
   game.state.start('boot');
 };
