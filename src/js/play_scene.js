@@ -132,28 +132,28 @@ Player.prototype.update = function(){
         this.x -= this._velocity._x;
         this._direction._x = -1;
         this._direction._y = 0;
-        this.angle = 270;
+        this.angle = 180;
     }
     else if (this._cursors.right.isDown)
     {
         this.x += this._velocity._x;
         this._direction._x = 1;
         this._direction._y = 0;
-        this.angle = 90;
+        this.angle = 0;
     }
     else if (this._cursors.down.isDown)
     {
         this.y += this._velocity._y;
         this._direction._x = 0;
         this._direction._y = 1;
-        this.angle = 180;
+        this.angle = 90;
     }
     else if (this._cursors.up.isDown)
     {
         this.y -= this._velocity._y;
         this._direction._x = 0;
         this._direction._y = -1;
-        this.angle = 0;
+        this.angle = 270;
     }
 
     if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
