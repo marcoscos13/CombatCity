@@ -26,7 +26,7 @@ var PlayScene = {
         playerWeapon.bulletAngleOffset = 90; //Ángulo
         playerWeapon.bulletSpeed = 600; //Velocidad
         playerWeapon.fireRate = 500; //FireRate 
-        player = new Player(this.game, playerPos, playerScale, playerVel, playerDir, 150, playerWeapon,  cursors, 'tank');
+        player = new Player(this.game, playerPos, playerScale, playerVel, playerDir, playerWeapon,  cursors, 'tank');
     },
     
     update: function(){
@@ -99,6 +99,7 @@ Bullet.prototype.constructor = Bullet;
 var Shooter = function(game, pos, scale, vel, dir, weapon, sprite){
     Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
     this._weapon = weapon;
+    //this._weapon.trackSprite(this, 0, 0);
 }
 
 Shooter.prototype = Object.create(Movable.prototype);
@@ -113,8 +114,8 @@ Shooter.prototype.set_fireRate = function(newRate){
 }
 
 ////Clase Player y sus métodos
-var Player = function(game, pos, scale, vel, dir, bulletTime, weapon, cursors, sprite){
-    Shooter.apply(this, [game, pos, scale, vel, dir, bulletTime, weapon, sprite]);
+var Player = function(game, pos, scale, vel, dir, weapon, cursors, sprite){
+    Shooter.apply(this, [game, pos, scale, vel, dir, weapon, sprite]);
     this._cursors = cursors;
     this._direction._x = 0;
     this._direction._y = -1;
