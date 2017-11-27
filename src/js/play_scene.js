@@ -100,6 +100,7 @@ var Shooter = function(game, pos, scale, vel, dir, weapon, sprite){
     Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
     this._weapon = weapon;
     this._weapon.trackSprite(this, 0, 0);
+    this._weapon.trackRotation = true;
 }
 
 Shooter.prototype = Object.create(Movable.prototype);
