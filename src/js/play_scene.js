@@ -9,11 +9,24 @@ var PlayScene = {
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.game.stage.backgroundColor = '#2d2d2d';
         cursors = this.game.input.keyboard.createCursorKeys();
+
+        //Creación del player
         var playerPos = new Par(500, 500);
         var playerScale = new Par(3, 3);
         var playerVel = new Par(5, 5);
         var playerDir = new Par (0, 0);
-        player = new Player(this.game, playerPos, playerScale, playerVel, playerDir, 150, cursors, 'tank');
+            //Balas y arma del jugador
+        var playerWeapon = new Movable(this.game, playerPos, playerScale, playerVel, 'bullet');
+        playerWeapon = this.game.add.weapon(30, 'bullet');
+        playerWeapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+        playerWeapon.bullets.forEach((b) => {
+            b.scale.setTo(1, 1);
+            b.body.updateBounds();
+        }, this);
+        playerWeapon.bulletAngleOffset = 90; //Ángulo
+        playerWeapon.bulletSpeed = 600; //Velocidad
+        playerWeapon.fireRate = 500; //FireRate 
+        player = new Player(this.game, playerPos, playerScale, playerVel, playerDir, 150, playerWeapon,  cursors, 'tank');
     },
     
     update: function(){
@@ -77,36 +90,25 @@ Bullet.prototype = Object.create(Movable.prototype);
 Bullet.prototype.constructor = Bullet;
 
 ////Clase Shooter y sus métodos
-var Shooter = function(game, pos, scale, vel, dir, bulletTime, sprite){
+var Shooter = function(game, pos, scale, vel, dir, weapon, sprite){
     Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
-    this._bulletTime = bulletTime;
+    this._weapon = weapon;
 }
 
 Shooter.prototype = Object.create(Movable.prototype);
 Shooter.prototype.constructor = Shooter;
 Shooter.prototype.fire_bullet = function()
 { //Función para disparar
-    if (getCurrentTime() > this._bulletTime)
-    {
-        var bulletPos = new Par(this.x + 6, this.y - 8);
-        var bulletScale = new Par(1, 1);
-        var bulletVel = new Par(10, 10);
-        //bullet = new Bullet(game, bulletPos, bulletScale, bulletVel, this._direction, 'bullet');
-        this._bulletTime = getCurrentTime() + 150;
-    }
-
-    function getCurrentTime(){
-        var currentdate = new Date();
-        return currentdate.getMilliseconds();
-    }
+    //this._weapon.fire();
 }
-Shooter.prototype.set_bulletTime = function(newTime){
-    this._bulletTime = newTime;
+
+Shooter.prototype.set_fireRate = function(newRate){
+    this._weapon.fireRate = newRate;
 }
 
 ////Clase Player y sus métodos
-var Player = function(game, pos, scale, vel, dir, bulletTime, cursors, sprite){
-    Shooter.apply(this, [game, pos, scale, vel, dir, bulletTime, sprite]);
+var Player = function(game, pos, scale, vel, dir, bulletTime, weapon, cursors, sprite){
+    Shooter.apply(this, [game, pos, scale, vel, dir, bulletTime, weapon, sprite]);
     this._cursors = cursors;
     this._direction._x = 0;
     this._direction._y = -1;
