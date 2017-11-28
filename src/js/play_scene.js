@@ -64,7 +64,7 @@ var Collider = function (game, pos, scale, sprite) {
     game.physics.enable(this, Phaser.Physics.ARCADE); //Activa las fisicas arcade para este objeto
     this.anchor.setTo(0.5, 0.5);
     this.enableBody = true;
-    this.physicsBodyType = Phaser.Physics.ARCADE;
+    //this.physicsBodyType = Phaser.Physics.ARCADE;
     this.smoothed = false;
     this.scale.setTo(scale._x, scale._y);
     game.add.existing(this);
