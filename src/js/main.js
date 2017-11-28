@@ -23,8 +23,8 @@ var PreloaderScene = {
     this.load.setPreloadSprite(this.loadingBar);
 
     // TODO: load here the assets for the game
-    this.game.load.crossOrigin = '';
-    this.game.load.baseURL = 'https://marcoscos13.github.io/CombatCity/src/';
+    //this.game.load.crossOrigin = '';
+    //this.game.load.baseURL = 'https://marcoscos13.github.io/CombatCity/src/';
     this.game.load.image('logo', 'images/phaser.png');
     this.game.load.image('tank', 'images/tanque.png');
     this.game.load.image('bullet', 'images/muro.png');
