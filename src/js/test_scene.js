@@ -53,8 +53,8 @@ var PlayScene = {
         bloquesGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
         var BloqueTam = new Par(48, 48);
-        for (var j = 0; j < 16; j++){
-            for (var k = 0; k < 8; k++){
+        for (var j = 0; j < 13; j++){
+            for (var k = 0; k < 13; k++){
                 var BloquePos = new Par(48 * j + 24, 48 * k + 24);
                 var b = new Collider(this.game, BloquePos, playerScale, 'bullet');
                 b.body.immovable = true;
