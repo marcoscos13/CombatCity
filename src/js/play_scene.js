@@ -121,8 +121,8 @@ Shooter.prototype.fire_bullet = function()
     this._weapon.fire();
 }
 
-Shooter.prototype.set_fireRate = function(newRate){
-    this._weapon.fireRate = newRate;
+Shooter.prototype.set_fireLimit = function(newFireLimit){
+    this._weapon.fireLimit = newFireLimit;
 }
 
 ////Clase Player y sus métodos
