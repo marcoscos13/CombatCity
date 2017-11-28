@@ -1,23 +1,20 @@
 'use strict';
 
-//'Struct' para pares
-function Par(x, y)
-{
-    this._x=x;
-    this._y=y;
-}
+////////////////
+/////CLASES/////
+////////////////
 
 ////Clase Collider y sus métodos
 var Collider = function (game, pos, scale, sprite) {
     Phaser.Sprite.call(this, game, pos._x, pos._y, sprite);
     game.physics.enable(this, Phaser.Physics.ARCADE); //Activa las fisicas arcade para este objeto
-    this.anchor.setTo(0.5, 0.5);
     this.enableBody = true;
-    //this.physicsBodyType = Phaser.Physics.ARCADE;
+    this.physicsBodyType = Phaser.Physics.ARCADE;
     this.smoothed = false;
     this.scale.setTo(scale._x, scale._y);
+    this.anchor.setTo(0.5, 0.5);
     game.add.existing(this);
-}
+};
 
 Collider.prototype = Object.create(Phaser.Sprite.prototype);
 Collider.prototype.constructor = Collider;
@@ -51,42 +48,37 @@ Bullet.prototype = Object.create(Movable.prototype);
 Bullet.prototype.constructor = Bullet;
 
 ////Clase Shooter y sus métodos
-var Shooter = function(game, pos, scale, vel, dir, weapon, sprite){
+var Shooter = function(game, pos, scale, vel, dir, sprite){
     Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
-    var self = this;
-    this._weapon = weapon;
-    this._weapon.trackSprite(this, 0, 0);
-    this._weapon.trackRotation = true;
-    this._weapon.onKill = new Phaser.Signal();
-    this._weapon.onKill.add(function() {
-        self._weapon.resetShots();
-    });
 }
 
 Shooter.prototype = Object.create(Movable.prototype);
 Shooter.prototype.constructor = Shooter;
 Shooter.prototype.fire_bullet = function()
 { //Función para disparar
-    this._weapon.fire();
+
 }
 
-Shooter.prototype.set_fireLimit = function(newFireLimit){
-    this._weapon.fireLimit = newFireLimit;
+Shooter.prototype.set_fireRate = function(newRate){
+
 }
 
 ////Clase Player y sus métodos
-var Player = function(game, pos, scale, vel, dir, weapon, cursors, sprite){
-    Shooter.apply(this, [game, pos, scale, vel, dir, weapon, sprite]);
+var Player = function(game, pos, scale, vel, dir, cursors, sprite){
+    Shooter.apply(this, [game, pos, scale, vel, dir, sprite]);
+    //Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
     this._cursors = cursors;
     this._direction._x = 0;
     this._direction._y = -1;
     this.angle = 0;
 }
 
-Player.prototype = Object.create(Shooter.prototype);
+//Player.prototype = Object.create(Shooter.prototype);
+Player.prototype = Object.create(Movable.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
+
     if (this._cursors.left.isDown)
     {
         this.body.velocity.y = 0;
@@ -121,10 +113,5 @@ Player.prototype.update = function(){
     }else{
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
-    }
-
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-    {
-        this.fire_bullet();
     }
 }
