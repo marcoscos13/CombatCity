@@ -28,6 +28,7 @@ var PreloaderScene = {
     this.game.load.image('logo', 'images/phaser.png');
     this.game.load.image('tank', 'images/tanque.png');
     this.game.load.image('bullet', 'images/muro.png');
+    this.game.load.image('background', 'images/Background.png');
   },
 
   create: function () {
@@ -37,7 +38,7 @@ var PreloaderScene = {
 
 
 window.onload = function () {
-  var game = new Phaser.Game(1000, 800, Phaser.AUTO, 'game');
+  var game = new Phaser.Game(1000, 700, Phaser.AUTO, 'game');
 
   game.state.add('boot', BootScene);
   game.state.add('preloader', PreloaderScene);

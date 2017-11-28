@@ -8,8 +8,15 @@ var bulletsGroup;
 var bulletTime = 0;
 var bullet;
 
+var blockSize = 48;
+
 var PlayScene = {
     create: function(){
+        //Fondo negro
+        var bg = this.game.add.image((this.game.width - blockSize*13)/2, (this.game.height - blockSize*13)/2,'background');
+        bg.height = blockSize*13;
+        bg.width = blockSize*13;
+
         //Físicas
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.game.stage.backgroundColor = '#2d2d2d';
@@ -17,13 +24,12 @@ var PlayScene = {
         this.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 
         //Creación del player
-        var playerPos = new Par(400, 700);
+        var playerPos = new Par(500, 620);
         var playerScale = new Par(3, 3);
         var playerVel = new Par(5, 5);
         var playerDir = new Par (0, 0);
 
         //Balas y arma del jugador
-
         //Se inicializa el grupo de las balas
         bulletsGroup = this.game.add.group();
         bulletsGroup.enableBody = true;
@@ -52,12 +58,13 @@ var PlayScene = {
         bloquesGroup.enableBody = true;
         bloquesGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
-        var BloqueTam = new Par(48, 48);
+        //var BloqueTam = new Par(blockSize, blockSize);
         for (var j = 0; j < 13; j++){
-            for (var k = 0; k < 13; k++){
-                var BloquePos = new Par(48 * j + 24, 48 * k + 24);
+            for (var k = 0; k < 11; k++){
+                var BloquePos = getCell(this.game,j,k);
                 var b = new Collider(this.game, BloquePos, playerScale, 'bullet');
                 b.body.immovable = true;
+                b.anchor.setTo(0,0);
                 b.body.collideWorldBounds = true;
                 bloquesGroup.add(b);
             }
@@ -76,7 +83,7 @@ var PlayScene = {
     },
 
     render: function(){
-        this.game.debug.text( "Testing Scene", 50, 50 );
+        this.game.debug.text( "PlayScene", 50, 50 );
         this.game.debug.text( "Direction X: " + player._direction._x, 50, 80 );
         this.game.debug.text( "Direction Y: " + player._direction._y, 50, 110 );
     }
@@ -89,11 +96,26 @@ function collisionHandler (bulletsgroup, bloque) {
         bloquesGroup.kill();
 }
 
+
+
 //'Struct' para pares
 function Par(x, y)
 {
     this._x=x;
     this._y=y;
+}
+
+function getCell(game, x, y){
+    var temp_x = game.width/2 - (blockSize * 13)/2;
+    var temp_y = game.height/2 - (blockSize * 13)/2;
+    for (var i = 0; i < x; i++){
+        temp_x += blockSize;
+    }
+    for (var j = 0; j < y; j++){
+        temp_y += blockSize;
+    }
+    var pos = new Par(temp_x, temp_y);
+    return pos;
 }
 
 ////////////////
