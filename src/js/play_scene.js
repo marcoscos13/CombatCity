@@ -75,7 +75,7 @@ var PlayScene = {
         //Creación del player
         var playerPos = new Par(500, 620);
         var playerScale = new Par(3, 3);
-        var playerVel = new Par(5, 5);
+        var playerVel = new Par(150, 150);
         var playerDir = new Par (0, 0);
 
         //Balas y arma del jugador
