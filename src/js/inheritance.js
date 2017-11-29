@@ -11,6 +11,7 @@ var Collider = function (game, pos, scale, sprite) {
     this.enableBody = true;
     this.physicsBodyType = Phaser.Physics.ARCADE;
     this.smoothed = false;
+    this._scale = scale;
     this.scale.setTo(scale._x, scale._y);
     this.anchor.setTo(0.5, 0.5);
     game.add.existing(this);
@@ -67,6 +68,7 @@ Shooter.prototype.set_fireRate = function(newRate){
 var Player = function(game, pos, scale, vel, dir, cursors, sprite){
     Shooter.apply(this, [game, pos, scale, vel, dir, sprite]);
     //Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
+    this.scale.setTo(this._scale._x * 0.875, this._scale._y * 0.875);
     this._cursors = cursors;
     this._direction._x = 0;
     this._direction._y = -1;
@@ -78,11 +80,11 @@ Player.prototype = Object.create(Movable.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
-
+    
     if (this._cursors.left.isDown)
     {
         this.body.velocity.y = 0;
-        this.body.velocity.x = -300;
+        this.body.velocity.x = -this._velocity._x;
         this._direction._x = -1;
         this._direction._y = 0;
         this.angle = 180;
@@ -90,7 +92,7 @@ Player.prototype.update = function(){
     else if (this._cursors.right.isDown)
     {
         this.body.velocity.y = 0;
-        this.body.velocity.x = 300;
+        this.body.velocity.x = this._velocity._x;
         this._direction._x = 1;
         this._direction._y = 0;
         this.angle = 0;
@@ -98,7 +100,7 @@ Player.prototype.update = function(){
     else if (this._cursors.down.isDown)
     {
         this.body.velocity.x = 0;
-        this.body.velocity.y = 300;
+        this.body.velocity.y = this._velocity._y;
         this._direction._x = 0;
         this._direction._y = 1;
         this.angle = 90;
@@ -106,7 +108,7 @@ Player.prototype.update = function(){
     else if (this._cursors.up.isDown)
     {
         this.body.velocity.x = 0;
-        this.body.velocity.y = -300;
+        this.body.velocity.y = -this._velocity._y;
         this._direction._x = 0;
         this._direction._y = -1;
         this.angle = 270;
