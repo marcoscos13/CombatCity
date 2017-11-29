@@ -4,6 +4,7 @@ var player;
 var cursors;
 var bloquesGroup;
 var bulletsGroup;
+var wallsGroup;
 
 var bulletTime = 0;
 var bullet;
@@ -16,6 +17,54 @@ var PlayScene = {
         var bg = this.game.add.image((this.game.width - blockSize*13)/2, (this.game.height - blockSize*13)/2,'background');
         bg.height = blockSize*13;
         bg.width = blockSize*13;
+
+        wallsGroup = this.game.add.group();
+        var posZero = new Par(0,0);
+        var wallScale = new Par(3, 3);
+
+        //Muro Invisible Izquierda
+        var wallL = new Collider(this.game, posZero, wallScale, 'white');
+        wallL.anchor.setTo(0,0);
+        wallL.body.immovable = true;
+        wallL.height = 13*blockSize;
+        wallL.y = (this.game.height - (13*blockSize))/2;
+        wallL.body.collideWorldBounds = true;
+        wallL.width = (this.game.width - (13*blockSize))/2;
+        wallL.visible = false;
+        wallsGroup.add(wallL);
+
+        //Muro Invisible Derecha
+        var wallR = new Collider(this.game, posZero, wallScale, 'white');
+        wallR.anchor.setTo(0,0);
+        wallR.body.immovable = true;
+        wallR.height = 13*blockSize;
+        wallR.y = (this.game.height - (13*blockSize))/2;
+        wallR.x = this.game.width/2 + 13*blockSize;
+        wallR.body.collideWorldBounds = true;
+        wallR.width = (this.game.width - (13*blockSize))/2;
+        wallR.visible = false;
+        wallsGroup.add(wallR);
+
+        //Muro Invisible Arriba
+        var wallU = new Collider(this.game, posZero, wallScale, 'white');
+        wallU.anchor.setTo(0,0);
+        wallU.body.immovable = true;
+        wallU.width = this.game.width;
+        wallU.height = (this.game.height - 13*blockSize)/2
+        wallU.body.collideWorldBounds = true;
+        wallU.visible = false;
+        wallsGroup.add(wallU);
+
+        //Muro Invisible Arriba
+        var wallD = new Collider(this.game, posZero, wallScale, 'white');
+        wallD.anchor.setTo(0,0);
+        wallD.body.immovable = true;
+        wallD.width = this.game.width;
+        wallD.height = (this.game.height - 13*blockSize)/2
+        wallD.y = this.game.height/2 + 13*blockSize;
+        wallD.body.collideWorldBounds = true;
+        wallD.visible = false;
+        wallsGroup.add(wallD);
 
         //Físicas
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -73,7 +122,9 @@ var PlayScene = {
     
     update: function(){
         this.game.physics.arcade.collide(player, bloquesGroup);
+        this.game.physics.arcade.collide(player, wallsGroup);
         this.game.physics.arcade.overlap(bulletsGroup, bloquesGroup, collisionHandler, null, this);
+        this.game.physics.arcade.overlap(bulletsGroup, wallsGroup, resetBullet, null, this);
 
         //Provisional, esto hay que meterlo en el update de Player ---------------------------------------------------------------------
         if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))

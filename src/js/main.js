@@ -28,7 +28,8 @@ var PreloaderScene = {
     this.game.load.image('logo', 'images/phaser.png');
     this.game.load.image('tank', 'images/tanque.png');
     this.game.load.image('bullet', 'images/muro.png');
-    this.game.load.image('background', 'images/Background.png');
+    this.game.load.image('background', 'images/background.png');
+    this.game.load.image('white', 'images/white.png');
   },
 
   create: function () {
