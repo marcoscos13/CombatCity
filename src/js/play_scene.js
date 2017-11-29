@@ -6,7 +6,8 @@ var bloquesGroup;
 var bulletsGroup;
 var wallsGroup;
 
-var bulletTime = 0;
+var bulletVel;
+var bulletTime;
 var bullet;
 
 var blockSize = 48;
@@ -79,6 +80,8 @@ var PlayScene = {
         var playerDir = new Par (0, 0);
 
         //Balas y arma del jugador
+        bulletVel = 300;
+        bulletTime = 600;
         //Se inicializa el grupo de las balas
         bulletsGroup = this.game.add.group();
         bulletsGroup.enableBody = true;
@@ -97,7 +100,7 @@ var PlayScene = {
         }
 
         //Player
-        player = new Player(this.game, playerPos, playerScale, playerVel, playerDir, cursors, 'tank');
+        player = new Player(this.game, playerPos, playerScale, playerVel, playerDir, bulletsGroup, bulletVel, bulletTime,  cursors, 'tank');
         player.body.collideWorldBounds = true;
         player._direction._x = 1;
         player._direction._y = 0;
@@ -126,11 +129,11 @@ var PlayScene = {
         this.game.physics.arcade.overlap(bulletsGroup, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(bulletsGroup, wallsGroup, resetBullet, null, this);
 
-        //Provisional, esto hay que meterlo en el update de Player ---------------------------------------------------------------------
-        if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-        {
-            fireBullet(this);
-        }
+        // //Provisional, esto hay que meterlo en el update de Player ---------------------------------------------------------------------
+        // if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+        // {
+        //     fireBullet(this);
+        // }
     },
 
     render: function(){
@@ -164,21 +167,21 @@ function getCell(game, x, y){
     return pos;
 }
 
- //Provisional, este método tiene que ir dentro de Player ---------------------------------------------------------------------
- function fireBullet (game) {
-    if (game.time.now > bulletTime)
-    {
-        bullet = bulletsGroup.getFirstExists(false);
+//  //Provisional, este método tiene que ir dentro de Player ---------------------------------------------------------------------
+//  function fireBullet (game) {
+//     if (game.time.now > bulletTime)
+//     {
+//         bullet = bulletsGroup.getFirstExists(false);
 
-        if (bullet)
-        {
-            bullet.reset(player.x, player.y);
-            bullet.body.velocity.y = 300 * player._direction._y;
-            bullet.body.velocity.x = 300 * player._direction._x;
-            bulletTime = game.time.now + 150;
-        }
-    }
-}
+//         if (bullet)
+//         {
+//             bullet.reset(player.x, player.y);
+//             bullet.body.velocity.y = 300 * player._direction._y;
+//             bullet.body.velocity.x = 300 * player._direction._x;
+//             bulletTime = game.time.now + 150;
+//         }
+//     }
+// }
 
 // Called if the bullet goes out of the screen
 function resetBullet (bullet) {

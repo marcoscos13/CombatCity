@@ -49,24 +49,37 @@ Bullet.prototype = Object.create(Movable.prototype);
 Bullet.prototype.constructor = Bullet;
 
 ////Clase Shooter y sus métodos
-var Shooter = function(game, pos, scale, vel, dir, sprite){
+var Shooter = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, sprite){
     Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
+    this._bulletsGroup = bulletsGroup;
+    this._bulletVel = bulletVel;
+    this._bulletTime = bulletTime;
+    this._bulletSince = 0;
+    this._game = game;
 }
 
 Shooter.prototype = Object.create(Movable.prototype);
 Shooter.prototype.constructor = Shooter;
 Shooter.prototype.fire_bullet = function()
 { //Función para disparar
+    if (this._game.time.now > this._bulletSince)
+    {
+        var bullet = this._bulletsGroup.getFirstExists(false);
 
-}
-
-Shooter.prototype.set_fireRate = function(newRate){
-
+        if (bullet)
+        {
+            bullet.reset(this.x, this.y);
+            bullet.body.velocity.y = this._bulletVel * this._direction._y;
+            bullet.body.velocity.x = this._bulletVel * this._direction._x;
+            this._bulletSince = this._game.time.now + this._bulletTime;
+            console.debug(this._bulletSince);
+        }
+    }
 }
 
 ////Clase Player y sus métodos
-var Player = function(game, pos, scale, vel, dir, cursors, sprite){
-    Shooter.apply(this, [game, pos, scale, vel, dir, sprite]);
+var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, cursors, sprite){
+    Shooter.apply(this, [game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, sprite]);
     //Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
     this._cursors = cursors;
     this._direction._x = 0;
@@ -75,7 +88,7 @@ var Player = function(game, pos, scale, vel, dir, cursors, sprite){
 }
 
 //Player.prototype = Object.create(Shooter.prototype);
-Player.prototype = Object.create(Movable.prototype);
+Player.prototype = Object.create(Shooter.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
@@ -126,5 +139,10 @@ Player.prototype.update = function(){
     }else{
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
+    }
+
+    if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+    {
+        this.fire_bullet();
     }
 }
