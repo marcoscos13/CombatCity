@@ -73,9 +73,9 @@ var PlayScene = {
         this.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 
         //Creación del player
-        var playerPos = new Par(500, 620);
+        var playerPos = new Par(300, 560);
         var playerScale = new Par(3, 3);
-        var playerVel = new Par(150, 150);
+        var playerVel = new Par(140, 140);
         var playerDir = new Par (0, 0);
 
         //Balas y arma del jugador
@@ -134,9 +134,11 @@ var PlayScene = {
     },
 
     render: function(){
-        this.game.debug.text( "PlayScene", 50, 50 );
+        this.game.debug.text( "PlayScene", 50, 60 );
         this.game.debug.text( "Direction X: " + player._direction._x, 50, 80 );
-        this.game.debug.text( "Direction Y: " + player._direction._y, 50, 110 );
+        this.game.debug.text( "Direction Y: " + player._direction._y, 50, 100 );
+        this.game.debug.text( "Player X: " + player.x, 50, 120 );
+        this.game.debug.text( "Player Y: " + player.y, 50, 140 );
     }
 };
 

@@ -68,7 +68,6 @@ Shooter.prototype.set_fireRate = function(newRate){
 var Player = function(game, pos, scale, vel, dir, cursors, sprite){
     Shooter.apply(this, [game, pos, scale, vel, dir, sprite]);
     //Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
-    this.scale.setTo(this._scale._x * 0.875, this._scale._y * 0.875);
     this._cursors = cursors;
     this._direction._x = 0;
     this._direction._y = -1;
@@ -83,6 +82,9 @@ Player.prototype.update = function(){
     
     if (this._cursors.left.isDown)
     {
+        if (this._direction._x !== 0){
+            this.y = 24 * Math.round(this.y/24);
+        }
         this.body.velocity.y = 0;
         this.body.velocity.x = -this._velocity._x;
         this._direction._x = -1;
@@ -91,6 +93,9 @@ Player.prototype.update = function(){
     }
     else if (this._cursors.right.isDown)
     {
+        if (this._direction._x !== 0){
+            this.y = 24 * Math.round(this.y/24);
+        }
         this.body.velocity.y = 0;
         this.body.velocity.x = this._velocity._x;
         this._direction._x = 1;
@@ -99,6 +104,9 @@ Player.prototype.update = function(){
     }
     else if (this._cursors.down.isDown)
     {
+        if (this._direction._y !== 0){
+            this.x = 24 * Math.round(this.x/24);
+        }
         this.body.velocity.x = 0;
         this.body.velocity.y = this._velocity._y;
         this._direction._x = 0;
@@ -107,6 +115,9 @@ Player.prototype.update = function(){
     }
     else if (this._cursors.up.isDown)
     {
+        if (this._direction._y !== 0){
+            this.x = 24 * Math.round(this.x/24);
+        }
         this.body.velocity.x = 0;
         this.body.velocity.y = -this._velocity._y;
         this._direction._x = 0;
