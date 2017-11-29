@@ -30,7 +30,7 @@ var PlayScene = {
         wallL.y = (this.game.height - (13*blockSize))/2;
         wallL.body.collideWorldBounds = true;
         wallL.width = (this.game.width - (13*blockSize))/2;
-        wallL.visible = false;
+        //wallL.visible = false;
         wallsGroup.add(wallL);
 
         //Muro Invisible Derecha
@@ -42,7 +42,7 @@ var PlayScene = {
         wallR.x = this.game.width/2 + 13*blockSize;
         wallR.body.collideWorldBounds = true;
         wallR.width = (this.game.width - (13*blockSize))/2;
-        wallR.visible = false;
+        //wallR.visible = false;
         wallsGroup.add(wallR);
 
         //Muro Invisible Arriba
@@ -52,7 +52,7 @@ var PlayScene = {
         wallU.width = this.game.width;
         wallU.height = (this.game.height - 13*blockSize)/2
         wallU.body.collideWorldBounds = true;
-        wallU.visible = false;
+        //wallU.visible = false;
         wallsGroup.add(wallU);
 
         //Muro Invisible Arriba
@@ -63,7 +63,7 @@ var PlayScene = {
         wallD.height = (this.game.height - 13*blockSize)/2
         wallD.y = this.game.height/2 + 13*blockSize;
         wallD.body.collideWorldBounds = true;
-        wallD.visible = false;
+        //wallD.visible = false;
         wallsGroup.add(wallD);
 
         //Físicas
