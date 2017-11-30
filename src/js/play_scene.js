@@ -128,7 +128,6 @@ var PlayScene = {
         this.game.physics.arcade.collide(player, wallsGroup);
         this.game.physics.arcade.overlap(bulletsGroup, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(bulletsGroup, wallsGroup, resetBullet, null, this);
-
         // //Provisional, esto hay que meterlo en el update de Player ---------------------------------------------------------------------
         // if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
         // {

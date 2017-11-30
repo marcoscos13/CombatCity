@@ -72,7 +72,6 @@ Shooter.prototype.fire_bullet = function()
             bullet.body.velocity.y = this._bulletVel * this._direction._y;
             bullet.body.velocity.x = this._bulletVel * this._direction._x;
             this._bulletSince = this._game.time.now + this._bulletTime;
-            console.debug(this._bulletSince);
         }
     }
 }
