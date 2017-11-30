@@ -1,13 +1,13 @@
 'use strict';
 
 var PlayScene = require('./play_scene.js');
-var TestScene = require('./test_scene.js');
-var TestScene2 = require('./test_scene2.js');
+//var TestScene = require('./test_scene.js');
+//var TestScene2 = require('./test_scene2.js');
 
 var BootScene = {
   preload: function () {
     // load here assets required for the loading screen
-    this.game.load.image('preloader_bar', 'images/preloader_bar.png');
+    //this.game.load.image('preloader_bar', 'images/preloader_bar.png');
   },
 
   create: function () {
@@ -18,9 +18,9 @@ var BootScene = {
 
 var PreloaderScene = {
   preload: function () {
-    this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
-    this.loadingBar.anchor.setTo(0, 0.5);
-    this.load.setPreloadSprite(this.loadingBar);
+    //this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
+    //this.loadingBar.anchor.setTo(0, 0.5);
+    //this.load.setPreloadSprite(this.loadingBar);
 
     // TODO: load here the assets for the game
     //this.game.load.crossOrigin = '';
