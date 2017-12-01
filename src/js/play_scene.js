@@ -31,7 +31,7 @@ var PlayScene = {
         wallL.y = (this.game.height - (13*blockSize))/2;
         wallL.body.collideWorldBounds = true;
         wallL.width = (this.game.width - (13*blockSize))/2;
-        //wallL.visible = false;
+        wallL.visible = false;
         wallsGroup.add(wallL);
 
         //Muro Invisible Derecha
@@ -43,7 +43,7 @@ var PlayScene = {
         wallR.x = this.game.width/2 + 13*blockSize;
         wallR.body.collideWorldBounds = true;
         wallR.width = (this.game.width - (13*blockSize))/2;
-        //wallR.visible = false;
+        wallR.visible = false;
         wallsGroup.add(wallR);
 
         //Muro Invisible Arriba
@@ -53,7 +53,7 @@ var PlayScene = {
         wallU.width = this.game.width;
         wallU.height = (this.game.height - 13*blockSize)/2
         wallU.body.collideWorldBounds = true;
-        //wallU.visible = false;
+        wallU.visible = false;
         wallsGroup.add(wallU);
 
         //Muro Invisible Arriba
@@ -64,7 +64,7 @@ var PlayScene = {
         wallD.height = (this.game.height - 13*blockSize)/2
         wallD.y = this.game.height/2 + 13*blockSize;
         wallD.body.collideWorldBounds = true;
-        //wallD.visible = false;
+        wallD.visible = false;
         wallsGroup.add(wallD);
 
         //Físicas
@@ -74,14 +74,14 @@ var PlayScene = {
         this.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 
         //Creación del player
-        var playerPos = new Par(300, 560);
+        var playerPos = new Par(315, 575);
         var playerScale = new Par(3, 3);
         var playerVel = new Par(140, 140);
         var playerDir = new Par (0, 0);
 
         //Balas y arma del jugador
         bulletVel = 300;
-        bulletTime = 600;
+        bulletTime = 450;
         //Se inicializa el grupo de las balas
         bulletsGroup = this.game.add.group();
         bulletsGroup.enableBody = true;
@@ -136,11 +136,11 @@ var PlayScene = {
     },
 
     render: function(){
-        this.game.debug.text( "PlayScene", 50, 60 );
-        this.game.debug.text( "Direction X: " + player._direction._x, 50, 80 );
-        this.game.debug.text( "Direction Y: " + player._direction._y, 50, 100 );
-        this.game.debug.text( "Player X: " + player.x, 50, 120 );
-        this.game.debug.text( "Player Y: " + player.y, 50, 140 );
+        // this.game.debug.text( "PlayScene", 50, 60 );
+        // this.game.debug.text( "Direction X: " + player._direction._x, 50, 80 );
+        // this.game.debug.text( "Direction Y: " + player._direction._y, 50, 100 );
+        // this.game.debug.text( "Player X: " + player.x, 50, 120 );
+        // this.game.debug.text( "Player Y: " + player.y, 50, 140 );
     }
 };
 
