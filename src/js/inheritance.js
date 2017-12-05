@@ -84,6 +84,8 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this._direction._x = 0;
     this._direction._y = -1;
     this.angle = 0;
+    this._dirStack = new SmartStack();
+    this._dirChar = ' ';
 }
 
 //Player.prototype = Object.create(Shooter.prototype);
@@ -91,9 +93,43 @@ Player.prototype = Object.create(Shooter.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
+
+    if (!this._cursors.left.isDown && !this._cursors.right.isDown && !this._cursors.down.isDown && !this._cursors.up.isDown)
+        this._dirChar = ' ';
+    else this._dirChar = this._dirStack.top.data;
+
+    this._cursors.left.onDown.add(function(){
+        this._dirStack.push('l');
+    }, this);
+    this._cursors.right.onDown.add(function(){
+        this._dirStack.push('r');
+    }, this);
+    this._cursors.down.onDown.add(function(){
+        this._dirStack.push('d');
+    }, this);
+    this._cursors.up.onDown.add(function(){
+        this._dirStack.push('u');
+    }, this);
+    this._cursors.left.onUp.add(function(){
+        this._dirStack.remove('l');
+    }, this);
+    this._cursors.right.onUp.add(function(){
+        this._dirStack.remove('r');
+    }, this);
+    this._cursors.down.onUp.add(function(){
+        this._dirStack.remove('d');
+    }, this);
+    this._cursors.up.onUp.add(function(){
+        this._dirStack.remove('u');
+    }, this);
+
     
-    if (this._cursors.left.isDown)
-    {
+
+    // if (!this._cursors.left.isDown && !this._cursors.right.isDown && !this._cursors.down.isDown && !this._cursors.up.isDown)
+    //     this._dirChar = ' ';
+    // else this._dirChar = this._dirStack.top.data;
+
+    if (this._dirChar === 'l'){
         if (this._direction._x !== 0){
             this.y = 24 * Math.round(this.y/24);
         }
@@ -103,8 +139,7 @@ Player.prototype.update = function(){
         this._direction._y = 0;
         this.angle = 180;
     }
-    else if (this._cursors.right.isDown)
-    {
+    else if (this._dirChar === 'r'){
         if (this._direction._x !== 0){
             this.y = 24 * Math.round(this.y/24);
         }
@@ -114,8 +149,7 @@ Player.prototype.update = function(){
         this._direction._y = 0;
         this.angle = 0;
     }
-    else if (this._cursors.down.isDown)
-    {
+    else if (this._dirChar === 'd'){
         if (this._direction._y !== 0){
             this.x = 24 * Math.round(this.x/24);
         }
@@ -125,8 +159,7 @@ Player.prototype.update = function(){
         this._direction._y = 1;
         this.angle = 90;
     }
-    else if (this._cursors.up.isDown)
-    {
+    else if (this._dirChar === 'u'){
         if (this._direction._y !== 0){
             this.x = 24 * Math.round(this.x/24);
         }
@@ -135,10 +168,59 @@ Player.prototype.update = function(){
         this._direction._x = 0;
         this._direction._y = -1;
         this.angle = 270;
-    }else{
+    }
+    else{
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
     }
+
+    // if (this._cursors.left.isDown)
+    // {
+    //     if (this._direction._x !== 0){
+    //         this.y = 24 * Math.round(this.y/24);
+    //     }
+    //     this.body.velocity.y = 0;
+    //     this.body.velocity.x = -this._velocity._x;
+    //     this._direction._x = -1;
+    //     this._direction._y = 0;
+    //     this.angle = 180;
+    // }
+    // else if (this._cursors.right.isDown)
+    // {
+        // if (this._direction._x !== 0){
+        //     this.y = 24 * Math.round(this.y/24);
+        // }
+        // this.body.velocity.y = 0;
+        // this.body.velocity.x = this._velocity._x;
+        // this._direction._x = 1;
+        // this._direction._y = 0;
+        // this.angle = 0;
+    // }
+    // else if (this._cursors.down.isDown)
+    // {
+        // if (this._direction._y !== 0){
+        //     this.x = 24 * Math.round(this.x/24);
+        // }
+        // this.body.velocity.x = 0;
+        // this.body.velocity.y = this._velocity._y;
+        // this._direction._x = 0;
+        // this._direction._y = 1;
+        // this.angle = 90;
+    // }
+    // else if (this._cursors.up.isDown)
+    // {
+        // if (this._direction._y !== 0){
+        //     this.x = 24 * Math.round(this.x/24);
+        // }
+        // this.body.velocity.x = 0;
+        // this.body.velocity.y = -this._velocity._y;
+        // this._direction._x = 0;
+        // this._direction._y = -1;
+        // this.angle = 270;
+    // }else{
+        // this.body.velocity.x = 0;
+        // this.body.velocity.y = 0;
+    // }
 
     if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
     {
