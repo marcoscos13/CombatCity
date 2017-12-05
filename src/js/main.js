@@ -3,6 +3,7 @@
 var PlayScene = require('./play_scene.js');
 //var TestScene = require('./test_scene.js');
 //var TestScene2 = require('./test_scene2.js');
+var Inheritance = require('./inheritance.js');
 
 var BootScene = {
   preload: function () {
