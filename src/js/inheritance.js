@@ -84,6 +84,12 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this._direction._x = 0;
     this._direction._y = -1;
     this.angle = 0;
+    this.dirStack = new SmartStack();
+    this.dirChar = ' ';
+    this.boolL = false;
+    this.boolR = false;
+    this.boolD = false;
+    this.boolU = false;
 }
 
 //Player.prototype = Object.create(Shooter.prototype);
@@ -91,9 +97,67 @@ Player.prototype = Object.create(Shooter.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
+
+    if (!this._cursors.left.isDown && !this._cursors.right.isDown && !this._cursors.down.isDown && !this._cursors.up.isDown)
+        this.dirChar = ' ';
+    else this.dirChar = this.dirStack.top.data;
+
+    this._cursors.left.onDown.add(function(){
+        if(!this.boolL){
+            this.dirStack.push('l');
+            this.boolL = true;
+        }
+    }, this);
+    this._cursors.right.onDown.add(function(){
+        if(!this.boolR){
+            this.dirStack.push('r');
+            this.boolR = true;
+        }
+    }, this);
+    this._cursors.down.onDown.add(function(){
+        if(!this.boolD){
+            this.dirStack.push('d');
+            this.boolD = true;
+        }
+    }, this);
+    this._cursors.up.onDown.add(function(){
+        if(!this.boolU){
+            this.dirStack.push('u');
+            this.boolU = true;
+        }
+    }, this);
+    this._cursors.left.onUp.add(function(){
+        if(this.boolL){
+            this.dirStack.remove('l');
+            this.boolL = false;
+        }
+    }, this);
+    this._cursors.right.onUp.add(function(){
+        if(this.boolR){
+            this.dirStack.remove('r');
+            this.boolR = false;
+        }
+    }, this);
+    this._cursors.down.onUp.add(function(){
+        if(this.boolD){
+            this.dirStack.remove('d');
+            this.boolD = false;
+        }
+    }, this);
+    this._cursors.up.onUp.add(function(){
+        if(this.boolU){
+            this.dirStack.remove('u');
+            this.boolU = false;
+        }
+    }, this);
+
     
-    if (this._cursors.left.isDown)
-    {
+
+    // if (!this._cursors.left.isDown && !this._cursors.right.isDown && !this._cursors.down.isDown && !this._cursors.up.isDown)
+    //     this._dirChar = ' ';
+    // else this._dirChar = this._dirStack.top.data;
+
+    if (this.dirChar === 'l'){
         if (this._direction._x !== 0){
             this.y = 24 * Math.round(this.y/24);
         }
@@ -103,8 +167,7 @@ Player.prototype.update = function(){
         this._direction._y = 0;
         this.angle = 180;
     }
-    else if (this._cursors.right.isDown)
-    {
+    else if (this.dirChar === 'r'){
         if (this._direction._x !== 0){
             this.y = 24 * Math.round(this.y/24);
         }
@@ -114,8 +177,7 @@ Player.prototype.update = function(){
         this._direction._y = 0;
         this.angle = 0;
     }
-    else if (this._cursors.down.isDown)
-    {
+    else if (this.dirChar === 'd'){
         if (this._direction._y !== 0){
             this.x = 24 * Math.round(this.x/24);
         }
@@ -125,8 +187,7 @@ Player.prototype.update = function(){
         this._direction._y = 1;
         this.angle = 90;
     }
-    else if (this._cursors.up.isDown)
-    {
+    else if (this.dirChar === 'u'){
         if (this._direction._y !== 0){
             this.x = 24 * Math.round(this.x/24);
         }
@@ -135,10 +196,59 @@ Player.prototype.update = function(){
         this._direction._x = 0;
         this._direction._y = -1;
         this.angle = 270;
-    }else{
+    }
+    else{
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
     }
+
+    // if (this._cursors.left.isDown)
+    // {
+    //     if (this._direction._x !== 0){
+    //         this.y = 24 * Math.round(this.y/24);
+    //     }
+    //     this.body.velocity.y = 0;
+    //     this.body.velocity.x = -this._velocity._x;
+    //     this._direction._x = -1;
+    //     this._direction._y = 0;
+    //     this.angle = 180;
+    // }
+    // else if (this._cursors.right.isDown)
+    // {
+        // if (this._direction._x !== 0){
+        //     this.y = 24 * Math.round(this.y/24);
+        // }
+        // this.body.velocity.y = 0;
+        // this.body.velocity.x = this._velocity._x;
+        // this._direction._x = 1;
+        // this._direction._y = 0;
+        // this.angle = 0;
+    // }
+    // else if (this._cursors.down.isDown)
+    // {
+        // if (this._direction._y !== 0){
+        //     this.x = 24 * Math.round(this.x/24);
+        // }
+        // this.body.velocity.x = 0;
+        // this.body.velocity.y = this._velocity._y;
+        // this._direction._x = 0;
+        // this._direction._y = 1;
+        // this.angle = 90;
+    // }
+    // else if (this._cursors.up.isDown)
+    // {
+        // if (this._direction._y !== 0){
+        //     this.x = 24 * Math.round(this.x/24);
+        // }
+        // this.body.velocity.x = 0;
+        // this.body.velocity.y = -this._velocity._y;
+        // this._direction._x = 0;
+        // this._direction._y = -1;
+        // this.angle = 270;
+    // }else{
+        // this.body.velocity.x = 0;
+        // this.body.velocity.y = 0;
+    // }
 
     if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
     {
