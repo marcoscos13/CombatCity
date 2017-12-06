@@ -31,7 +31,7 @@ var SmartStack = function(){
       var next = null;
       var actual = this.top;
       var i = 0;
-      while (i < this.size && found === false){
+      while (i < this.size && !found){
           if (actual.data === data){
               found = true;
               if (next !== null) next.previous = actual.previous;
