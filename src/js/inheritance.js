@@ -90,6 +90,15 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.boolR = false;
     this.boolD = false;
     this.boolU = false;
+    var grayW = (this.game.height - 48*13)/2;
+    var grayH = (this.game.width - 48*13)/2;
+    this.gapW = grayW - Math.trunc(grayW/24)*24;
+    if (this.gapW > 12) this.gapW = 24-this.gapW;
+    this.gapH = grayH - Math.trunc(grayH/24)*24;
+    if (this.gapH > 12) this.gapH = 24-this.gapH;
+
+    // console.debug("GapW: " + this.gapW);
+    // console.debug("GapH: " + this.gapH);
 }
 
 //Player.prototype = Object.create(Shooter.prototype);
@@ -151,15 +160,12 @@ Player.prototype.update = function(){
         }
     }, this);
 
-    
-
-    // if (!this._cursors.left.isDown && !this._cursors.right.isDown && !this._cursors.down.isDown && !this._cursors.up.isDown)
-    //     this._dirChar = ' ';
-    // else this._dirChar = this._dirStack.top.data;
+    ////////////////////////////////////////////////////////
 
     if (this.dirChar === 'l'){
         if (this._direction._x !== 0){
-            this.y = 24 * Math.round(this.y/24);
+            this.y += this.gapW;
+            this.y = 24 * Math.round(this.y/24) - this.gapW;
         }
         this.body.velocity.y = 0;
         this.body.velocity.x = -this._velocity._x;
@@ -169,7 +175,8 @@ Player.prototype.update = function(){
     }
     else if (this.dirChar === 'r'){
         if (this._direction._x !== 0){
-            this.y = 24 * Math.round(this.y/24);
+            this.y += this.gapW;
+            this.y = 24 * Math.round(this.y/24) - this.gapW;
         }
         this.body.velocity.y = 0;
         this.body.velocity.x = this._velocity._x;
@@ -179,7 +186,8 @@ Player.prototype.update = function(){
     }
     else if (this.dirChar === 'd'){
         if (this._direction._y !== 0){
-            this.x = 24 * Math.round(this.x/24);
+            this.x += this.gapH;
+            this.x = 24 * Math.round(this.x/24) - this.gapH;
         }
         this.body.velocity.x = 0;
         this.body.velocity.y = this._velocity._y;
@@ -189,7 +197,8 @@ Player.prototype.update = function(){
     }
     else if (this.dirChar === 'u'){
         if (this._direction._y !== 0){
-            this.x = 24 * Math.round(this.x/24);
+            this.x += this.gapH;
+            this.x = 24 * Math.round(this.x/24) - this.gapH;
         }
         this.body.velocity.x = 0;
         this.body.velocity.y = -this._velocity._y;
@@ -202,56 +211,8 @@ Player.prototype.update = function(){
         this.body.velocity.y = 0;
     }
 
-    // if (this._cursors.left.isDown)
-    // {
-    //     if (this._direction._x !== 0){
-    //         this.y = 24 * Math.round(this.y/24);
-    //     }
-    //     this.body.velocity.y = 0;
-    //     this.body.velocity.x = -this._velocity._x;
-    //     this._direction._x = -1;
-    //     this._direction._y = 0;
-    //     this.angle = 180;
-    // }
-    // else if (this._cursors.right.isDown)
-    // {
-        // if (this._direction._x !== 0){
-        //     this.y = 24 * Math.round(this.y/24);
-        // }
-        // this.body.velocity.y = 0;
-        // this.body.velocity.x = this._velocity._x;
-        // this._direction._x = 1;
-        // this._direction._y = 0;
-        // this.angle = 0;
-    // }
-    // else if (this._cursors.down.isDown)
-    // {
-        // if (this._direction._y !== 0){
-        //     this.x = 24 * Math.round(this.x/24);
-        // }
-        // this.body.velocity.x = 0;
-        // this.body.velocity.y = this._velocity._y;
-        // this._direction._x = 0;
-        // this._direction._y = 1;
-        // this.angle = 90;
-    // }
-    // else if (this._cursors.up.isDown)
-    // {
-        // if (this._direction._y !== 0){
-        //     this.x = 24 * Math.round(this.x/24);
-        // }
-        // this.body.velocity.x = 0;
-        // this.body.velocity.y = -this._velocity._y;
-        // this._direction._x = 0;
-        // this._direction._y = -1;
-        // this.angle = 270;
-    // }else{
-        // this.body.velocity.x = 0;
-        // this.body.velocity.y = 0;
-    // }
-
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-    {
+    //Disparo
+    if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
         this.fire_bullet();
     }
 }

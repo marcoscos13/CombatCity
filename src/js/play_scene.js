@@ -112,7 +112,9 @@ var PlayScene = {
         wallsGroup.add(wallD);
 
         //Creación del player
-        var playerPos = new Par(315, 575);
+        var playerPos = getCell(this.game, 6, 13);
+        playerPos._x += 24;
+        playerPos._y += 24;
         var playerVel = new Par(140, 140);
         var playerDir = new Par (0, 0);
 
@@ -160,8 +162,8 @@ var PlayScene = {
         // this.game.debug.text( "PlayScene", 50, 60 );
         // this.game.debug.text( "Direction X: " + player._direction._x, 50, 80 );
         // this.game.debug.text( "Direction Y: " + player._direction._y, 50, 100 );
-        this.game.debug.text( "Player X: " + player.x, 50, 120 );
-        this.game.debug.text( "Player Y: " + player.y, 50, 140 );
+        // this.game.debug.text( "Player X: " + player.x, 50, 120 );
+        // this.game.debug.text( "Player Y: " + player.y, 50, 140 );
     }
 };
 
@@ -186,22 +188,6 @@ function getCell(game, x, y){
     var pos = new Par(temp_x, temp_y);
     return pos;
 }
-
-//  //Provisional, este método tiene que ir dentro de Player ---------------------------------------------------------------------
-//  function fireBullet (game) {
-//     if (game.time.now > bulletTime)
-//     {
-//         bullet = bulletsGroup.getFirstExists(false);
-
-//         if (bullet)
-//         {
-//             bullet.reset(player.x, player.y);
-//             bullet.body.velocity.y = 300 * player._direction._y;
-//             bullet.body.velocity.x = 300 * player._direction._x;
-//             bulletTime = game.time.now + 150;
-//         }
-//     }
-// }
 
 // Called if the bullet goes out of the screen
 function resetBullet (bullet) {
