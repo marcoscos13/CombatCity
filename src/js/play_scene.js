@@ -5,6 +5,7 @@ var cursors;
 var bloquesGroup;
 var bulletsGroup;
 var wallsGroup;
+var objectsScale = new Par(3, 3);
 
 var bulletVel;
 var bulletTime;
@@ -13,12 +14,55 @@ var bullet;
 var blockSize = 48;
 
 var PlayScene = {
+    preload: function(){
+        this.load.text('level01', '../levels/level01.json');
+    },
+
     create: function(){
+
+        //Físicas
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
+        this.game.stage.backgroundColor = '#2d2d2d';
+        cursors = this.game.input.keyboard.createCursorKeys();
+        this.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
+
         //Fondo negro
         var bg = this.game.add.image((this.game.width - blockSize*13)/2, (this.game.height - blockSize*13)/2,'background');
         bg.height = blockSize*13;
         bg.width = blockSize*13;
 
+        //Creación de Bloques
+
+        this.levelData = JSON.parse(this.game.cache.getText('level01')); //Parsea el JSON
+
+        bloquesGroup = this.game.add.group();
+        bloquesGroup.enableBody = true;
+        bloquesGroup.physicsBodyType = Phaser.Physics.ARCADE;
+
+        for (var j = 0; j < 13; j++){
+            for (var i = 0; i < 13; i++){
+                var BloquePos = getCell(this.game,i,j);
+                var bloque;
+                var row = this.levelData.map[j].row;
+                var blockCreated = true; //Bool para controlar si ha creado algun bloque
+
+                if (row.charAt(i*2) == '1') //Si es ladrillo
+                    bloque = new Collider(this.game, BloquePos, objectsScale, 'muro');
+                else if (row.charAt(i*2) == '2') //Si es metal
+                    bloque = new Collider(this.game, BloquePos, objectsScale, 'metal');
+                else blockCreated = false;
+
+                if (blockCreated){
+                    bloque.body.immovable = true;
+                    bloque.anchor.setTo(0,0);
+                    bloque.body.collideWorldBounds = true;
+                    bloquesGroup.add(bloque);
+                }
+            }
+        }
+
+
+        //Parades límite
         wallsGroup = this.game.add.group();
         var posZero = new Par(0,0);
         var wallScale = new Par(3, 3);
@@ -67,15 +111,8 @@ var PlayScene = {
         wallD.visible = false;
         wallsGroup.add(wallD);
 
-        //Físicas
-        this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.game.stage.backgroundColor = '#2d2d2d';
-        cursors = this.game.input.keyboard.createCursorKeys();
-        this.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
-
         //Creación del player
         var playerPos = new Par(315, 575);
-        var playerScale = new Par(3, 3);
         var playerVel = new Par(140, 140);
         var playerDir = new Par (0, 0);
 
@@ -89,38 +126,22 @@ var PlayScene = {
     
         //Se crean las balas y se añaden al grupo
         for (var i = 0; i < 1; i++){ //i = numero de balas
-            var b = this.game.add.sprite(0, 0, 'bullet');
-            b.name = "bullet" + i;
-            b.exists = false;
-            b.visible = false;
-            b.checkWorldBounds = true;
-            b.anchor.setTo(0.5, 0.5);
-            b.events.onOutOfBounds.add(resetBullet, this);
-            bulletsGroup.add(b);
+            var bloque = this.game.add.sprite(0, 0, 'muro');
+            bloque.name = "muro" + i;
+            bloque.exists = false;
+            bloque.visible = false;
+            bloque.checkWorldBounds = true;
+            bloque.anchor.setTo(0.5, 0.5);
+            bloque.events.onOutOfBounds.add(resetBullet, this);
+            bulletsGroup.add(bloque);
         }
 
         //Player
-        player = new Player(this.game, playerPos, playerScale, playerVel, playerDir, bulletsGroup, bulletVel, bulletTime,  cursors, 'tank');
+        player = new Player(this.game, playerPos, objectsScale, playerVel, playerDir, bulletsGroup, bulletVel, bulletTime,  cursors, 'tank');
         player.body.collideWorldBounds = true;
         player._direction._x = 1;
         player._direction._y = 0;
         
-        //Creación de Bloques
-        bloquesGroup = this.game.add.group();
-        bloquesGroup.enableBody = true;
-        bloquesGroup.physicsBodyType = Phaser.Physics.ARCADE;
-
-        //var BloqueTam = new Par(blockSize, blockSize);
-        for (var j = 0; j < 13; j++){
-            for (var k = 0; k < 11; k++){
-                var BloquePos = getCell(this.game,j,k);
-                var b = new Collider(this.game, BloquePos, playerScale, 'bullet');
-                b.body.immovable = true;
-                b.anchor.setTo(0,0);
-                b.body.collideWorldBounds = true;
-                bloquesGroup.add(b);
-            }
-        }
     },
     
     update: function(){
@@ -139,8 +160,8 @@ var PlayScene = {
         // this.game.debug.text( "PlayScene", 50, 60 );
         // this.game.debug.text( "Direction X: " + player._direction._x, 50, 80 );
         // this.game.debug.text( "Direction Y: " + player._direction._y, 50, 100 );
-        // this.game.debug.text( "Player X: " + player.x, 50, 120 );
-        // this.game.debug.text( "Player Y: " + player.y, 50, 140 );
+        this.game.debug.text( "Player X: " + player.x, 50, 120 );
+        this.game.debug.text( "Player Y: " + player.y, 50, 140 );
     }
 };
 
