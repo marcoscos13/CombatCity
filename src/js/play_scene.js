@@ -15,7 +15,7 @@ var blockSize = 48;
 
 var PlayScene = {
     preload: function(){
-        this.load.text('level01', '../levels/level01.json');
+        this.load.text('level01', 'levels/level01.json');
     },
 
     create: function(){
