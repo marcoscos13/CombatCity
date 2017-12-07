@@ -81,8 +81,6 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     Shooter.apply(this, [game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, sprite]);
     //Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
     this._cursors = cursors;
-    this._direction._x = 0;
-    this._direction._y = -1;
     this.angle = 0;
     this.dirStack = new SmartStack();
     this.dirChar = ' ';
@@ -215,4 +213,20 @@ Player.prototype.update = function(){
     if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
         this.fire_bullet();
     }
+}
+
+var Enemy = function(game, pos, scale, vel, dir /*, bulletsGroup, bulletVel, bulletTime*/, lives, sprite){
+    Shooter.apply(this, [game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, sprite]);
+    this._direction._x = 0;
+    this._direction._y = -1;
+    this.angle = 0;
+    this._lives = lives;
+}
+
+Enemy.prototype = Object.create(Shooter.prototype);
+Enemy.prototype.constructor = Enemy;
+
+Enemy.prototype.update = function(){
+    this.body.velocity.x = this._direction._x * this._velocity._x;
+    this.body.velocity.y = this._direction._y * this._velocity._y;
 }

@@ -116,7 +116,7 @@ var PlayScene = {
         playerPos._x += 24;
         playerPos._y += 24;
         var playerVel = new Par(140, 140);
-        var playerDir = new Par (0, 0);
+        var playerDir = new Par (0, -1);
 
         //Balas y arma del jugador
         bulletVel = 300;
@@ -143,6 +143,12 @@ var PlayScene = {
         player.body.collideWorldBounds = true;
         player._direction._x = 1;
         player._direction._y = 0;
+
+        //EnemyTest------------------------------------------------
+        // var enemyPos = getCell(this.game, 5, 12);
+        // enemyPos._x += 24;
+        // enemyPos._y += 24;
+        // enemy = new Enemy(this.game, enemyPos, objectsScale, playerVel, playerDir, 3, 'tank');
         
     },
     

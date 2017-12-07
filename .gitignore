@@ -4,3 +4,5 @@ node_modules
 dist
 .publish
 gulp.config.json
+
+src/js/bundle\.js
