@@ -11,6 +11,7 @@ var bulletVel;
 var bulletTime;
 var bullet;
 
+var bloquetest;
 var blockSize = 48;
 
 var PlayScene = {
@@ -61,6 +62,104 @@ var PlayScene = {
             }
         }
 
+        ///////////////////////////////////////////////////////////////////// Test mapa por cubitos
+
+        
+        for (var j = 0; j < 13; j++){
+            for (var i = 0; i < 13; i++){
+                var BloquePos = getCell(this.game,i,j);
+                var bloque;
+                var row = this.levelData.map[j].row;
+                var blockCreated = true; //Bool para controlar si ha creado algun bloque
+
+                if (row.charAt(i*2) == '1'){ //Si es ladrillo
+                    var miniBlockCrop = 4;
+                    for(var bY = 0; bY < 4; bY++){
+                        BloquePos._x = getCell(this.game,i,j)._x;
+                        for(var bX = 0; bX < 4; bX++){
+                            bloquetest = new Collider(this.game, BloquePos, objectsScale, 'muro');
+                            
+                            bloquetest.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
+                            bloquetest.body.immovable = true;
+                            bloquetest.anchor.setTo(0,0);
+                            bloquetest.body.collideWorldBounds = true;
+                            bloquetest.body.setSize(4, 4);
+                            bloquesGroup.add(bloquetest);
+            
+                            BloquePos._x += 12;
+                        }
+                        BloquePos._y += 12;
+                    }
+                }
+                 else if (row.charAt(i*2) == '2'){ //Si es metal
+                    var miniBlockCrop = 8;
+                    for(var bY = 0; bY < 2; bY++){
+                        BloquePos._x = getCell(this.game,i,j)._x;
+                        for(var bX = 0; bX < 2; bX++){
+                            bloquetest = new Collider(this.game, BloquePos, objectsScale, 'metal');
+                            
+                            bloquetest.crop(new Phaser.Rectangle(8*bX,8*bY,miniBlockCrop,miniBlockCrop));
+                            bloquetest.body.immovable = true;
+                            bloquetest.anchor.setTo(0,0);
+                            bloquetest.body.collideWorldBounds = true;
+                            bloquetest.body.setSize(8, 8);
+                            bloquesGroup.add(bloquetest);
+            
+                            BloquePos._x += 24;
+                        }
+                        BloquePos._y += 24;
+                    }
+                 }
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////// Test Cubo por Cubitos
+
+        // //Ladrillo -----------------------
+        // var BloquePos = getCell(this.game,6,6);
+        // var miniBlockCrop = 4;       
+
+        // for(var j = 0; j < 4; j++){
+        //     BloquePos._x = getCell(this.game,6,6)._x;
+        //     for(var i = 0; i < 4; i++){
+        //         bloquetest = new Collider(this.game, BloquePos, objectsScale, 'muro');
+                
+        //         bloquetest.crop(new Phaser.Rectangle(4*i,4*j,miniBlockCrop,miniBlockCrop));
+        //         bloquetest.body.immovable = true;
+        //         bloquetest.anchor.setTo(0,0);
+        //         bloquetest.body.collideWorldBounds = true;
+        //         bloquetest.body.setSize(4, 4);
+        //         bloquesGroup.add(bloquetest);
+
+        //         BloquePos._x += 12;
+        //     }
+        //     BloquePos._y += 12;
+        // }
+
+        // //Metal -----------------------
+        // var BloquePos = getCell(this.game,6,6);
+        // var miniBlockCrop = 8;       
+
+        // for(var j = 0; j < 2; j++){
+        //     BloquePos._x = getCell(this.game,6,6)._x;
+        //     for(var i = 0; i < 2; i++){
+        //         bloquetest = new Collider(this.game, BloquePos, objectsScale, 'metal');
+                
+        //         bloquetest.crop(new Phaser.Rectangle(8*i,8*j,miniBlockCrop,miniBlockCrop));
+        //         bloquetest.body.immovable = true;
+        //         bloquetest.anchor.setTo(0,0);
+        //         bloquetest.body.collideWorldBounds = true;
+        //         bloquetest.body.setSize(8, 8);
+        //         bloquesGroup.add(bloquetest);
+
+        //         BloquePos._x += 24;
+        //     }
+        //     BloquePos._y += 24;
+        // }
+
+        ///////////////////////////////////////////////////////////////
 
         //Parades límite
         wallsGroup = this.game.add.group();
@@ -120,7 +219,7 @@ var PlayScene = {
 
         //Balas y arma del jugador
         bulletVel = 300;
-        bulletTime = 450;
+        bulletTime = 270;
         //Se inicializa el grupo de las balas
         bulletsGroup = this.game.add.group();
         bulletsGroup.enableBody = true;
@@ -128,14 +227,16 @@ var PlayScene = {
     
         //Se crean las balas y se añaden al grupo
         for (var i = 0; i < 1; i++){ //i = numero de balas
-            var bloque = this.game.add.sprite(0, 0, 'muro');
-            bloque.name = "muro" + i;
-            bloque.exists = false;
-            bloque.visible = false;
-            bloque.checkWorldBounds = true;
-            bloque.anchor.setTo(0.5, 0.5);
-            bloque.events.onOutOfBounds.add(resetBullet, this);
-            bulletsGroup.add(bloque);
+            var bala = this.game.add.sprite(0, 0, 'bullet');
+            bala.name = "bala" + i;
+            bala.scale.setTo(3,3);
+            bala.exists = false;
+            bala.visible = false;
+            bala.smoothed = false;
+            bala.checkWorldBounds = true;
+            bala.anchor.setTo(0.5, 0.5);
+            bala.events.onOutOfBounds.add(resetBullet, this);
+            bulletsGroup.add(bala);
         }
 
         //Player
@@ -166,10 +267,13 @@ var PlayScene = {
 
     render: function(){
         // this.game.debug.text( "PlayScene", 50, 60 );
-        // this.game.debug.text( "Direction X: " + player._direction._x, 50, 80 );
-        // this.game.debug.text( "Direction Y: " + player._direction._y, 50, 100 );
+        this.game.debug.text( "Direction X: " + player._direction._x, 50, 80 );
+        this.game.debug.text( "Direction Y: " + player._direction._y, 50, 100 );
         // this.game.debug.text( "Player X: " + player.x, 50, 120 );
         // this.game.debug.text( "Player Y: " + player.y, 50, 140 );
+        this.game.debug.text(bloquesGroup.length, 50, 140);
+        //this.game.debug.body(player);
+        //this.game.debug.body(bloquetest);
     }
 };
 

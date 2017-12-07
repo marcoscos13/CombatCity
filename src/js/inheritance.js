@@ -65,13 +65,25 @@ Shooter.prototype.fire_bullet = function()
     if (this._game.time.now > this._bulletSince)
     {
         var bullet = this._bulletsGroup.getFirstExists(false);
-
         if (bullet)
         {
+            bullet.angle = 0;
+            if (bullet.scale.x < 0)
+                bullet.scale.x *= -1;
             bullet.reset(this.x, this.y);
             bullet.body.velocity.y = this._bulletVel * this._direction._y;
             bullet.body.velocity.x = this._bulletVel * this._direction._x;
             this._bulletSince = this._game.time.now + this._bulletTime;
+            if (this._direction._x != 0)
+                bullet.scale.x *= this._direction._x;
+            else{
+                bullet.scale.y *= this._direction._y;
+                
+                if (this._direction._y == 1)
+                    bullet.angle = 90;
+                else
+                    bullet.angle = 270;
+            }
         }
     }
 }
