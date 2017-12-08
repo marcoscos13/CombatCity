@@ -8,6 +8,7 @@ var bloquesGroup;
 var bulletsGroup;
 var wallsGroup;
 var objectsScale = new Par(3, 3);
+var ebulletsGroup;
 
 var bulletVel;
 var bulletTime;
@@ -97,7 +98,7 @@ var PlayScene = {
         wallU.anchor.setTo(0,0);
         wallU.body.immovable = true;
         wallU.width = this.game.width;
-        wallU.height = (this.game.height - 13*blockSize)/2
+        wallU.height = (this.game.height - 13*blockSize)/2;
         wallU.body.collideWorldBounds = true;
         wallU.visible = false;
         wallsGroup.add(wallU);
@@ -107,7 +108,7 @@ var PlayScene = {
         wallD.anchor.setTo(0,0);
         wallD.body.immovable = true;
         wallD.width = this.game.width;
-        wallD.height = (this.game.height - 13*blockSize)/2
+        wallD.height = (this.game.height - 13*blockSize)/2;
         wallD.y = this.game.height/2 + 13*blockSize;
         wallD.body.collideWorldBounds = true;
         wallD.visible = false;
@@ -147,12 +148,28 @@ var PlayScene = {
         player._direction._y = 0;
 
         //EnemyTest------------------------------------------------
+        //Balas
+        ebulletsGroup = this.game.add.group();
+        ebulletsGroup.enableBody = true;
+        ebulletsGroup.physicsBodyType = Phaser.Physics.ARCADE;
+        //Enemy
+        //Se crean las balas y se añaden al grupo
+        for (var i = 0; i < 1; i++){ //i = numero de balas
+            var bloque = this.game.add.sprite(0, 0, 'muro');
+            bloque.name = "muro" + i;
+            bloque.exists = false;
+            bloque.visible = false;
+            bloque.checkWorldBounds = true;
+            bloque.anchor.setTo(0.5, 0.5);
+            bloque.events.onOutOfBounds.add(resetBullet, this);
+            ebulletsGroup.add(bloque);
+        }
         var enemyPos = getCell(this.game, 0, 11);
         enemyPos._x += 24;
         enemyPos._y += 24;
         var enemyDir = new Par (1, 0);
         var enemyVel = new Par(100, 100);
-        enemy = new Enemy(this.game, enemyPos, objectsScale, enemyVel, enemyDir, bulletsGroup, bulletVel, bulletTime, 3, 'tank');
+        enemy = new Enemy(this.game, enemyPos, objectsScale, enemyVel, enemyDir, ebulletsGroup, bulletVel, bulletTime, 3, 'tank');
         
     },
     
@@ -161,8 +178,11 @@ var PlayScene = {
         this.game.physics.arcade.collide(player, wallsGroup);
         this.game.physics.arcade.overlap(bulletsGroup, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(bulletsGroup, wallsGroup, resetBullet, null, this);
-
+        
         //this.game.physics.arcade.overlap(enemy, wallsGroup, enemy.changeDir(), null, this);
+        this.game.physics.arcade.overlap(ebulletsGroup, bloquesGroup, collisionHandler, null, this);
+        this.game.physics.arcade.overlap(ebulletsGroup, wallsGroup, resetBullet, null, this);
+        //this.game.physics.arcade.overlap(ebulletsGroup, player, resetBullet, null, this);
         this.game.physics.arcade.collide(bloquesGroup, enemy);
         this.game.physics.arcade.collide(wallsGroup, enemy);
         this.game.physics.arcade.collide(player, enemy);

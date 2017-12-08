@@ -57,7 +57,6 @@ var Shooter = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bull
     this._bulletTime = bulletTime;
     this._bulletSince = 0;
     this._game = game;
-    this.body.static = true;
     var grayW = (this.game.height - 48*13)/2;
     var grayH = (this.game.width - 48*13)/2;
     this.gapW = grayW - Math.trunc(grayW/24)*24;
@@ -220,46 +219,11 @@ var Enemy = function(game, pos, scale, vel, dir , bulletsGroup, bulletVel, bulle
     Shooter.apply(this, [game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, sprite]);
     this.angle = 0;
     this._lives = lives;
+    //this._timer = game.time.create(false);
+    this.body.immovable = true;
     this.body.onCollide = new Phaser.Signal();
     this.body.onCollide.add(function(){
-        var rnd = game.rnd.integerInRange(1, 4);
-        if(rnd === 1){
-            this._direction._x = 1;
-            this._direction._y = 0;
-        }
-        else if (rnd === 2){
-            this._direction._x = -1;
-            this._direction._y = 0;
-        }
-        else if (rnd === 3){
-            this._direction._y = 1;
-            this._direction._x = 0;
-        }
-        else if (rnd === 4){
-            this._direction._y = -1;
-            this._direction._x = 0;
-        }
-
-        if (this._direction._x === 1){
-            this.angle = 0;
-            this.y += this.gapW;
-            this.y = 24 * Math.round(this.y/24) - this.gapW;
-        }
-        else if (this._direction._x === -1){
-            this.angle = 180;
-            this.y += this.gapW;
-            this.y = 24 * Math.round(this.y/24) - this.gapW;
-        }
-        else if (this._direction._y === 1){
-            this.angle = 90;
-            this.x += this.gapH;
-            this.x = 24 * Math.round(this.x/24) - this.gapH;
-        }
-        else if (this._direction._y === -1){
-            this.angle = 270;
-            this.x += this.gapH;
-            this.x = 24 * Math.round(this.x/24) - this.gapH;
-        }
+        this.change_dir();
     }, this);
 }
 
@@ -269,17 +233,47 @@ Enemy.prototype.constructor = Enemy;
 Enemy.prototype.update = function(){
     this.body.velocity.x = this._direction._x * this._velocity._x;
     this.body.velocity.y = this._direction._y * this._velocity._y;
+    var rnd = this.game.rnd.integerInRange(0, 1)
+    if (rnd === 1) this.fire_bullet();
     //this.changeDir();
 }
-// Enemy.prototype.changeDir = function(){
-//     this._direction._x = this.game.rnd.integerInRange(-1, 1);
-//     this._direction._y = this.game.rnd.integerInRange(-1, 1);
-//     if(this._direction._x === 0){
-//         while (this._direction._y === 0) this._direction._y = this.game.rnd.integerInRange(-1, 1);
-//     }
-//     else this._direction._y = 0;
-//     if (this._direction._x === 1) this.angle = 0;
-//     else if (this._direction._x === -1) this.angle = 180;
-//     else if (this._direction._y === 1) this.angle = 90;
-//     else if (this._direction._y === -1) this.angle = 270;
-// }
+Enemy.prototype.change_dir = function(){
+    var rnd = this.game.rnd.integerInRange(1, 4);
+    if(rnd === 1){
+        this._direction._x = 1;
+        this._direction._y = 0;
+    }
+    else if (rnd === 2){
+        this._direction._x = -1;
+        this._direction._y = 0;
+    }
+    else if (rnd === 3){
+        this._direction._y = 1;
+        this._direction._x = 0;
+    }
+    else if (rnd === 4){
+        this._direction._y = -1;
+        this._direction._x = 0;
+    }
+
+    if (this._direction._x === 1){
+        this.angle = 0;
+        this.y += this.gapW;
+        this.y = 24 * Math.round(this.y/24) - this.gapW;
+    }
+    else if (this._direction._x === -1){
+        this.angle = 180;
+        this.y += this.gapW;
+        this.y = 24 * Math.round(this.y/24) - this.gapW;
+    }
+    else if (this._direction._y === 1){
+        this.angle = 90;
+        this.x += this.gapH;
+        this.x = 24 * Math.round(this.x/24) - this.gapH;
+    }
+    else if (this._direction._y === -1){
+        this.angle = 270;
+        this.x += this.gapH;
+        this.x = 24 * Math.round(this.x/24) - this.gapH;
+    }
+}
