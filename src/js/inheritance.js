@@ -70,15 +70,18 @@ Shooter.prototype.fire_bullet = function()
             bullet.angle = 0;
             if (bullet.scale.x < 0)
                 bullet.scale.x *= -1;
+
+            bullet._direction._x = this._direction._x;
+            bullet._direction._y = this._direction._y;
             bullet.reset(this.x, this.y);
             bullet.body.velocity.y = this._bulletVel * this._direction._y;
             bullet.body.velocity.x = this._bulletVel * this._direction._x;
             this._bulletSince = this._game.time.now + this._bulletTime;
-            if (this._direction._x != 0)
+            if (this._direction._x != 0){
                 bullet.scale.x *= this._direction._x;
+            }
             else{
                 bullet.scale.y *= this._direction._y;
-                
                 if (this._direction._y == 1)
                     bullet.angle = 90;
                 else
@@ -96,6 +99,7 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.angle = 0;
     this.dirStack = new SmartStack();
     this.dirChar = ' ';
+    this.tankLevel = 1;
     this.boolL = false;
     this.boolR = false;
     this.boolD = false;

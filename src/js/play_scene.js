@@ -14,6 +14,8 @@ var bullet;
 var bloquetest;
 var blockSize = 48;
 
+var bulletCollider;
+
 var PlayScene = {
     preload: function(){
         this.load.text('level01', 'levels/level01.json');
@@ -40,29 +42,7 @@ var PlayScene = {
         bloquesGroup.enableBody = true;
         bloquesGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
-        for (var j = 0; j < 13; j++){
-            for (var i = 0; i < 13; i++){
-                var BloquePos = getCell(this.game,i,j);
-                var bloque;
-                var row = this.levelData.map[j].row;
-                var blockCreated = true; //Bool para controlar si ha creado algun bloque
-
-                if (row.charAt(i*2) == '1') //Si es ladrillo
-                    bloque = new Collider(this.game, BloquePos, objectsScale, 'muro');
-                else if (row.charAt(i*2) == '2') //Si es metal
-                    bloque = new Collider(this.game, BloquePos, objectsScale, 'metal');
-                else blockCreated = false;
-
-                if (blockCreated){
-                    bloque.body.immovable = true;
-                    bloque.anchor.setTo(0,0);
-                    bloque.body.collideWorldBounds = true;
-                    bloquesGroup.add(bloque);
-                }
-            }
-        }
-
-        ///////////////////////////////////////////////////////////////////// Test mapa por cubitos
+        ///////////////////////////////////////////////////////////////////// Mapa por cubitos
 
         
         for (var j = 0; j < 13; j++){
@@ -225,19 +205,15 @@ var PlayScene = {
         bulletsGroup.enableBody = true;
         bulletsGroup.physicsBodyType = Phaser.Physics.ARCADE;
     
-        //Se crean las balas y se añaden al grupo
-        for (var i = 0; i < 1; i++){ //i = numero de balas
-            var bala = this.game.add.sprite(0, 0, 'bullet');
-            bala.name = "bala" + i;
-            bala.scale.setTo(3,3);
-            bala.exists = false;
-            bala.visible = false;
-            bala.smoothed = false;
-            bala.checkWorldBounds = true;
-            bala.anchor.setTo(0.5, 0.5);
-            bala.events.onOutOfBounds.add(resetBullet, this);
+        //Se crean las balas y se añaden al grupo        
+        for (var i = 0; i < 1; i++){ //i = numero de balas simultaneas en pantalla
+            var bala = new Bullet(this.game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
             bulletsGroup.add(bala);
         }
+        //Collider que destruye los bloques
+        bulletCollider = new Collider(this.game, new Par(50,50), objectsScale);
+        bulletCollider.width = blockSize;
+        bulletCollider.height = blockSize/2;
 
         //Player
         player = new Player(this.game, playerPos, objectsScale, playerVel, playerDir, bulletsGroup, bulletVel, bulletTime,  cursors, 'tank');
@@ -257,6 +233,7 @@ var PlayScene = {
         this.game.physics.arcade.collide(player, bloquesGroup);
         this.game.physics.arcade.collide(player, wallsGroup);
         this.game.physics.arcade.overlap(bulletsGroup, bloquesGroup, collisionHandler, null, this);
+        this.game.physics.arcade.overlap(bulletCollider, bloquesGroup, destructionHandler, null, this);
         this.game.physics.arcade.overlap(bulletsGroup, wallsGroup, resetBullet, null, this);
         // //Provisional, esto hay que meterlo en el update de Player ---------------------------------------------------------------------
         // if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
@@ -271,9 +248,10 @@ var PlayScene = {
         this.game.debug.text( "Direction Y: " + player._direction._y, 50, 100 );
         // this.game.debug.text( "Player X: " + player.x, 50, 120 );
         // this.game.debug.text( "Player Y: " + player.y, 50, 140 );
-        this.game.debug.text(bloquesGroup.length, 50, 140);
+        //this.game.debug.text(bloquesGroup.length, 50, 140);
         //this.game.debug.body(player);
         //this.game.debug.body(bloquetest);
+        //this.game.debug.body(bulletCollider);
     }
 };
 
@@ -305,7 +283,27 @@ function resetBullet (bullet) {
 }
 
 // Called if the bullet hits one of the block sprites
+
 function collisionHandler (bullet, block) {
+    //block.kill();
+    var distance;
+    if (player.tankLevel < 3)
+        distance = 24;
+    else
+        distance = 36;
+    bulletCollider.x = bullet.x + (distance * bullet._direction._x);
+    bulletCollider.y = bullet.y - (distance *-bullet._direction._y);
+    if (bullet._direction._y != 0){
+        bulletCollider.width = blockSize;
+        bulletCollider.height = blockSize/2;
+    }
+    else {
+        bulletCollider.width = blockSize/2;
+        bulletCollider.height = blockSize;
+    }
     bullet.kill();
+}
+
+function destructionHandler (bulletC, block){
     block.kill();
 }

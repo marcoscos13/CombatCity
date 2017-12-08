@@ -31,6 +31,7 @@ var PreloaderScene = {
     this.game.load.image('logo', 'images/phaser.png');
     this.game.load.image('tank', 'images/tanque.png');
     this.game.load.image('muro', 'images/muro.png');
+    this.game.load.image('bullet', 'images/bullet.png');
     this.game.load.image('metal', 'images/metal.png');
     this.game.load.image('background', 'images/background.png');
     this.game.load.image('white', 'images/white.png');
@@ -68,7 +69,10 @@ var bulletVel;
 var bulletTime;
 var bullet;
 
+var bloquetest;
 var blockSize = 48;
+
+var bulletCollider;
 
 var PlayScene = {
     preload: function(){
@@ -96,6 +100,9 @@ var PlayScene = {
         bloquesGroup.enableBody = true;
         bloquesGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
+        ///////////////////////////////////////////////////////////////////// Mapa por cubitos
+
+        
         for (var j = 0; j < 13; j++){
             for (var i = 0; i < 13; i++){
                 var BloquePos = getCell(this.game,i,j);
@@ -103,21 +110,94 @@ var PlayScene = {
                 var row = this.levelData.map[j].row;
                 var blockCreated = true; //Bool para controlar si ha creado algun bloque
 
-                if (row.charAt(i*2) == '1') //Si es ladrillo
-                    bloque = new Collider(this.game, BloquePos, objectsScale, 'muro');
-                else if (row.charAt(i*2) == '2') //Si es metal
-                    bloque = new Collider(this.game, BloquePos, objectsScale, 'metal');
-                else blockCreated = false;
-
-                if (blockCreated){
-                    bloque.body.immovable = true;
-                    bloque.anchor.setTo(0,0);
-                    bloque.body.collideWorldBounds = true;
-                    bloquesGroup.add(bloque);
+                if (row.charAt(i*2) == '1'){ //Si es ladrillo
+                    var miniBlockCrop = 4;
+                    for(var bY = 0; bY < 4; bY++){
+                        BloquePos._x = getCell(this.game,i,j)._x;
+                        for(var bX = 0; bX < 4; bX++){
+                            bloquetest = new Collider(this.game, BloquePos, objectsScale, 'muro');
+                            
+                            bloquetest.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
+                            bloquetest.body.immovable = true;
+                            bloquetest.anchor.setTo(0,0);
+                            bloquetest.body.collideWorldBounds = true;
+                            bloquetest.body.setSize(4, 4);
+                            bloquesGroup.add(bloquetest);
+            
+                            BloquePos._x += 12;
+                        }
+                        BloquePos._y += 12;
+                    }
                 }
+                 else if (row.charAt(i*2) == '2'){ //Si es metal
+                    var miniBlockCrop = 8;
+                    for(var bY = 0; bY < 2; bY++){
+                        BloquePos._x = getCell(this.game,i,j)._x;
+                        for(var bX = 0; bX < 2; bX++){
+                            bloquetest = new Collider(this.game, BloquePos, objectsScale, 'metal');
+                            
+                            bloquetest.crop(new Phaser.Rectangle(8*bX,8*bY,miniBlockCrop,miniBlockCrop));
+                            bloquetest.body.immovable = true;
+                            bloquetest.anchor.setTo(0,0);
+                            bloquetest.body.collideWorldBounds = true;
+                            bloquetest.body.setSize(8, 8);
+                            bloquesGroup.add(bloquetest);
+            
+                            BloquePos._x += 24;
+                        }
+                        BloquePos._y += 24;
+                    }
+                 }
             }
         }
 
+        ///////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////// Test Cubo por Cubitos
+
+        // //Ladrillo -----------------------
+        // var BloquePos = getCell(this.game,6,6);
+        // var miniBlockCrop = 4;       
+
+        // for(var j = 0; j < 4; j++){
+        //     BloquePos._x = getCell(this.game,6,6)._x;
+        //     for(var i = 0; i < 4; i++){
+        //         bloquetest = new Collider(this.game, BloquePos, objectsScale, 'muro');
+                
+        //         bloquetest.crop(new Phaser.Rectangle(4*i,4*j,miniBlockCrop,miniBlockCrop));
+        //         bloquetest.body.immovable = true;
+        //         bloquetest.anchor.setTo(0,0);
+        //         bloquetest.body.collideWorldBounds = true;
+        //         bloquetest.body.setSize(4, 4);
+        //         bloquesGroup.add(bloquetest);
+
+        //         BloquePos._x += 12;
+        //     }
+        //     BloquePos._y += 12;
+        // }
+
+        // //Metal -----------------------
+        // var BloquePos = getCell(this.game,6,6);
+        // var miniBlockCrop = 8;       
+
+        // for(var j = 0; j < 2; j++){
+        //     BloquePos._x = getCell(this.game,6,6)._x;
+        //     for(var i = 0; i < 2; i++){
+        //         bloquetest = new Collider(this.game, BloquePos, objectsScale, 'metal');
+                
+        //         bloquetest.crop(new Phaser.Rectangle(8*i,8*j,miniBlockCrop,miniBlockCrop));
+        //         bloquetest.body.immovable = true;
+        //         bloquetest.anchor.setTo(0,0);
+        //         bloquetest.body.collideWorldBounds = true;
+        //         bloquetest.body.setSize(8, 8);
+        //         bloquesGroup.add(bloquetest);
+
+        //         BloquePos._x += 24;
+        //     }
+        //     BloquePos._y += 24;
+        // }
+
+        ///////////////////////////////////////////////////////////////
 
         //Parades límite
         wallsGroup = this.game.add.group();
@@ -173,33 +253,37 @@ var PlayScene = {
         playerPos._x += 24;
         playerPos._y += 24;
         var playerVel = new Par(140, 140);
-        var playerDir = new Par (0, 0);
+        var playerDir = new Par (0, -1);
 
         //Balas y arma del jugador
         bulletVel = 300;
-        bulletTime = 450;
+        bulletTime = 270;
         //Se inicializa el grupo de las balas
         bulletsGroup = this.game.add.group();
         bulletsGroup.enableBody = true;
         bulletsGroup.physicsBodyType = Phaser.Physics.ARCADE;
     
-        //Se crean las balas y se añaden al grupo
-        for (var i = 0; i < 1; i++){ //i = numero de balas
-            var bloque = this.game.add.sprite(0, 0, 'muro');
-            bloque.name = "muro" + i;
-            bloque.exists = false;
-            bloque.visible = false;
-            bloque.checkWorldBounds = true;
-            bloque.anchor.setTo(0.5, 0.5);
-            bloque.events.onOutOfBounds.add(resetBullet, this);
-            bulletsGroup.add(bloque);
+        //Se crean las balas y se añaden al grupo        
+        for (var i = 0; i < 1; i++){ //i = numero de balas simultaneas en pantalla
+            var bala = new Bullet(this.game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
+            bulletsGroup.add(bala);
         }
+        //Collider que destruye los bloques
+        bulletCollider = new Collider(this.game, new Par(50,50), objectsScale);
+        bulletCollider.width = blockSize;
+        bulletCollider.height = blockSize/2;
 
         //Player
         player = new Player(this.game, playerPos, objectsScale, playerVel, playerDir, bulletsGroup, bulletVel, bulletTime,  cursors, 'tank');
         player.body.collideWorldBounds = true;
         player._direction._x = 1;
         player._direction._y = 0;
+
+        //EnemyTest------------------------------------------------
+        // var enemyPos = getCell(this.game, 5, 12);
+        // enemyPos._x += 24;
+        // enemyPos._y += 24;
+        // enemy = new Enemy(this.game, enemyPos, objectsScale, playerVel, playerDir, 3, 'tank');
         
     },
     
@@ -207,6 +291,7 @@ var PlayScene = {
         this.game.physics.arcade.collide(player, bloquesGroup);
         this.game.physics.arcade.collide(player, wallsGroup);
         this.game.physics.arcade.overlap(bulletsGroup, bloquesGroup, collisionHandler, null, this);
+        this.game.physics.arcade.overlap(bulletCollider, bloquesGroup, destructionHandler, null, this);
         this.game.physics.arcade.overlap(bulletsGroup, wallsGroup, resetBullet, null, this);
         // //Provisional, esto hay que meterlo en el update de Player ---------------------------------------------------------------------
         // if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
@@ -217,10 +302,14 @@ var PlayScene = {
 
     render: function(){
         // this.game.debug.text( "PlayScene", 50, 60 );
-        // this.game.debug.text( "Direction X: " + player._direction._x, 50, 80 );
-        // this.game.debug.text( "Direction Y: " + player._direction._y, 50, 100 );
+        this.game.debug.text( "Direction X: " + player._direction._x, 50, 80 );
+        this.game.debug.text( "Direction Y: " + player._direction._y, 50, 100 );
         // this.game.debug.text( "Player X: " + player.x, 50, 120 );
         // this.game.debug.text( "Player Y: " + player.y, 50, 140 );
+        //this.game.debug.text(bloquesGroup.length, 50, 140);
+        //this.game.debug.body(player);
+        //this.game.debug.body(bloquetest);
+        //this.game.debug.body(bulletCollider);
     }
 };
 
@@ -252,8 +341,28 @@ function resetBullet (bullet) {
 }
 
 // Called if the bullet hits one of the block sprites
+
 function collisionHandler (bullet, block) {
+    //block.kill();
+    var distance;
+    if (player.tankLevel < 3)
+        distance = 24;
+    else
+        distance = 36;
+    bulletCollider.x = bullet.x + (distance * bullet._direction._x);
+    bulletCollider.y = bullet.y - (distance *-bullet._direction._y);
+    if (bullet._direction._y != 0){
+        bulletCollider.width = blockSize;
+        bulletCollider.height = blockSize/2;
+    }
+    else {
+        bulletCollider.width = blockSize/2;
+        bulletCollider.height = blockSize;
+    }
     bullet.kill();
+}
+
+function destructionHandler (bulletC, block){
     block.kill();
 }
 },{}]},{},[1]);
