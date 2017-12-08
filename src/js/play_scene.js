@@ -1,5 +1,7 @@
 'use strict';
 
+var enemy;
+
 var player;
 var cursors;
 var bloquesGroup;
@@ -145,10 +147,12 @@ var PlayScene = {
         player._direction._y = 0;
 
         //EnemyTest------------------------------------------------
-        // var enemyPos = getCell(this.game, 5, 12);
-        // enemyPos._x += 24;
-        // enemyPos._y += 24;
-        // enemy = new Enemy(this.game, enemyPos, objectsScale, playerVel, playerDir, 3, 'tank');
+        var enemyPos = getCell(this.game, 0, 11);
+        enemyPos._x += 24;
+        enemyPos._y += 24;
+        var enemyDir = new Par (1, 0);
+        var enemyVel = new Par(100, 100);
+        enemy = new Enemy(this.game, enemyPos, objectsScale, enemyVel, enemyDir, bulletsGroup, bulletVel, bulletTime, 3, 'tank');
         
     },
     
@@ -157,6 +161,11 @@ var PlayScene = {
         this.game.physics.arcade.collide(player, wallsGroup);
         this.game.physics.arcade.overlap(bulletsGroup, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(bulletsGroup, wallsGroup, resetBullet, null, this);
+
+        //this.game.physics.arcade.overlap(enemy, wallsGroup, enemy.changeDir(), null, this);
+        this.game.physics.arcade.collide(bloquesGroup, enemy);
+        this.game.physics.arcade.collide(wallsGroup, enemy);
+        this.game.physics.arcade.collide(player, enemy);
         // //Provisional, esto hay que meterlo en el update de Player ---------------------------------------------------------------------
         // if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
         // {

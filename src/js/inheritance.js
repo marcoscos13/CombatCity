@@ -29,11 +29,12 @@ var Movable = function (game, pos, scale, vel, dir, sprite){
 
 Movable.prototype = Object.create(Collider.prototype);
 Movable.prototype.constructor = Movable;
-Movable.prototype.set_velocity = function()
-{ //Función para cambiar la velocidad
-    this._velocity._x = velocity._x;
-    this._velocity._y = velocity._y;
-}
+
+// Movable.prototype.set_velocity = function()
+// { //Función para cambiar la velocidad
+//     this._velocity._x = velocity._x;
+//     this._velocity._y = velocity._y;
+// }
 Movable.prototype.update = function()
 { //Update de los móviles
     // this.x += this._direction._x * this._velocity._x;
@@ -56,6 +57,13 @@ var Shooter = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bull
     this._bulletTime = bulletTime;
     this._bulletSince = 0;
     this._game = game;
+    this.body.static = true;
+    var grayW = (this.game.height - 48*13)/2;
+    var grayH = (this.game.width - 48*13)/2;
+    this.gapW = grayW - Math.trunc(grayW/24)*24;
+    if (this.gapW > 12) this.gapW = 24-this.gapW;
+    this.gapH = grayH - Math.trunc(grayH/24)*24;
+    if (this.gapH > 12) this.gapH = 24-this.gapH;
 }
 
 Shooter.prototype = Object.create(Movable.prototype);
@@ -88,13 +96,6 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.boolR = false;
     this.boolD = false;
     this.boolU = false;
-    var grayW = (this.game.height - 48*13)/2;
-    var grayH = (this.game.width - 48*13)/2;
-    this.gapW = grayW - Math.trunc(grayW/24)*24;
-    if (this.gapW > 12) this.gapW = 24-this.gapW;
-    this.gapH = grayH - Math.trunc(grayH/24)*24;
-    if (this.gapH > 12) this.gapH = 24-this.gapH;
-
     // console.debug("GapW: " + this.gapW);
     // console.debug("GapH: " + this.gapH);
 }
@@ -215,12 +216,51 @@ Player.prototype.update = function(){
     }
 }
 
-var Enemy = function(game, pos, scale, vel, dir /*, bulletsGroup, bulletVel, bulletTime*/, lives, sprite){
+var Enemy = function(game, pos, scale, vel, dir , bulletsGroup, bulletVel, bulletTime, lives, sprite){
     Shooter.apply(this, [game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, sprite]);
-    this._direction._x = 0;
-    this._direction._y = -1;
     this.angle = 0;
     this._lives = lives;
+    this.body.onCollide = new Phaser.Signal();
+    this.body.onCollide.add(function(){
+        var rnd = game.rnd.integerInRange(1, 4);
+        if(rnd === 1){
+            this._direction._x = 1;
+            this._direction._y = 0;
+        }
+        else if (rnd === 2){
+            this._direction._x = -1;
+            this._direction._y = 0;
+        }
+        else if (rnd === 3){
+            this._direction._y = 1;
+            this._direction._x = 0;
+        }
+        else if (rnd === 4){
+            this._direction._y = -1;
+            this._direction._x = 0;
+        }
+
+        if (this._direction._x === 1){
+            this.angle = 0;
+            this.y += this.gapW;
+            this.y = 24 * Math.round(this.y/24) - this.gapW;
+        }
+        else if (this._direction._x === -1){
+            this.angle = 180;
+            this.y += this.gapW;
+            this.y = 24 * Math.round(this.y/24) - this.gapW;
+        }
+        else if (this._direction._y === 1){
+            this.angle = 90;
+            this.x += this.gapH;
+            this.x = 24 * Math.round(this.x/24) - this.gapH;
+        }
+        else if (this._direction._y === -1){
+            this.angle = 270;
+            this.x += this.gapH;
+            this.x = 24 * Math.round(this.x/24) - this.gapH;
+        }
+    }, this);
 }
 
 Enemy.prototype = Object.create(Shooter.prototype);
@@ -229,4 +269,17 @@ Enemy.prototype.constructor = Enemy;
 Enemy.prototype.update = function(){
     this.body.velocity.x = this._direction._x * this._velocity._x;
     this.body.velocity.y = this._direction._y * this._velocity._y;
+    //this.changeDir();
 }
+// Enemy.prototype.changeDir = function(){
+//     this._direction._x = this.game.rnd.integerInRange(-1, 1);
+//     this._direction._y = this.game.rnd.integerInRange(-1, 1);
+//     if(this._direction._x === 0){
+//         while (this._direction._y === 0) this._direction._y = this.game.rnd.integerInRange(-1, 1);
+//     }
+//     else this._direction._y = 0;
+//     if (this._direction._x === 1) this.angle = 0;
+//     else if (this._direction._x === -1) this.angle = 180;
+//     else if (this._direction._y === 1) this.angle = 90;
+//     else if (this._direction._y === -1) this.angle = 270;
+// }
