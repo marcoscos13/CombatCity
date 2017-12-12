@@ -111,8 +111,10 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.gapH = grayH - Math.trunc(grayH/24)*24;
     if (this.gapH > 12) this.gapH = 24-this.gapH;
 
-    // console.debug("GapW: " + this.gapW);
-    // console.debug("GapH: " + this.gapH);
+    //Inicializa el player mirando hacia arriba
+    this._direction._x = 0;
+    this._direction._y = -1;
+    this.angle = 270;    
 }
 
 //Player.prototype = Object.create(Shooter.prototype);
@@ -246,3 +248,5 @@ Enemy.prototype.update = function(){
     this.body.velocity.x = this._direction._x * this._velocity._x;
     this.body.velocity.y = this._direction._y * this._velocity._y;
 }
+
+
