@@ -65,13 +65,28 @@ Shooter.prototype.fire_bullet = function()
     if (this._game.time.now > this._bulletSince)
     {
         var bullet = this._bulletsGroup.getFirstExists(false);
-
         if (bullet)
         {
+            bullet.angle = 0;
+            if (bullet.scale.x < 0)
+                bullet.scale.x *= -1;
+
+            bullet._direction._x = this._direction._x;
+            bullet._direction._y = this._direction._y;
             bullet.reset(this.x, this.y);
             bullet.body.velocity.y = this._bulletVel * this._direction._y;
             bullet.body.velocity.x = this._bulletVel * this._direction._x;
             this._bulletSince = this._game.time.now + this._bulletTime;
+            if (this._direction._x != 0){
+                bullet.scale.x *= this._direction._x;
+            }
+            else{
+                bullet.scale.y *= this._direction._y;
+                if (this._direction._y == 1)
+                    bullet.angle = 90;
+                else
+                    bullet.angle = 270;
+            }
         }
     }
 }
@@ -84,6 +99,7 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.angle = 0;
     this.dirStack = new SmartStack();
     this.dirChar = ' ';
+    this.tankLevel = 1;
     this.boolL = false;
     this.boolR = false;
     this.boolD = false;
@@ -95,8 +111,10 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.gapH = grayH - Math.trunc(grayH/24)*24;
     if (this.gapH > 12) this.gapH = 24-this.gapH;
 
-    // console.debug("GapW: " + this.gapW);
-    // console.debug("GapH: " + this.gapH);
+    //Inicializa el player mirando hacia arriba
+    this._direction._x = 0;
+    this._direction._y = -1;
+    this.angle = 270;    
 }
 
 //Player.prototype = Object.create(Shooter.prototype);
@@ -230,3 +248,5 @@ Enemy.prototype.update = function(){
     this.body.velocity.x = this._direction._x * this._velocity._x;
     this.body.velocity.y = this._direction._y * this._velocity._y;
 }
+
+
