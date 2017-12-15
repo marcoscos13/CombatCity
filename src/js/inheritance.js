@@ -56,6 +56,12 @@ var Shooter = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bull
     this._bulletTime = bulletTime;
     this._bulletSince = 0;
     this._game = game;
+    var grayW = (this.game.height - 48*13)/2;
+    var grayH = (this.game.width - 48*13)/2;
+    this.gapW = grayW - Math.trunc(grayW/24)*24;
+    if (this.gapW > 12) this.gapW = 24-this.gapW;
+    this.gapH = grayH - Math.trunc(grayH/24)*24;
+    if (this.gapH > 12) this.gapH = 24-this.gapH;
 }
 
 Shooter.prototype = Object.create(Movable.prototype);
@@ -104,12 +110,6 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.boolR = false;
     this.boolD = false;
     this.boolU = false;
-    var grayW = (this.game.height - 48*13)/2;
-    var grayH = (this.game.width - 48*13)/2;
-    this.gapW = grayW - Math.trunc(grayW/24)*24;
-    if (this.gapW > 12) this.gapW = 24-this.gapW;
-    this.gapH = grayH - Math.trunc(grayH/24)*24;
-    if (this.gapH > 12) this.gapH = 24-this.gapH;
 
     //Inicializa el player mirando hacia arriba
     this._direction._x = 0;
@@ -256,6 +256,7 @@ Enemy.prototype = Object.create(Shooter.prototype);
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.update = function(){
+    //console.debug(this.x + ' ' + this.y);
     if(!this._changeStarted){
         this._changeStarted = true;
         this._timer.loop(this.game.rnd.realInRange(2000, 5000), this.change_dir, this);
@@ -275,22 +276,27 @@ Enemy.prototype.stop = function(){
     this._velocity._y = 0;
 }
 Enemy.prototype.change_dir = function(){
-    var rnd = this.game.rnd.integerInRange(1, 4);
-    if(rnd === 1){
-        this._direction._x = 1;
-        this._direction._y = 0;
-    }
-    else if (rnd === 2){
-        this._direction._x = -1;
-        this._direction._y = 0;
-    }
-    else if (rnd === 3){
-        this._direction._y = 1;
-        this._direction._x = 0;
-    }
-    else if (rnd === 4){
-        this._direction._y = -1;
-        this._direction._x = 0;
+    var dirxaux = this._direction._x;
+    var diryaux = this._direction._y;
+    
+    while(dirxaux === this._direction._x && diryaux === this._direction._y){
+        var rnd = this.game.rnd.integerInRange(1, 4);
+        if(rnd === 1){
+            this._direction._x = 1;
+            this._direction._y = 0;
+        }
+        else if (rnd === 2){
+            this._direction._x = -1;
+            this._direction._y = 0;
+        }
+        else if (rnd === 3){
+            this._direction._y = 1;
+            this._direction._x = 0;
+        }
+        else if (rnd === 4){
+            this._direction._y = -1;
+            this._direction._x = 0;
+        }
     }
 
     if (this._direction._x === 1){

@@ -1,5 +1,6 @@
 'use strict';
 
+var enemy;
 var player;
 var cursors;
 var bloquesGroup;
@@ -8,7 +9,7 @@ var iceGroup;
 var playerBullets;
 var wallsGroup;
 var objectsScale = new Par(3, 3);
-var enemyBullets = [];
+var enemyBullets = new Array();
 // var totalEnemyBullets;
 
 var bulletVel;
@@ -86,20 +87,25 @@ var PlayScene = {
 
         ////////////////////////EnemyTest
 
-        //Creación de 20 bulletsGroup para los 20 enemigos
-        for (var i = 0; i < 20; i++){
+        //Creación de 4 bulletsGroup para los 20 enemigos
+        for (var i = 0; i < 4; i++){
             //Se inicializa el grupo de las balas
             enemyBullets[i] = this.game.add.group();
             enemyBullets[i].enableBody = true;
             enemyBullets[i].physicsBodyType = Phaser.Physics.ARCADE;
-        
             //Se crean las balas y se añaden al grupo        
-            for (var i = 0; i < 1; i++){ //i = numero de balas simultaneas en pantalla
-                var bala = new Bullet(this.game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
-                enemyBullets[i].add(bala);
-            }
+            // var bala = new Bullet(this.game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
+            enemyBullets[i].add(new Bullet(this.game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet'));
         }
 
+        //Creación de un enemy
+        var enemyPos = getCell(this.game, blockSize, 0, 11);
+        enemyPos._x += 24;
+        enemyPos._y += 24;
+        var enemyDir = new Par (1, 0);
+        var enemyVel = new Par(100, 100);
+        enemy = new Enemy(this.game, enemyPos, objectsScale, enemyVel, enemyDir, enemyBullets[0], bulletVel, bulletTime, 3, 'tank');
+        
         ////////////////////////Mapa    
 
         createWalls(this.game, wallsGroup, objectsScale, blockSize); //Crea los limites del mapa
@@ -111,6 +117,9 @@ var PlayScene = {
         this.game.physics.arcade.collide(player, bloquesGroup);
         this.game.physics.arcade.collide(player, waterGroup);
         this.game.physics.arcade.collide(player, wallsGroup);
+        this.game.physics.arcade.collide(enemy, bloquesGroup);
+        this.game.physics.arcade.collide(enemy, waterGroup);
+        this.game.physics.arcade.collide(enemy, wallsGroup);
         this.game.physics.arcade.overlap(playerBullets, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(bulletCollider, bloquesGroup, destructionHandler, null, this);
         this.game.physics.arcade.overlap(playerBullets, wallsGroup, resetBullet, null, this);
