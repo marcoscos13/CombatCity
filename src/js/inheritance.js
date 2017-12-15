@@ -233,20 +233,89 @@ Player.prototype.update = function(){
     }
 }
 
-var Enemy = function(game, pos, scale, vel, dir /*, bulletsGroup, bulletVel, bulletTime*/, lives, sprite){
+var Enemy = function(game, pos, scale, vel, dir , bulletsGroup, bulletVel, bulletTime, lives, sprite){
     Shooter.apply(this, [game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, sprite]);
-    this._direction._x = 0;
-    this._direction._y = -1;
+    this._moving = true;
+    this._velxAux = this._velocity._x;
+    this._velyAux = this._velocity._y;
     this.angle = 0;
     this._lives = lives;
+    this.body.immovable = true;
+    this._changeStarted = false;
+    this._timer = this.game.time.create(false);
+    this.body.onCollide = new Phaser.Signal();
+    this.body.onCollide.add(function(){
+        if (this._velocity._x !== 0 || this._velocity._y !== 0){
+            this.stop();
+            this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.change_dir, this);
+        }
+    }, this);
 }
 
 Enemy.prototype = Object.create(Shooter.prototype);
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.update = function(){
-    this.body.velocity.x = this._direction._x * this._velocity._x;
-    this.body.velocity.y = this._direction._y * this._velocity._y;
+    if(!this._changeStarted){
+        this._changeStarted = true;
+        this._timer.loop(this.game.rnd.realInRange(2000, 5000), this.change_dir, this);
+        this._timer.start();
+    }
+    if(this._moving){
+        this.body.velocity.x = this._direction._x * this._velocity._x;
+        this.body.velocity.y = this._direction._y * this._velocity._y;
+    }
+    var rnd = this.game.rnd.integerInRange(0, 1)
+    if (rnd === 1) this.fire_bullet();
+    //this.changeDir();
 }
 
+Enemy.prototype.stop = function(){
+    this._velocity._x = 0;
+    this._velocity._y = 0;
+}
+Enemy.prototype.change_dir = function(){
+    var rnd = this.game.rnd.integerInRange(1, 4);
+    if(rnd === 1){
+        this._direction._x = 1;
+        this._direction._y = 0;
+    }
+    else if (rnd === 2){
+        this._direction._x = -1;
+        this._direction._y = 0;
+    }
+    else if (rnd === 3){
+        this._direction._y = 1;
+        this._direction._x = 0;
+    }
+    else if (rnd === 4){
+        this._direction._y = -1;
+        this._direction._x = 0;
+    }
 
+    if (this._direction._x === 1){
+        this.angle = 0;
+        this.y += this.gapW;
+        this.y = 24 * Math.round(this.y/24) - this.gapW;
+    }
+    else if (this._direction._x === -1){
+        this.angle = 180;
+        this.y += this.gapW;
+        this.y = 24 * Math.round(this.y/24) - this.gapW;
+    }
+    else if (this._direction._y === 1){
+        this.angle = 90;
+        this.x += this.gapH;
+        this.x = 24 * Math.round(this.x/24) - this.gapH;
+    }
+    else if (this._direction._y === -1){
+        this.angle = 270;
+        this.x += this.gapH;
+        this.x = 24 * Math.round(this.x/24) - this.gapH;
+    }
+
+    if (this._velocity._x === 0 && this._velocity._y === 0){
+        this._velocity._x = this._velxAux;
+        this._velocity._y = this._velyAux;
+    }
+}
