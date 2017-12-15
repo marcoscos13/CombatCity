@@ -5,9 +5,11 @@ var cursors;
 var bloquesGroup;
 var waterGroup;
 var iceGroup;
-var bulletsGroup;
+var playerBullets;
 var wallsGroup;
 var objectsScale = new Par(3, 3);
+var enemyBullets = [];
+// var totalEnemyBullets;
 
 var bulletVel;
 var bulletTime;
@@ -62,14 +64,14 @@ var PlayScene = {
         bulletVel = 300;
         bulletTime = 270;
         //Se inicializa el grupo de las balas
-        bulletsGroup = this.game.add.group();
-        bulletsGroup.enableBody = true;
-        bulletsGroup.physicsBodyType = Phaser.Physics.ARCADE;
+        playerBullets = this.game.add.group();
+        playerBullets.enableBody = true;
+        playerBullets.physicsBodyType = Phaser.Physics.ARCADE;
     
         //Se crean las balas y se añaden al grupo        
         for (var i = 0; i < 1; i++){ //i = numero de balas simultaneas en pantalla
             var bala = new Bullet(this.game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
-            bulletsGroup.add(bala);
+            playerBullets.add(bala);
         }
         //Collider que destruye los bloques
         bulletCollider = new Collider(this.game, new Par(50,50), objectsScale);
@@ -77,10 +79,26 @@ var PlayScene = {
         bulletCollider.height = blockSize/2;
 
         //Player
-        player = new Player(this.game, playerPos, objectsScale, playerVel, playerDir, bulletsGroup, bulletVel, bulletTime,  cursors, 'tank');
+        player = new Player(this.game, playerPos, objectsScale, playerVel, playerDir, playerBullets, bulletVel, bulletTime,  cursors, 'tank');
         player.body.collideWorldBounds = true;
         player._direction._x = 1;
         player._direction._y = 0; 
+
+        ////////////////////////EnemyTest
+
+        //Creación de 20 bulletsGroup para los 20 enemigos
+        for (var i = 0; i < 20; i++){
+            //Se inicializa el grupo de las balas
+            enemyBullets[i] = this.game.add.group();
+            enemyBullets[i].enableBody = true;
+            enemyBullets[i].physicsBodyType = Phaser.Physics.ARCADE;
+        
+            //Se crean las balas y se añaden al grupo        
+            for (var i = 0; i < 1; i++){ //i = numero de balas simultaneas en pantalla
+                var bala = new Bullet(this.game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
+                enemyBullets[i].add(bala);
+            }
+        }
 
         ////////////////////////Mapa    
 
@@ -93,9 +111,9 @@ var PlayScene = {
         this.game.physics.arcade.collide(player, bloquesGroup);
         this.game.physics.arcade.collide(player, waterGroup);
         this.game.physics.arcade.collide(player, wallsGroup);
-        this.game.physics.arcade.overlap(bulletsGroup, bloquesGroup, collisionHandler, null, this);
+        this.game.physics.arcade.overlap(playerBullets, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(bulletCollider, bloquesGroup, destructionHandler, null, this);
-        this.game.physics.arcade.overlap(bulletsGroup, wallsGroup, resetBullet, null, this);
+        this.game.physics.arcade.overlap(playerBullets, wallsGroup, resetBullet, null, this);
     },
 
     render: function(){
