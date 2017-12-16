@@ -70,6 +70,7 @@ Shooter.prototype.fire_bullet = function()
 { //Función para disparar
     if (this._game.time.now > this._bulletSince)
     {
+        //console.debug(this._bulletsGroup.getFirstExists(false));
         var bullet = this._bulletsGroup.getFirstExists(false);
         if (bullet)
         {
@@ -256,7 +257,6 @@ Enemy.prototype = Object.create(Shooter.prototype);
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.update = function(){
-    //console.debug(this.x + ' ' + this.y);
     if(!this._changeStarted){
         this._changeStarted = true;
         this._timer.loop(this.game.rnd.realInRange(2000, 5000), this.change_dir, this);

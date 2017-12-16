@@ -173,6 +173,13 @@ function getCell(game, blockSize, x, y){
     return pos;
 }
 
+function getCenteredCell(game, blockSize, x, y){
+    var pos = getCell(game, blockSize, x, y);
+    pos._x += 24;
+    pos._y += 24;
+    return pos;
+}
+
 //'Struct' para pares
 function Par(x, y)
 {

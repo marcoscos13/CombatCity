@@ -1,6 +1,5 @@
 'use strict';
 
-var enemy;
 var player;
 var cursors;
 var bloquesGroup;
@@ -9,8 +8,17 @@ var iceGroup;
 var playerBullets;
 var wallsGroup;
 var objectsScale = new Par(3, 3);
-var enemyBullets = new Array();
-// var totalEnemyBullets;
+var enemy;
+var enemyGroup;
+var enemyBullets1;
+var enemyBullets2;
+var enemyBullets3;
+var enemyBullets4;
+var enemyBullets;
+var spawnPos = new Array();
+var spawnCount = 0;
+var enemyCount = 0;
+var spawned = false;
 
 var bulletVel;
 var bulletTime;
@@ -54,10 +62,12 @@ var PlayScene = {
 
         iceGroup = this.game.add.group(); //Grupo de los bloques de hielo del mapa
 
+        enemyGroup = this.game.add.group();
+        enemyGroup.enableBody = true;
+        enemyGroup.physicsBodyType = Phaser.Physics.ARCADE;
+
         //Creación del player
-        var playerPos = getCell(this.game, blockSize, 4, 13);
-        playerPos._x += 24;
-        playerPos._y += 24;
+        var playerPos = getCenteredCell(this.game, blockSize, 4, 13);
         var playerVel = new Par(140, 140);
         var playerDir = new Par (0, -1);
 
@@ -85,26 +95,29 @@ var PlayScene = {
         player._direction._x = 1;
         player._direction._y = 0; 
 
-        ////////////////////////EnemyTest
+        //EnemySpawns
+        spawnPos[0] = getCenteredCell(this.game, blockSize, 0, 0);
+        spawnPos[1] = getCenteredCell(this.game, blockSize, 7, 0);
+        spawnPos[2] = getCenteredCell(this.game, blockSize, 12, 0);
 
-        //Creación de 4 bulletsGroup para los 20 enemigos
-        for (var i = 0; i < 4; i++){
-            //Se inicializa el grupo de las balas
-            enemyBullets[i] = this.game.add.group();
-            enemyBullets[i].enableBody = true;
-            enemyBullets[i].physicsBodyType = Phaser.Physics.ARCADE;
-            //Se crean las balas y se añaden al grupo        
-            // var bala = new Bullet(this.game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
-            enemyBullets[i].add(new Bullet(this.game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet'));
-        }
+        ////////////////////////EnemyTest
+        createEnemyBullets(this.game);
+
+        //--------------------
+        //Se inicializa el grupo de las balas
+        enemyBullets = this.game.add.group();
+        enemyBullets.enableBody = true;
+        enemyBullets.physicsBodyType = Phaser.Physics.ARCADE;
+        //Se crean las balas y se añaden al grupo        
+        var bals = new Bullet(this.game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
+        enemyBullets.add(bals);
+        //--------------------
 
         //Creación de un enemy
-        var enemyPos = getCell(this.game, blockSize, 0, 11);
-        enemyPos._x += 24;
-        enemyPos._y += 24;
+        var enemyPos = getCenteredCell(this.game, blockSize, 0, 11);
         var enemyDir = new Par (1, 0);
         var enemyVel = new Par(100, 100);
-        enemy = new Enemy(this.game, enemyPos, objectsScale, enemyVel, enemyDir, enemyBullets[0], bulletVel, bulletTime, 3, 'tank');
+        enemy = new Enemy(this.game, enemyPos, objectsScale, enemyVel, enemyDir, enemyBullets, bulletVel, bulletTime, 3, 'tank');
         
         ////////////////////////Mapa    
 
@@ -117,12 +130,19 @@ var PlayScene = {
         this.game.physics.arcade.collide(player, bloquesGroup);
         this.game.physics.arcade.collide(player, waterGroup);
         this.game.physics.arcade.collide(player, wallsGroup);
-        this.game.physics.arcade.collide(enemy, bloquesGroup);
-        this.game.physics.arcade.collide(enemy, waterGroup);
-        this.game.physics.arcade.collide(enemy, wallsGroup);
+        this.game.physics.arcade.collide(enemyGroup, bloquesGroup);
+        this.game.physics.arcade.collide(enemyGroup, waterGroup);
+        this.game.physics.arcade.collide(enemyGroup, wallsGroup);
+        this.game.physics.arcade.collide(enemyGroup, enemyGroup);
         this.game.physics.arcade.overlap(playerBullets, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(bulletCollider, bloquesGroup, destructionHandler, null, this);
         this.game.physics.arcade.overlap(playerBullets, wallsGroup, resetBullet, null, this);
+
+        if(enemyCount < 4 && spawnCount < 20 && !spawned){
+            this.game.time.events.add(Phaser.Timer.SECOND * 1, spawnEnemy, this);
+            spawned = true;
+            enemyCount++;
+        }
     },
 
     render: function(){
@@ -166,4 +186,36 @@ function collisionHandler (bullet, block) {
 // Called when the bulletCollider is on top of a block
 function destructionHandler (bulletC, block){
     block.kill();
+}
+
+function createEnemyBullets(game){
+    // enemyBullets1 = game.add.group();
+    // enemyBullets1.enableBody = true;
+    // enemyBullets1.physicsBodyType = Phaser.Physics.ARCADE;
+    // var bala1 = new Bullet(game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
+    // enemyBullets1.add(bala1);
+    // enemyBullets2 = game.add.group();
+    // enemyBullets2.enableBody = true;
+    // enemyBullets2.physicsBodyType = Phaser.Physics.ARCADE;
+    // var bala2 = new Bullet(game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
+    // enemyBullets1.add(bala2);
+    // enemyBullets3 = game.add.group();
+    // enemyBullets3.enableBody = true;
+    // enemyBullets3.physicsBodyType = Phaser.Physics.ARCADE;
+    // var bala3 = new Bullet(game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
+    // enemyBullets1.add(bala3);
+    // enemyBullets4 = game.add.group();
+    // enemyBullets4.enableBody = true;
+    // enemyBullets4.physicsBodyType = Phaser.Physics.ARCADE;
+    // var bala4 = new Bullet(game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
+    // enemyBullets1.add(bala4);
+}
+
+function spawnEnemy(){
+    var rnd = this.game.rnd.integerInRange(0, 2);
+    var enemyDir = new Par (1, 0);
+    var enemyVel = new Par(100, 100);
+    var spawnedEnemy = new Enemy(this.game, spawnPos[rnd], objectsScale, enemyVel, enemyDir, enemyBullets, bulletVel, bulletTime, 3, 'tank');
+    enemyGroup.add(spawnedEnemy);
+    spawned = false;
 }
