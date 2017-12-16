@@ -9,6 +9,7 @@ var iceGroup;
 var wallsGroup;
 var playerBullets;
 var objectsScale = new Par(3, 3);
+
 var enemy;
 var enemyGroup;
 var enemyBullets1;
@@ -16,6 +17,7 @@ var enemyBullets2;
 var enemyBullets3;
 var enemyBullets4;
 var enemyBullets;
+var spawnIndex = 0;
 var spawnPos = new Array();
 var spawnCount = 0;
 var enemyCount = 0;
@@ -98,7 +100,7 @@ var PlayScene = {
 
         //EnemySpawns
         spawnPos[0] = getCenteredCell(this.game, blockSize, 0, 0);
-        spawnPos[1] = getCenteredCell(this.game, blockSize, 7, 0);
+        spawnPos[1] = getCenteredCell(this.game, blockSize, 6, 0);
         spawnPos[2] = getCenteredCell(this.game, blockSize, 12, 0);
 
         ////////////////////////EnemyTest
@@ -106,7 +108,7 @@ var PlayScene = {
 
         //--------------------
 
-        this.game.time.events.add(Phaser.Timer.SECOND * 1, spawnEnemy, this);
+        
 
         //Creación de un enemy
         // var enemyPos = getCenteredCell(this.game, blockSize, 0, 11);
@@ -139,11 +141,12 @@ var PlayScene = {
         this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, destructionHandlerEnemy, null, this);
 
-        // if(enemyCount < 4 && spawnCount < 20 && !spawned){
-        //     this.game.time.events.add(Phaser.Timer.SECOND * 1, spawnEnemy, this);
-        //     spawned = true;
-        //     enemyCount++;
-        // }
+        if(enemyCount < 4 && spawnCount < 20 && !spawned){
+            this.game.time.events.add(Phaser.Timer.SECOND * 1.5, spawnEnemy, this);
+            spawned = true;
+            enemyCount++;
+            spawnCount++;
+        }
     },
 
     render: function(){
@@ -188,6 +191,7 @@ function collisionHandler (bullet, block) {
 function collisionKillEnemy (bullet, enemy) {
     if (enemy._lives > 1) enemy._lives--;
     else {
+        enemyCount--;
         enemyGroup.remove(enemy);
         enemy.kill();
     }
@@ -235,10 +239,11 @@ function createEnemyBullets(game){
 }
 
 function spawnEnemy(){
-    var rnd = this.game.rnd.integerInRange(0, 2);
     var enemyDir = new Par (1, 0);
     var enemyVel = new Par(100, 100);
-    var spawnedEnemy = new Enemy(this.game, spawnPos[rnd], objectsScale, enemyVel, enemyDir, enemyBullets1, bulletVel, bulletTime, 3, 'tank');
+    var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, enemyVel, enemyDir, enemyBullets1, bulletVel, bulletTime, 1, 'tank');
     enemyGroup.add(spawnedEnemy);
     spawned = false;
+    spawnIndex++;
+    if (spawnIndex >= spawnPos.length) spawnIndex = 0;
 }

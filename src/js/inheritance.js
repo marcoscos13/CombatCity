@@ -260,6 +260,11 @@ var Enemy = function(game, pos, scale, vel, dir , bulletsGroup, bulletVel, bulle
             this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.change_dir, this);
         }
     }, this);
+
+    //Inicializa el enemigo mirando hacia abajo
+    this._direction._x = 0;
+    this._direction._y = 1;
+    this.angle = 90; 
 }
 
 Enemy.prototype = Object.create(Shooter.prototype);
