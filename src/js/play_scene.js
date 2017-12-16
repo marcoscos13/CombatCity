@@ -114,10 +114,10 @@ var PlayScene = {
         //--------------------
 
         //Creación de un enemy
-        var enemyPos = getCenteredCell(this.game, blockSize, 0, 11);
-        var enemyDir = new Par (1, 0);
-        var enemyVel = new Par(100, 100);
-        enemy = new Enemy(this.game, enemyPos, objectsScale, enemyVel, enemyDir, enemyBullets, bulletVel, bulletTime, 3, 'tank');
+        // var enemyPos = getCenteredCell(this.game, blockSize, 0, 11);
+        // var enemyDir = new Par (1, 0);
+        // var enemyVel = new Par(100, 100);
+        // enemy = new Enemy(this.game, enemyPos, objectsScale, enemyVel, enemyDir, enemyBullets, bulletVel, bulletTime, 3, 'tank');
         
         ////////////////////////Mapa    
 
