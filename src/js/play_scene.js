@@ -1,15 +1,26 @@
 'use strict';
 
-var player;
+
 var cursors;
+
+var objectsScale = new Par(3, 3);
+var blockSize = 48;
+
 var bloquesGroup;
 var waterGroup;
 var iceGroup;
-
 var wallsGroup;
-var playerBullets;
-var objectsScale = new Par(3, 3);
 
+//Player
+var player;
+var playerBullets;
+
+var bulletVel;
+var bulletTime;
+var bullet;
+var bulletCollider;
+
+//Enemies
 var enemy;
 var enemyGroup;
 var enemyBullets1;
@@ -17,20 +28,14 @@ var enemyBullets2;
 var enemyBullets3;
 var enemyBullets4;
 var enemyBullets;
+
+var enemyBulletCollider;
+
 var spawnIndex = 0;
 var spawnPos = new Array();
 var spawnCount = 0;
 var enemyCount = 0;
 var spawned = false;
-
-var bulletVel;
-var bulletTime;
-var bullet;
-
-//var bloquetest;
-var blockSize = 48;
-
-var bulletCollider;
 
 var PlayScene = {
     preload: function(){
@@ -92,8 +97,17 @@ var PlayScene = {
         bulletCollider.width = blockSize;
         bulletCollider.height = blockSize/2;
 
+        //Collider que destruye los bloques (para los enemigos)
+        enemyBulletCollider = new Collider(this.game, new Par(50,50), objectsScale);
+        enemyBulletCollider.width = blockSize;
+        enemyBulletCollider.height = blockSize/2;
+
         //Player
-        player = new Player(this.game, playerPos, objectsScale, playerVel, playerDir, playerBullets, bulletVel, bulletTime,  cursors, 'tank');
+        player = new Player(this.game, playerPos, objectsScale, playerVel, playerDir, playerBullets, bulletVel, bulletTime,  cursors, 'sprites_atlas');
+        //player.animations.add('player1_right_on', ['player1_level1_right1','player1_level1_right2'], 2, true);
+        //player.animations.play('player1_right_on');
+        player.animations.add('player1_right_off', ['player1_level1_right1'], 1, true);
+        player.animations.play('player1_right_off');
         player.body.collideWorldBounds = true;
         player._direction._x = 1;
         player._direction._y = 0; 
@@ -138,7 +152,8 @@ var PlayScene = {
         this.game.physics.arcade.overlap(playerBullets, enemyGroup, collisionKillEnemy, null, this);
 
         this.game.physics.arcade.overlap(enemyBullets1, wallsGroup, resetBullet, null, this);
-        this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, collisionHandler, null, this);
+        this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, collisionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, destructionHandlerEnemy, null, this);
 
         if(enemyCount < 4 && spawnCount < 20 && !spawned){
@@ -183,6 +198,22 @@ function collisionHandler (bullet, block) {
     else {
         bulletCollider.width = blockSize/2;
         bulletCollider.height = blockSize;
+    }
+    bullet.kill();
+}
+
+// Called if the bullet hits one of the block sprites (for Enemies)
+function collisionHandlerEnemy (bullet, block) {
+    var distance = 24;
+    enemyBulletCollider.x = bullet.x + (distance * bullet._direction._x);
+    enemyBulletCollider.y = bullet.y - (distance *-bullet._direction._y);
+    if (bullet._direction._y != 0){
+        enemyBulletCollider.width = blockSize;
+        enemyBulletCollider.height = blockSize/2;
+    }
+    else {
+        enemyBulletCollider.width = blockSize/2;
+        enemyBulletCollider.height = blockSize;
     }
     bullet.kill();
 }
@@ -241,7 +272,9 @@ function createEnemyBullets(game){
 function spawnEnemy(){
     var enemyDir = new Par (1, 0);
     var enemyVel = new Par(100, 100);
-    var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, enemyVel, enemyDir, enemyBullets1, bulletVel, bulletTime, 1, 'tank');
+    var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, enemyVel, enemyDir, enemyBullets1, bulletVel, bulletTime, 1, 'sprites_atlas');
+    spawnedEnemy.animations.add('enemy_basic_right_off', ['enemy_basic_right1'], 1, true);
+    spawnedEnemy.animations.play('enemy_basic_right_off');
     enemyGroup.add(spawnedEnemy);
     spawned = false;
     spawnIndex++;
