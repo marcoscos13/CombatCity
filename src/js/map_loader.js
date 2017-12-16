@@ -33,7 +33,7 @@ function loadMap(self, objectsScale, blockSize, bloquesGroup, waterGroup, iceGro
                     BloquePos._x = getCell(self.game,blockSize,i,j)._x;
                     for(var bX = 0; bX < blocksW; bX++){
                         if (bX >= blocksWS && bY >= blocksHS){
-                            newBloque = new Collider(self.game, BloquePos, objectsScale, 'map_sheet');
+                            newBloque = new Block(self.game, BloquePos, objectsScale, 'map_sheet', 'Brick');
                             
                             newBloque.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
                             newBloque.body.immovable = true;

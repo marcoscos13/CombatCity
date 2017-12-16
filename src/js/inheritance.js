@@ -20,6 +20,15 @@ var Collider = function (game, pos, scale, sprite) {
 Collider.prototype = Object.create(Phaser.Sprite.prototype);
 Collider.prototype.constructor = Collider;
 
+////Clase Block y sus métodos
+var Block = function (game, pos, scale, vel, dir, sprite, bType){
+    Collider.apply(this, [game, pos, scale, sprite]);
+    this.blockType = bType;
+}
+
+Block.prototype = Object.create(Collider.prototype);
+Block.prototype.constructor = Block;
+
 ////Clase Movable y sus métodos
 var Movable = function (game, pos, scale, vel, dir, sprite){
     Collider.apply(this, [game, pos, scale, sprite]);
