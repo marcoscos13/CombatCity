@@ -21,7 +21,7 @@ Collider.prototype = Object.create(Phaser.Sprite.prototype);
 Collider.prototype.constructor = Collider;
 
 ////Clase Block y sus métodos
-var Block = function (game, pos, scale, vel, dir, sprite, bType){
+var Block = function (game, pos, scale, sprite, bType){
     Collider.apply(this, [game, pos, scale, sprite]);
     this.blockType = bType;
 }
