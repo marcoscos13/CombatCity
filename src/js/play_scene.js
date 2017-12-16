@@ -5,8 +5,9 @@ var cursors;
 var bloquesGroup;
 var waterGroup;
 var iceGroup;
-var playerBullets;
+
 var wallsGroup;
+var playerBullets;
 var objectsScale = new Par(3, 3);
 var enemy;
 var enemyGroup;
@@ -104,14 +105,8 @@ var PlayScene = {
         createEnemyBullets(this.game);
 
         //--------------------
-        //Se inicializa el grupo de las balas
-        enemyBullets = this.game.add.group();
-        enemyBullets.enableBody = true;
-        enemyBullets.physicsBodyType = Phaser.Physics.ARCADE;
-        //Se crean las balas y se añaden al grupo        
-        var bals = new Bullet(this.game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
-        enemyBullets.add(bals);
-        //--------------------
+
+        this.game.time.events.add(Phaser.Timer.SECOND * 1, spawnEnemy, this);
 
         //Creación de un enemy
         // var enemyPos = getCenteredCell(this.game, blockSize, 0, 11);
@@ -134,15 +129,21 @@ var PlayScene = {
         this.game.physics.arcade.collide(enemyGroup, waterGroup);
         this.game.physics.arcade.collide(enemyGroup, wallsGroup);
         this.game.physics.arcade.collide(enemyGroup, enemyGroup);
+
+        this.game.physics.arcade.overlap(playerBullets, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(playerBullets, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(bulletCollider, bloquesGroup, destructionHandler, null, this);
-        this.game.physics.arcade.overlap(playerBullets, wallsGroup, resetBullet, null, this);
+        
 
-        if(enemyCount < 4 && spawnCount < 20 && !spawned){
-            this.game.time.events.add(Phaser.Timer.SECOND * 1, spawnEnemy, this);
-            spawned = true;
-            enemyCount++;
-        }
+        this.game.physics.arcade.overlap(enemyBullets1, wallsGroup, resetBullet, null, this);
+        this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, collisionHandler, null, this);
+        this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, destructionHandlerEnemy, null, this);
+
+        // if(enemyCount < 4 && spawnCount < 20 && !spawned){
+        //     this.game.time.events.add(Phaser.Timer.SECOND * 1, spawnEnemy, this);
+        //     spawned = true;
+        //     enemyCount++;
+        // }
     },
 
     render: function(){
@@ -159,8 +160,8 @@ var PlayScene = {
 module.exports = PlayScene;
 
 // Called if the bullet goes out of the screen
-function resetBullet (bullet) {
-    bullet.kill();
+function resetBullet (_bullet) {
+    _bullet.kill();
 }
 
 // Called if the bullet hits one of the block sprites
@@ -185,37 +186,49 @@ function collisionHandler (bullet, block) {
 
 // Called when the bulletCollider is on top of a block
 function destructionHandler (bulletC, block){
-    block.kill();
+    if (block.blockType != 'Metal')
+        block.kill();
+    else if (player.tankLevel >= 3)
+        block.kill();
+}
+
+// Called when the bulletCollider is on top of a block
+function destructionHandlerEnemy (bulletC, block){
+    if (block.blockType != 'Metal')
+        block.kill();
 }
 
 function createEnemyBullets(game){
-    // enemyBullets1 = game.add.group();
-    // enemyBullets1.enableBody = true;
-    // enemyBullets1.physicsBodyType = Phaser.Physics.ARCADE;
-    // var bala1 = new Bullet(game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
-    // enemyBullets1.add(bala1);
-    // enemyBullets2 = game.add.group();
-    // enemyBullets2.enableBody = true;
-    // enemyBullets2.physicsBodyType = Phaser.Physics.ARCADE;
-    // var bala2 = new Bullet(game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
-    // enemyBullets1.add(bala2);
-    // enemyBullets3 = game.add.group();
-    // enemyBullets3.enableBody = true;
-    // enemyBullets3.physicsBodyType = Phaser.Physics.ARCADE;
-    // var bala3 = new Bullet(game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
-    // enemyBullets1.add(bala3);
-    // enemyBullets4 = game.add.group();
-    // enemyBullets4.enableBody = true;
-    // enemyBullets4.physicsBodyType = Phaser.Physics.ARCADE;
-    // var bala4 = new Bullet(game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
-    // enemyBullets1.add(bala4);
+    enemyBullets1 = game.add.group();
+    enemyBullets1.enableBody = true;
+    enemyBullets1.physicsBodyType = Phaser.Physics.ARCADE;
+    var bala1 = new Bullet(game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
+    enemyBullets1.add(bala1);
+
+    enemyBullets2 = game.add.group();
+    enemyBullets2.enableBody = true;
+    enemyBullets2.physicsBodyType = Phaser.Physics.ARCADE;
+    var bala2 = new Bullet(game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
+    enemyBullets2.add(bala2);
+
+    enemyBullets3 = game.add.group();
+    enemyBullets3.enableBody = true;
+    enemyBullets3.physicsBodyType = Phaser.Physics.ARCADE;
+    var bala3 = new Bullet(game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
+    enemyBullets3.add(bala3);
+
+    enemyBullets4 = game.add.group();
+    enemyBullets4.enableBody = true;
+    enemyBullets4.physicsBodyType = Phaser.Physics.ARCADE;
+    var bala4 = new Bullet(game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
+    enemyBullets4.add(bala4);
 }
 
 function spawnEnemy(){
     var rnd = this.game.rnd.integerInRange(0, 2);
     var enemyDir = new Par (1, 0);
     var enemyVel = new Par(100, 100);
-    var spawnedEnemy = new Enemy(this.game, spawnPos[rnd], objectsScale, enemyVel, enemyDir, enemyBullets, bulletVel, bulletTime, 3, 'tank');
+    var spawnedEnemy = new Enemy(this.game, spawnPos[rnd], objectsScale, enemyVel, enemyDir, enemyBullets1, bulletVel, bulletTime, 3, 'tank');
     enemyGroup.add(spawnedEnemy);
     spawned = false;
 }

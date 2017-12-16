@@ -68,7 +68,7 @@ function loadMap(self, objectsScale, blockSize, bloquesGroup, waterGroup, iceGro
                     BloquePos._x = getCell(self.game,blockSize,i,j)._x;
                     for(var bX = 0; bX < blocksW; bX++){
                         if (bX >= blocksWS && bY >= blocksHS){
-                            newBloque = new Collider(self.game, BloquePos, objectsScale, 'map_sheet');
+                            newBloque = new Block(self.game, BloquePos, objectsScale, 'map_sheet', 'Metal');
                             newBloque.frame = 4;
                             
                             newBloque.crop(new Phaser.Rectangle(8*bX,8*bY,miniBlockCrop,miniBlockCrop));
@@ -84,14 +84,14 @@ function loadMap(self, objectsScale, blockSize, bloquesGroup, waterGroup, iceGro
                 }
             }
             else if (row[i] == 'GG'){ //If it's a Grass block
-                newBloque = new Collider(self.game, BloquePos, objectsScale, 'map_sheet');
+                newBloque = new Block(self.game, BloquePos, objectsScale, 'map_sheet', 'Grass');
                 newBloque.frame = 2;
 
                 newBloque.body.immovable = true;
                 newBloque.anchor.setTo(0,0);
             }
             else if (row[i] == 'II'){ //If it's an Ice block
-                newBloque = new Collider(self.game, BloquePos, objectsScale, 'map_sheet');
+                newBloque = new Block(self.game, BloquePos, objectsScale, 'map_sheet', 'Ice');
                 newBloque.frame = 3;
 
                 newBloque.body.immovable = true;
@@ -99,7 +99,7 @@ function loadMap(self, objectsScale, blockSize, bloquesGroup, waterGroup, iceGro
                 iceGroup.add(newBloque);
             }
             else if (row[i] == 'WW'){ //If it's a Water block
-                newBloque = new Collider(self.game, BloquePos, objectsScale, 'map_sheet');
+                newBloque = new Block(self.game, BloquePos, objectsScale, 'map_sheet', 'Water');
                 newBloque.animations.add('water_movement', [1,5], 2, true);
                 newBloque.animations.play('water_movement');
 
