@@ -36,6 +36,7 @@ var PreloaderScene = {
     this.game.load.image('white', 'images/white.png');
     //this.game.load.image('map_sheet', 'images/map_sheet.png');
     this.game.load.spritesheet('map_sheet', 'images/map_sheet.png', 16, 16, 8);
+    this.game.load.atlas('sprites_atlas', 'images/sprites_atlas.png', 'images/sprites_atlas.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
   },
 
   create: function () {
