@@ -133,7 +133,7 @@ var PlayScene = {
         this.game.physics.arcade.overlap(playerBullets, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(playerBullets, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(bulletCollider, bloquesGroup, destructionHandler, null, this);
-        
+        this.game.physics.arcade.overlap(playerBullets, enemyGroup, collisionKillEnemy, null, this);
 
         this.game.physics.arcade.overlap(enemyBullets1, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, collisionHandler, null, this);
@@ -181,6 +181,12 @@ function collisionHandler (bullet, block) {
         bulletCollider.width = blockSize/2;
         bulletCollider.height = blockSize;
     }
+    bullet.kill();
+}
+
+// Called if the bullet hits an enemy
+function collisionKillEnemy (bullet, enemy) {
+    enemy.kill();
     bullet.kill();
 }
 
