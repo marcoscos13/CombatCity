@@ -30,12 +30,8 @@ var PreloaderScene = {
     this.game.load.image('logo', 'images/phaser.png');
     this.game.load.image('tank', 'images/tanque.png');
     this.game.load.image('bullet', 'images/bullet.png');
-    //this.game.load.image('muro', 'images/muro.png');
-    //this.game.load.image('metal', 'images/metal.png');
     this.game.load.image('background', 'images/background.png');
     this.game.load.image('white', 'images/white.png');
-    //this.game.load.image('map_sheet', 'images/map_sheet.png');
-    this.game.load.spritesheet('map_sheet', 'images/map_sheet.png', 16, 16, 8);
     this.game.load.atlas('sprites_atlas', 'images/sprites_atlas.png', 'images/sprites_atlas.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
   },
 

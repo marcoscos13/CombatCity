@@ -5,8 +5,8 @@
 ////////////////
 
 ////Clase Collider y sus métodos
-var Collider = function (game, pos, scale, sprite) {
-    Phaser.Sprite.call(this, game, pos._x, pos._y, sprite);
+var Collider = function (game, pos, scale, sprite, spriteID) {
+    Phaser.Sprite.call(this, game, pos._x, pos._y, sprite, spriteID);
     game.physics.enable(this, Phaser.Physics.ARCADE); //Activa las fisicas arcade para este objeto
     this.enableBody = true;
     this.physicsBodyType = Phaser.Physics.ARCADE;
@@ -21,8 +21,8 @@ Collider.prototype = Object.create(Phaser.Sprite.prototype);
 Collider.prototype.constructor = Collider;
 
 ////Clase Block y sus métodos
-var Block = function (game, pos, scale, sprite, bType){
-    Collider.apply(this, [game, pos, scale, sprite]);
+var Block = function (game, pos, scale, sprite, spriteID, bType){
+    Collider.apply(this, [game, pos, scale, sprite, spriteID]);
     this.blockType = bType;
 }
 
