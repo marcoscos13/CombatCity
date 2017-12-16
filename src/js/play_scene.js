@@ -186,7 +186,11 @@ function collisionHandler (bullet, block) {
 
 // Called if the bullet hits an enemy
 function collisionKillEnemy (bullet, enemy) {
-    enemy.kill();
+    if (enemy._lives > 1) enemy._lives--;
+    else {
+        enemyGroup.remove(enemy);
+        enemy.kill();
+    }
     bullet.kill();
 }
 
