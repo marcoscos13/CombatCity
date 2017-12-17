@@ -133,7 +133,7 @@ Player.prototype = Object.create(Shooter.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.resetPos = function(){
-    var posTemp = getCenteredCell(this.game, 48, 4, 13);
+    var posTemp = getCenteredCell(this.game, 48, 4, 12);
     this.x = posTemp._x;
     this.y = posTemp._y;
 }

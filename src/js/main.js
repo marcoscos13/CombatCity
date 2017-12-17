@@ -28,6 +28,7 @@ var PreloaderScene = {
     // this.game.load.baseURL = 'https://marcoscos13.github.io/CombatCity/src/';
     // this.game.load.crossOrigin = 'anonymous';
     this.game.load.image('bullet', 'images/bullet.png');
+    this.game.load.image('game_over', 'images/game_over.png');
     this.game.load.image('background', 'images/background.png');
     this.game.load.image('white', 'images/white.png');
     this.game.load.atlas('sprites_atlas', 'images/sprites_atlas.png', 'images/sprites_atlas.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);

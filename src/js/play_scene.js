@@ -43,6 +43,9 @@ var spawned = false;
 
 var levelData;
 
+var gameover = false;
+var gameoverSprite;
+
 var PlayScene = {
     preload: function(){
         this.load.text('levels', 'levels/levels.json');
@@ -143,6 +146,8 @@ var PlayScene = {
         createWalls(this.game, wallsGroup, objectsScale, blockSize); //Crea los limites del mapa
 
         loadMap(this, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, levelData, 1); //Inicializa el mapa creando todos los bloques 
+
+        //gameOver(this.game);
     },
     
     update: function(){
@@ -197,6 +202,13 @@ var PlayScene = {
             spawned = true;
             enemyCount++;
             spawnCount++;
+        }
+
+        if (gameover){
+            if(gameoverSprite.y >= this.game.height/2)
+                gameoverSprite.body.velocity.y = -140;
+            else
+                gameoverSprite.body.velocity.y = 0;
         }
     },
 
@@ -298,6 +310,13 @@ function destructionHandlerEnemy (bulletC, block){
         block.kill();
 }
 
+function gameOver(game){
+    var posTemp = new Par(game.width/2,game.height+100);
+    var scaleTemp = new Par(3,3);
+    gameoverSprite = new Collider(game, posTemp, scaleTemp,'game_over');
+    gameover = true;
+}
+
 function createEnemyBullets(game){
     enemyBullets1 = game.add.group();
     enemyBullets1.enableBody = true;
@@ -348,8 +367,6 @@ function spawnEnemy(){
         bulletsUsed4 = true;
     }
     var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, bulletGroup, bNumber, 'fast');
-    spawnedEnemy.animations.add('enemy_basic_right_off', ['enemy_basic_right1'], 1, true);
-    spawnedEnemy.animations.play('enemy_basic_right_off');
     enemyGroup.add(spawnedEnemy);
     spawned = false;
     spawnIndex++;
