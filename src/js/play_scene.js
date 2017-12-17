@@ -149,9 +149,10 @@ var PlayScene = {
         this.game.physics.arcade.collide(player, bloquesGroup);
         this.game.physics.arcade.collide(player, waterGroup);
         this.game.physics.arcade.collide(player, wallsGroup);
-        this.game.physics.arcade.collide(enemyGroup, bloquesGroup);
-        this.game.physics.arcade.collide(enemyGroup, waterGroup);
-        this.game.physics.arcade.collide(enemyGroup, wallsGroup);
+
+        this.game.physics.arcade.overlap(enemyGroup, bloquesGroup, collisionChangeDirEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyGroup, waterGroup, collisionChangeDirEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyGroup, wallsGroup, collisionChangeDirEnemy, null, this);
         this.game.physics.arcade.collide(enemyGroup, enemyGroup);
 
         this.game.physics.arcade.overlap(playerBullets, wallsGroup, resetBullet, null, this);
@@ -255,7 +256,7 @@ function collisionHandlerEnemy (bullet, block) {
     bullet.kill();
 }
 
-//Called if the bullet hits an enemy
+// Called if the bullet hits an enemy
 function collisionKillEnemy (bullet, enemy) {
     if (enemy._lives > 1) enemy._lives--;
     else {
@@ -265,19 +266,20 @@ function collisionKillEnemy (bullet, enemy) {
         else if (enemy._bulletN === 4) bulletsUsed4 = false;
         enemyCount--;
         enemyGroup.remove(enemy);
+        enemy._timerbullets.stop();
         enemy.kill();
     }
     bullet.kill();
 }
 
-//Called if an enemy bullet hits the player
+// Called if an enemy bullet hits the player
 function collisionHitPlayer (_player, enemyBullet) {
     enemyBullet.kill();
     player.resetPos();
     _player.lives--;
 }
 
-//Called if two bullets collide;
+// Called if two bullets collide;
 function collisionBullets (playerBullet, enemyBullet) {
     enemyBullet.kill();
     playerBullet.kill();
@@ -297,6 +299,16 @@ function destructionHandlerEnemy (bulletC, block){
     if (block.blockType != 'Metal')
         block.kill();
 }
+
+// Called if an enemy hits a wall, etc.
+function collisionChangeDirEnemy (enemy, block){
+    if (enemy._velocity._x !== 0 && enemy._velocity._y !== 0 && !enemy._changeCalled){
+        enemy.stop();
+        enemy._changeCalled = true;
+        enemy.game.time.events.add(Phaser.Timer.SECOND * 0.5, enemy.change_dir, enemy);
+    }
+}
+
 
 function createEnemyBullets(game){
     enemyBullets1 = game.add.group();
@@ -347,9 +359,7 @@ function spawnEnemy(){
         bNumber = 4;
         bulletsUsed4 = true;
     }
-    var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, bulletGroup, bNumber, 'fast');
-    spawnedEnemy.animations.add('enemy_basic_right_off', ['enemy_basic_right1'], 1, true);
-    spawnedEnemy.animations.play('enemy_basic_right_off');
+    var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, bulletGroup, bNumber, levelData.levels[1][13].enemies[spawnCount]);
     enemyGroup.add(spawnedEnemy);
     spawned = false;
     spawnIndex++;
