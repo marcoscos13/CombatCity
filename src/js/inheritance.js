@@ -243,13 +243,27 @@ Player.prototype.update = function(){
     }
 }
 
-var Enemy = function(game, pos, scale, vel, dir , bulletsGroup, bulletVel, bulletTime, lives, sprite){
-    Shooter.apply(this, [game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, sprite]);
+var Enemy = function(game, pos, scale, bulletsGroup, typeId){
+    if (typeId === 'armored'){
+        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 300, 270, 'sprites_atlas']);
+        this._lives = 3;
+    }
+    else if (typeId === 'power'){
+        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 300, 135, 'sprites_atlas']);
+        this._lives = 1;
+    }
+    else if (typeId === 'fast'){
+        Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 300, 270, 'sprites_atlas']);
+        this._lives = 1;
+    }
+    else{
+        Shooter.apply(this, [game, pos, scale, new Par(100, 100), new Par(0, 1), bulletsGroup, 300, 270, 'sprites_atlas']);
+        this._lives = 1;
+    }
+
     this._moving = true;
     this._velxAux = this._velocity._x;
     this._velyAux = this._velocity._y;
-    this.angle = 0;
-    this._lives = lives;
     this.body.immovable = true;
     this._changeStarted = false;
     this._timer = this.game.time.create(false);
@@ -262,8 +276,6 @@ var Enemy = function(game, pos, scale, vel, dir , bulletsGroup, bulletVel, bulle
     }, this);
 
     //Inicializa el enemigo mirando hacia abajo
-    this._direction._x = 0;
-    this._direction._y = 1;
     this.angle = 90; 
 }
 
