@@ -59,7 +59,7 @@ var PlayScene = {
         
         //Físicas
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.game.stage.backgroundColor = '#2d2d2d';
+        this.game.stage.backgroundColor = '#464646';
         cursors = this.game.input.keyboard.createCursorKeys();
         this.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 
@@ -152,6 +152,10 @@ var PlayScene = {
     },
     
     update: function(){
+        // if (this.game.input.keyboard.isDown(Phaser.Keyboard.ENTER)){
+        //     this.game.state.start('levelManager', false, false, 2);
+        // }
+
         this.game.physics.arcade.collide(player, bloquesGroup);
         this.game.physics.arcade.collide(player, waterGroup);
         this.game.physics.arcade.collide(player, wallsGroup);
@@ -207,7 +211,7 @@ var PlayScene = {
         this.game.physics.arcade.overlap(hq, enemyBullets3, collisionHQ, null, this);
         this.game.physics.arcade.overlap(hq, enemyBullets4, collisionHQ, null, this);
 
-        if(enemyCount < 4 && spawnCount < 20 && !spawned){
+        if(enemyCount < 1 && spawnCount < 20 && !spawned){
             this.game.time.events.add(Phaser.Timer.SECOND * 1.5, spawnEnemy, this);
             spawned = true;
             enemyCount++;

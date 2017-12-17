@@ -1,6 +1,7 @@
 'use strict';
 
 var PlayScene = require('./play_scene.js');
+var LevelManager = require('./levelManager_scene.js');
 //var TestScene = require('./test_scene.js');
 //var TestScene2 = require('./test_scene2.js');
 //var Stack = require('./stack.js');
@@ -31,11 +32,13 @@ var PreloaderScene = {
     this.game.load.image('game_over', 'images/game_over.png');
     this.game.load.image('background', 'images/background.png');
     this.game.load.image('white', 'images/white.png');
+    this.game.load.image('grey', 'images/grey.png');
     this.game.load.atlas('sprites_atlas', 'images/sprites_atlas.png', 'images/sprites_atlas.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
   },
 
   create: function () {
     this.game.state.start('play');
+    //this.game.state.start('levelManager',true,false);
   }
 };
 
@@ -46,6 +49,7 @@ window.onload = function () {
   game.state.add('boot', BootScene);
   game.state.add('preloader', PreloaderScene);
   game.state.add('play', PlayScene); //Escena de juego
+  game.state.add('levelManager', LevelManager); //Escena de elegir nivel
   //game.state.add('play', TestScene); //Escena de testing ------------------------------
   //game.state.add('play', TestScene2); //Escena de testing 2 ------------------------------
 
