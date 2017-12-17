@@ -120,6 +120,7 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.boolR = false;
     this.boolD = false;
     this.boolU = false;
+    this.lives = 3;
 
     //Inicializa el player mirando hacia arriba
     this._direction._x = 0;
@@ -130,6 +131,12 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
 //Player.prototype = Object.create(Shooter.prototype);
 Player.prototype = Object.create(Shooter.prototype);
 Player.prototype.constructor = Player;
+
+Player.prototype.resetPos = function(){
+    var posTemp = getCenteredCell(this.game, 48, 4, 13);
+    this.x = posTemp._x;
+    this.y = posTemp._y;
+}
 
 Player.prototype.update = function(){
 

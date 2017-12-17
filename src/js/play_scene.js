@@ -160,6 +160,18 @@ var PlayScene = {
         this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, destructionHandlerEnemy, null, this);
 
+        //EnemyBullets collision with player
+        this.game.physics.arcade.overlap(player, enemyBullets1, collisionHitPlayer, null, this);
+        this.game.physics.arcade.overlap(enemyBullets2, player, collisionHitPlayer, null, this);
+        this.game.physics.arcade.overlap(enemyBullets3, player, collisionHitPlayer, null, this);
+        this.game.physics.arcade.overlap(enemyBullets4, player, collisionHitPlayer, null, this);
+
+        //Collision between bullets
+        this.game.physics.arcade.overlap(playerBullets, enemyBullets1, collisionBullets, null, this);
+        this.game.physics.arcade.overlap(playerBullets, enemyBullets2, collisionBullets, null, this);
+        this.game.physics.arcade.overlap(playerBullets, enemyBullets3, collisionBullets, null, this);
+        this.game.physics.arcade.overlap(playerBullets, enemyBullets4, collisionBullets, null, this);
+
         if(enemyCount < 4 && spawnCount < 20 && !spawned){
             this.game.time.events.add(Phaser.Timer.SECOND * 1.5, spawnEnemy, this);
             spawned = true;
@@ -176,23 +188,24 @@ var PlayScene = {
         //this.game.debug.text(bloquesGroup.length, 50, 140);
         //this.game.debug.body(player);
         //this.game.debug.body(bulletCollider);
+        this.game.debug.text("Player lives: " + player.lives, 50, 80);
     }
 };
 
 module.exports = PlayScene;
 
-// Called if the bullet goes out of the screen
+//Called if the bullet goes out of the screen
 function resetBullet (_bullet) {
     _bullet.kill();
 }
 
-// Called if the bullet hits one of the block sprites
+//Called if the bullet hits one of the block sprites
 function collisionHandler (bullet, block) {
     var distance;
     if (player.tankLevel < 3)
-        distance = 24;
+        distance = 12;
     else
-        distance = 36;
+        distance = 24;
     bulletCollider.x = bullet.x + (distance * bullet._direction._x);
     bulletCollider.y = bullet.y - (distance *-bullet._direction._y);
     if (bullet._direction._y != 0){
@@ -206,9 +219,9 @@ function collisionHandler (bullet, block) {
     bullet.kill();
 }
 
-// Called if the bullet hits one of the block sprites (for Enemies)
+//Called if the bullet hits one of the block sprites (for Enemies)
 function collisionHandlerEnemy (bullet, block) {
-    var distance = 24;
+    var distance = 12;
     enemyBulletCollider.x = bullet.x + (distance * bullet._direction._x);
     enemyBulletCollider.y = bullet.y - (distance *-bullet._direction._y);
     if (bullet._direction._y != 0){
@@ -222,7 +235,7 @@ function collisionHandlerEnemy (bullet, block) {
     bullet.kill();
 }
 
-// Called if the bullet hits an enemy
+//Called if the bullet hits an enemy
 function collisionKillEnemy (bullet, enemy) {
     if (enemy._lives > 1) enemy._lives--;
     else {
@@ -232,6 +245,20 @@ function collisionKillEnemy (bullet, enemy) {
     }
     bullet.kill();
 }
+
+//Called if an enemy bullet hits the player
+function collisionHitPlayer (_player, enemyBullet) {
+    enemyBullet.kill();
+    player.resetPos();
+    _player.lives--;
+}
+
+//Called if two bullets collide;
+function collisionBullets (playerBullet, enemyBullet) {
+    enemyBullet.kill();
+    playerBullet.kill();
+}
+
 
 // Called when the bulletCollider is on top of a block
 function destructionHandler (bulletC, block){
