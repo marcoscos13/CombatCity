@@ -68,6 +68,11 @@ var PlayScene = {
         bg.height = blockSize*13;
         bg.width = blockSize*13;
 
+        //HQ sprite
+        var hqPos = getCenteredCell(this.game, blockSize,6,12);
+        hq = new Collider(this.game, hqPos, objectsScale, 'sprites_atlas', 'base_1');
+        hq.body.immovable = true;
+
         //Se inicializan los grupos necesarios para el mapa (Se incializan antes del player porque este tiene que aparecer por encima de algunos)
         bloquesGroup = this.game.add.group(); //Grupo de los bloques del mapa
         bloquesGroup.enableBody = true;
@@ -83,10 +88,7 @@ var PlayScene = {
 
         iceGroup = this.game.add.group(); //Grupo de los bloques de hielo del mapa
 
-        enemyGroup = this.game.add.group();
-        enemyGroup.enableBody = true;
-        enemyGroup.physicsBodyType = Phaser.Physics.ARCADE;
-
+        
         //Creación del player
         var playerPos = getCenteredCell(this.game, blockSize, 4, 13);
         var playerVel = new Par(140, 140);
@@ -115,6 +117,8 @@ var PlayScene = {
         enemyBulletCollider.width = blockSize;
         enemyBulletCollider.height = blockSize/2;
 
+        
+
         //Player
         player = new Player(this.game, playerPos, objectsScale, playerVel, playerDir, playerBullets, bulletVel, bulletTime,  cursors, 'sprites_atlas');
         //player.animations.add('player1_right_on', ['player1_level1_right1','player1_level1_right2'], 2, true);
@@ -133,25 +137,20 @@ var PlayScene = {
         ////////////////////////EnemyTest
         createEnemyBullets(this.game);
 
-        //--------------------
+        //Enemy group
+        enemyGroup = this.game.add.group();
+        enemyGroup.enableBody = true;
+        enemyGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
-        
 
-        //Creación de un enemy
-        // var enemyPos = getCenteredCell(this.game, blockSize, 0, 11);
-        // var enemyDir = new Par (1, 0);
-        // var enemyVel = new Par(100, 100);
-        // enemy = new Enemy(this.game, enemyPos, objectsScale, enemyVel, enemyDir, enemyBullets, bulletVel, bulletTime, 3, 'tank');
-        
         ////////////////////////Mapa    
-
         createWalls(this.game, wallsGroup, objectsScale, blockSize); //Crea los limites del mapa
-
         loadMap(this, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, levelData, 1); //Inicializa el mapa creando todos los bloques 
 
-        //gameOver(this.game);
-        var hqPos = getCenteredCell(this.game, blockSize,6,12);
-        hq = new Collider(this.game, hqPos, objectsScale, 'sprites_atlas', 'base_1');
+        //Game Over prite
+        var posTemp = new Par(this.game.width/2, this.game.height+100);
+        var scaleTemp = new Par(3,3);
+        gameoverSprite = new Collider(this.game, posTemp, scaleTemp,'game_over');
     },
     
     update: function(){
@@ -197,6 +196,17 @@ var PlayScene = {
         this.game.physics.arcade.overlap(playerBullets, enemyBullets2, collisionBullets, null, this);
         this.game.physics.arcade.overlap(playerBullets, enemyBullets3, collisionBullets, null, this);
         this.game.physics.arcade.overlap(playerBullets, enemyBullets4, collisionBullets, null, this);
+
+        //Collision with HQ
+        this.game.physics.arcade.collide(player, hq);
+        this.game.physics.arcade.collide(enemyGroup, hq);
+
+        //Collision between bullets and HQ
+        this.game.physics.arcade.overlap(hq, playerBullets, collisionHQ, null, this);
+        this.game.physics.arcade.overlap(hq, enemyBullets1, collisionHQ, null, this);
+        this.game.physics.arcade.overlap(hq, enemyBullets2, collisionHQ, null, this);
+        this.game.physics.arcade.overlap(hq, enemyBullets3, collisionHQ, null, this);
+        this.game.physics.arcade.overlap(hq, enemyBullets4, collisionHQ, null, this);
 
         if(enemyCount < 4 && spawnCount < 20 && !spawned){
             this.game.time.events.add(Phaser.Timer.SECOND * 1.5, spawnEnemy, this);
@@ -296,8 +306,7 @@ function collisionBullets (playerBullet, enemyBullet) {
     playerBullet.kill();
 }
 
-
-// Called when the bulletCollider is on top of a block
+//Called when the bulletCollider is on top of a block
 function destructionHandler (bulletC, block){
     if (block.blockType != 'Metal')
         block.kill();
@@ -305,17 +314,20 @@ function destructionHandler (bulletC, block){
         block.kill();
 }
 
-// Called when the bulletCollider is on top of a block
+//Called when the bulletCollider is on top of a block
 function destructionHandlerEnemy (bulletC, block){
     if (block.blockType != 'Metal')
         block.kill();
 }
 
-function gameOver(game){
-    var posTemp = new Par(game.width/2,game.height+100);
-    var scaleTemp = new Par(3,3);
-    gameoverSprite = new Collider(game, posTemp, scaleTemp,'game_over');
-    gameover = true;
+//Collision bewteen bullets and hq
+function collisionHQ(hq, _bullet){
+    if (!gameover){
+        _bullet.kill();
+        hq.animations.add('hq_2', ['base_2'], 1, true);
+        hq.animations.play('hq_2');
+        gameover = true;
+    }
 }
 
 function createEnemyBullets(game){
