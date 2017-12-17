@@ -27,7 +27,11 @@ var enemyBullets1;
 var enemyBullets2;
 var enemyBullets3;
 var enemyBullets4;
-var enemyBullets;
+// var enemyBullets;
+var bulletsUsed1 = false;
+var bulletsUsed2 = false;
+var bulletsUsed3 = false;
+var bulletsUsed4 = false;
 
 var enemyBulletCollider;
 
@@ -255,6 +259,10 @@ function collisionHandlerEnemy (bullet, block) {
 function collisionKillEnemy (bullet, enemy) {
     if (enemy._lives > 1) enemy._lives--;
     else {
+        if (enemy._bulletN === 1) bulletsUsed1 = false;
+        else if (enemy._bulletN === 2) bulletsUsed2 = false;
+        else if (enemy._bulletN === 3) bulletsUsed3 = false;
+        else if (enemy._bulletN === 4) bulletsUsed4 = false;
         enemyCount--;
         enemyGroup.remove(enemy);
         enemy.kill();
@@ -317,9 +325,32 @@ function createEnemyBullets(game){
 }
 
 function spawnEnemy(){
-    var enemyDir = new Par (1, 0);
-    var enemyVel = new Par(100, 100);
-    var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, enemyBullets1, 'basic');
+    var bulletGroup;
+    var bNumber;
+    if (!bulletsUsed1){
+        bulletGroup = enemyBullets1;
+        bNumber = 1;
+        bulletsUsed1 = true;
+    }
+    else if (!bulletsUsed2){
+        bulletGroup = enemyBullets2;
+        bNumber = 2;
+        bulletsUsed2 = true;
+    }
+    else if (!bulletsUsed3){
+        bulletGroup = enemyBullets3;
+        bNumber = 3;
+        bulletsUsed3 = true;
+    }
+    else if (!bulletsUsed4){
+        bulletGroup = enemyBullets4;
+        bNumber = 4;
+        bulletsUsed4 = true;
+    }
+    console.debug(bulletGroup);
+    var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, bulletGroup, bNumber, 'fast');
+    spawnedEnemy.animations.add('enemy_basic_right_off', ['enemy_basic_right1'], 1, true);
+    spawnedEnemy.animations.play('enemy_basic_right_off');
     enemyGroup.add(spawnedEnemy);
     spawned = false;
     spawnIndex++;

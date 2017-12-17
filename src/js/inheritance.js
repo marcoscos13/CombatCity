@@ -276,6 +276,7 @@ var Enemy = function(game, pos, scale, bulletsGroup, typeId){
         this.animations.play('enemy_basic_right_off');
     }
 
+    this._bulletN = bulletN;
     this._moving = true;
     this._velxAux = this._velocity._x;
     this._velyAux = this._velocity._y;
