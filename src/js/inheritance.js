@@ -114,7 +114,7 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.angle = 0;
     this.dirStack = new SmartStack();
     this.dirChar = ' ';
-    this.tankLevel = 1;
+    this.tankLevel = 0;
     this.boolL = false;
     this.boolR = false;
     this.boolD = false;
@@ -269,13 +269,13 @@ var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
         this.animations.play('enemy_armor_right_off');
     }
     else if (typeId === 'power'){
-        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 300, 500, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 500, 500, 'sprites_atlas']);
         this._lives = 1;
         this.animations.add('enemy_power_right_off', ['enemy_power_right1'], 1, true);
         this.animations.play('enemy_power_right_off');
     }
     else if (typeId === 'fast'){
-        Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 300, 250, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 300, 500, 'sprites_atlas']);
         this._lives = 1;
         this.animations.add('enemy_fast_right_off', ['enemy_fast_right1'], 1, true);
         this.animations.play('enemy_fast_right_off');
@@ -303,7 +303,7 @@ var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     //         this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.change_dir, this);
     //     }
     // }, this);
-    this._timerbullets.loop(250, this.fire_bullet, this);
+    this._timerbullets.loop(500, this.fire_bullet, this);
     this._timerbullets.start();
 
     //Inicializa el enemigo mirando hacia abajo

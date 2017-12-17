@@ -20,6 +20,9 @@ var bulletTime;
 var bullet;
 var bulletCollider;
 
+//Powerups
+var powerupTypes = ['powerup_star', 'powerup_grenade'];
+
 //Enemies
 var enemy;
 var enemyGroup;
@@ -27,7 +30,6 @@ var enemyBullets1;
 var enemyBullets2;
 var enemyBullets3;
 var enemyBullets4;
-// var enemyBullets;
 var bulletsUsed1 = false;
 var bulletsUsed2 = false;
 var bulletsUsed3 = false;
@@ -41,6 +43,9 @@ var spawnCount = -1;
 var enemyCount = 0;
 var enemyKilledCount = 0;
 var spawned = false;
+
+//PowerUps
+var powerupsGroup;
 
 var levelData;
 var levelN = 1;
@@ -90,6 +95,9 @@ var PlayScene = {
 
         iceGroup = this.game.add.group(); //Grupo de los bloques de hielo del mapa
 
+        powerupsGroup = this.game.add.group(); //Grupo de los powerups
+        powerupsGroup.enableBody = true;
+        powerupsGroup.physicsBodyType = Phaser.Physics.ARCADE;
         
         //Creación del player
         var playerPos = getCenteredCell(this.game, blockSize, 4, 13);
@@ -166,6 +174,8 @@ var PlayScene = {
         this.game.physics.arcade.overlap(enemyGroup, waterGroup, collisionChangeDirEnemy, null, this);
         this.game.physics.arcade.overlap(enemyGroup, wallsGroup, collisionChangeDirEnemy, null, this);
         this.game.physics.arcade.collide(enemyGroup, enemyGroup);
+
+        this.game.physics.arcade.overlap(player, powerupsGroup, powerupHandler, null, this);
 
         //Player Bullets Collisions
         this.game.physics.arcade.overlap(playerBullets, wallsGroup, resetBullet, null, this);
@@ -326,6 +336,7 @@ function collisionKillEnemy (bullet, enemy) {
         enemy._timerbullets.stop();
         enemy.kill();
         enemyKilledCount++;
+        spawnPowerup(this.game);
     }
     bullet.kill();
 }
@@ -385,6 +396,31 @@ function collisionChangeDirEnemy (enemy, block){
     }
 }
 
+// Called if a powerup is taken
+function powerupHandler (player, powerup){
+    if (powerup.blockType === 'powerup_star' && player.tankLevel < 3){
+        player.tankLevel++;
+        if(player.tankLevel === 1) player._bulletVel = 500;
+        else if (player.tankLevel === 2) {
+            playerBullets.add(new Bullet(this.game, new Par(0,0), objectsScale, 500, new Par(0,0), 'bullet'));
+        }
+    }
+    else if (powerup.blockType === 'powerup_grenade'){
+        enemyGroup.forEach(function (e) {
+            if (e._bulletN === 1) bulletsUsed1 = false;
+            else if (e._bulletN === 2) bulletsUsed2 = false;
+            else if (e._bulletN === 3) bulletsUsed3 = false;
+            else if (e._bulletN === 4) bulletsUsed4 = false;
+            enemyCount--;
+            enemyGroup.remove(e);
+            e._timerbullets.stop();
+            e.kill();
+            enemyKilledCount++;
+        });
+    }
+    powerup.kill();
+}
+
 function createEnemyBullets(game){
     enemyBullets1 = game.add.group();
     enemyBullets1.enableBody = true;
@@ -440,4 +476,11 @@ function spawnEnemy(){
     spawned = false;
     spawnIndex++;
     if (spawnIndex >= spawnPos.length) spawnIndex = 0;
+}
+
+function spawnPowerup(game){
+    var rnd = game.rnd.integerInRange(0, 1);
+    var id = powerupTypes[rnd];
+    var powerup = new Block(game, getCenteredCell(game, blockSize, game.rnd.integerInRange(0, 12), game.rnd.integerInRange(0, 12)), objectsScale, 'sprites_atlas', id, id);
+    powerupsGroup.add(powerup);
 }
