@@ -276,9 +276,7 @@ function createEnemyBullets(game){
 function spawnEnemy(){
     var enemyDir = new Par (1, 0);
     var enemyVel = new Par(100, 100);
-    var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, enemyBullets1, 'fast');
-    spawnedEnemy.animations.add('enemy_basic_right_off', ['enemy_basic_right1'], 1, true);
-    spawnedEnemy.animations.play('enemy_basic_right_off');
+    var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, enemyBullets1, 'basic');
     enemyGroup.add(spawnedEnemy);
     spawned = false;
     spawnIndex++;

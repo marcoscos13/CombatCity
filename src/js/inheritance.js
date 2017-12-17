@@ -244,21 +244,29 @@ Player.prototype.update = function(){
 }
 
 var Enemy = function(game, pos, scale, bulletsGroup, typeId){
-    if (typeId === 'armored'){
+    if (typeId === 'armor'){
         Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 300, 270, 'sprites_atlas']);
         this._lives = 3;
+        this.animations.add('enemy_armor_right_off', ['enemy_armor_right1'], 1, true);
+        this.animations.play('enemy_armor_right_off');
     }
     else if (typeId === 'power'){
         Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 300, 135, 'sprites_atlas']);
         this._lives = 1;
+        this.animations.add('enemy_power_right_off', ['enemy_power_right1'], 1, true);
+        this.animations.play('enemy_power_right_off');
     }
     else if (typeId === 'fast'){
         Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 300, 270, 'sprites_atlas']);
         this._lives = 1;
+        this.animations.add('enemy_fast_right_off', ['enemy_fast_right1'], 1, true);
+        this.animations.play('enemy_fast_right_off');
     }
     else{
         Shooter.apply(this, [game, pos, scale, new Par(100, 100), new Par(0, 1), bulletsGroup, 300, 270, 'sprites_atlas']);
         this._lives = 1;
+        this.animations.add('enemy_basic_right_off', ['enemy_basic_right1'], 1, true);
+        this.animations.play('enemy_basic_right_off');
     }
 
     this._moving = true;
