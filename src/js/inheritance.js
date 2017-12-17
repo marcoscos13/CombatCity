@@ -287,7 +287,7 @@ var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     this.body.onCollide.add(function(){
         if (this._velocity._x !== 0 || this._velocity._y !== 0){
             this.stop();
-            this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.change_dir, this);
+            this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.change_dir, this);
         }
     }, this);
 
