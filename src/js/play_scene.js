@@ -163,31 +163,28 @@ var PlayScene = {
         this.game.physics.arcade.collide(enemyGroup, wallsGroup);
         this.game.physics.arcade.collide(enemyGroup, enemyGroup);
 
+        //Player Bullets Collisions
         this.game.physics.arcade.overlap(playerBullets, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(playerBullets, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(bulletCollider, bloquesGroup, destructionHandler, null, this);
         this.game.physics.arcade.overlap(playerBullets, enemyGroup, collisionKillEnemy, null, this);
 
-        //Enemy Bullets collisions
+        //Enemy Bullets collisions with Walls
         this.game.physics.arcade.overlap(enemyBullets1, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, collisionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
-        this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, destructionHandlerEnemy, null, this);
 
         this.game.physics.arcade.overlap(enemyBullets2, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(enemyBullets2, bloquesGroup, collisionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
-        this.game.physics.arcade.overlap(enemyBullets2, bloquesGroup, destructionHandlerEnemy, null, this);
 
         this.game.physics.arcade.overlap(enemyBullets3, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(enemyBullets3, bloquesGroup, collisionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
-        this.game.physics.arcade.overlap(enemyBullets3, bloquesGroup, destructionHandlerEnemy, null, this);
 
         this.game.physics.arcade.overlap(enemyBullets4, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(enemyBullets4, bloquesGroup, collisionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
-        this.game.physics.arcade.overlap(enemyBullets4, bloquesGroup, destructionHandlerEnemy, null, this);
 
         //EnemyBullets collision with player
         this.game.physics.arcade.overlap(player, enemyBullets1, collisionHitPlayer, null, this);
@@ -201,12 +198,12 @@ var PlayScene = {
         this.game.physics.arcade.overlap(playerBullets, enemyBullets3, collisionBullets, null, this);
         this.game.physics.arcade.overlap(playerBullets, enemyBullets4, collisionBullets, null, this);
 
-        // if(enemyCount < 4 && spawnCount < 20 && !spawned){
-        //     this.game.time.events.add(Phaser.Timer.SECOND * 1.5, spawnEnemy, this);
-        //     spawned = true;
-        //     enemyCount++;
-        //     spawnCount++;
-        // }
+        if(enemyCount < 4 && spawnCount < 20 && !spawned){
+            this.game.time.events.add(Phaser.Timer.SECOND * 1.5, spawnEnemy, this);
+            spawned = true;
+            enemyCount++;
+            spawnCount++;
+        }
 
         if (gameover){
             if(gameoverSprite.y >= this.game.height/2)
