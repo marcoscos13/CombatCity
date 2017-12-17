@@ -37,13 +37,17 @@ var spawnCount = 0;
 var enemyCount = 0;
 var spawned = false;
 
+var levelData;
+
 var PlayScene = {
     preload: function(){
-        this.load.text('level01', 'levels/level01.json');
+        this.load.text('levels', 'levels/levels.json');
+       
     },
 
     create: function(){
-
+        levelData = JSON.parse(this.game.cache.getText('levels')); //Parsea el JSON
+        
         //Físicas
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.game.stage.backgroundColor = '#2d2d2d';
@@ -134,7 +138,7 @@ var PlayScene = {
 
         createWalls(this.game, wallsGroup, objectsScale, blockSize); //Crea los limites del mapa
 
-        loadMap(this, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, 'level01'); //Inicializa el mapa creando todos los bloques 
+        loadMap(this, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, levelData, 1); //Inicializa el mapa creando todos los bloques 
     },
     
     update: function(){

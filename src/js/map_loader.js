@@ -1,15 +1,13 @@
 'use strict';
 
-function loadMap(self, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, levelID){
-
-    self.levelData = JSON.parse(self.game.cache.getText('level01')); //Parsea el JSON
+function loadMap(self, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, levelData, levelN){
 
     for (var j = 0; j < 13; j++){
         for (var i = 0; i < 13; i++){
             var newBloque;
             var BloquePos = getCell(self.game,blockSize,i,j);
             var bloque;
-            var row = self.levelData.map[j].row;
+            var row = levelData.levels[levelN][j];
             var blockCreated = true; //Bool para controlar si ha creado algun bloque
 
             if (row[i].charAt(0) == 'B'){ //If it's a Brick type block

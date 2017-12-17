@@ -1,0 +1,41 @@
+{
+    "levels":
+        [
+            [
+                ["BF","MF","GG","WW","II","","","","","","","",""],
+                ["BL","ML","","","","","","","","","","",""],
+                ["BR","MR","","","","","","","","","","",""],
+                ["BU","MU","","","","","","","","","","",""],
+                ["BD","MD","","","","","","","","","","",""],
+                ["","","","","","","","","","","","",""],
+                ["","","","","","","","","","","","",""],
+                ["","","","","","","","","","","","",""],
+                ["","","","","","","","","","","","",""],
+                ["","","","","","","","","","","","",""],
+                ["","","","","","","","","","","","",""],
+                ["","","","","","","","","","","","",""],
+                ["","","","","","","","","","","","",""],
+                ["","","","","","","","","","","","",""],
+                {"enemies": ["basic","basic","basic","basic","basic","basic","basic","basic","basic","basic",
+                             "basic","basic","basic","basic","basic","basic","basic","basic","basic","basic"]}
+            ],
+
+            [
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","BF","EE","BF","EE","BF","EE","BF","EE","BF","EE","BF","EE"],
+                ["EE","BF","EE","BF","EE","BF","EE","BF","EE","BF","EE","BF","EE"],
+                ["EE","BF","EE","BF","EE","BF","MF","BF","EE","BF","EE","BF","EE"],
+                ["EE","BF","EE","BF","EE","BU","EE","BU","EE","BF","EE","BF","EE"],
+                ["EE","BU","EE","BU","EE","BD","EE","BD","EE","BU","EE","BU","EE"],
+                ["BD","EE","BD","BD","EE","BU","EE","BU","EE","BD","BD","EE","BD"],
+                ["MU","EE","BU","BU","EE","BD","EE","BD","EE","BU","BU","EE","MU"],
+                ["EE","BD","EE","BD","EE","BF","BF","BF","EE","BD","EE","BD","EE"],
+                ["EE","BF","EE","BF","EE","BF","EE","BF","EE","BF","EE","BF","EE"],
+                ["EE","BF","EE","BF","EE","BU","EE","BU","EE","BF","EE","BF","EE"],
+                ["EE","BF","EE","BF","EE","EE","EE","EE","EE","BF","EE","BF","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                {"enemies": ["basic","basic","basic","basic","basic","basic","basic","basic","basic","basic",
+                             "basic","basic","basic","basic","basic","basic","basic","basic","basic","basic"]}
+            ]
+        ]    
+}
