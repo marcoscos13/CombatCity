@@ -105,6 +105,9 @@ function loadMap(self, objectsScale, blockSize, bloquesGroup, waterGroup, iceGro
             }
         }
     }
+
+    createFortBrickWalls(self, objectsScale, blockSize, bloquesGroup);
+    //createFortMetalWalls(self, objectsScale, blockSize, bloquesGroup);
 }
 
 function createWalls(game, wallsGroup, wallScale, blockSize){
@@ -180,4 +183,309 @@ function Par(x, y)
 {
     this._x=x;
     this._y=y;
+}
+
+function createFortMetalWalls(self, objectsScale, blockSize, bloquesGroup){
+    //This creates the base that the player has to protect
+
+    var protection1;
+
+    //Left
+    var BloquePos = getCell(self.game,blockSize,5,12);
+    
+    var blocksWS = 0;
+    var blocksHS = 0;
+    var blocksW = 2;
+    var blocksH = 2;
+
+    blocksWS = 1;
+    
+    var miniBlockCrop = 8;
+    for(var bY = 0; bY < blocksH; bY++){
+        BloquePos._x = getCell(self.game,blockSize,5,12)._x;
+        for(var bX = 0; bX < blocksW; bX++){
+            if (bX >= blocksWS && bY >= blocksHS){
+                protection1 = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'metal', 'Metal');
+                
+                protection1.crop(new Phaser.Rectangle(8*bX,8*bY,miniBlockCrop,miniBlockCrop));
+                protection1.body.immovable = true;
+                protection1.anchor.setTo(0,0);
+                protection1.body.collideWorldBounds = true;
+                protection1.body.setSize(8, 8);
+                bloquesGroup.add(protection1);
+            }
+            BloquePos._x += 24;
+        }
+        BloquePos._y += 24;
+    }
+
+    //Right
+    BloquePos = getCell(self.game,blockSize,7,12);
+
+    blocksWS = 0;
+    blocksHS = 0;
+    blocksW = 2;
+    blocksH = 2;
+
+    blocksW = 1;
+    
+    var miniBlockCrop = 8;
+    for(var bY = 0; bY < blocksH; bY++){
+        BloquePos._x = getCell(self.game,blockSize,7,12)._x;
+        for(var bX = 0; bX < blocksW; bX++){
+            if (bX >= blocksWS && bY >= blocksHS){
+                protection1 = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'metal', 'Metal');
+                
+                protection1.crop(new Phaser.Rectangle(8*bX,8*bY,miniBlockCrop,miniBlockCrop));
+                protection1.body.immovable = true;
+                protection1.anchor.setTo(0,0);
+                protection1.body.collideWorldBounds = true;
+                protection1.body.setSize(8, 8);
+                bloquesGroup.add(protection1);
+            }
+            BloquePos._x += 24;
+        }
+        BloquePos._y += 24;
+    }
+
+    //Top Left
+    BloquePos = getCell(self.game,blockSize,5,11);
+    
+    blocksWS = 0;
+    blocksHS = 0;
+    blocksW = 2;
+    blocksH = 2;
+
+    blocksHS = 1;
+    blocksWS = 1;
+    
+    var miniBlockCrop = 8;
+    for(var bY = 0; bY < blocksH; bY++){
+        BloquePos._x = getCell(self.game,blockSize,5,11)._x;
+        for(var bX = 0; bX < blocksW; bX++){
+            if (bX >= blocksWS && bY >= blocksHS){
+                protection1 = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'metal', 'Metal');
+                
+                protection1.crop(new Phaser.Rectangle(8*bX,8*bY,miniBlockCrop,miniBlockCrop));
+                protection1.body.immovable = true;
+                protection1.anchor.setTo(0,0);
+                protection1.body.collideWorldBounds = true;
+                protection1.body.setSize(8, 8);
+                bloquesGroup.add(protection1);
+            }
+            BloquePos._x += 24;
+        }
+        BloquePos._y += 24;
+    }
+    
+    //Top Center
+    BloquePos = getCell(self.game,blockSize,6,11);
+    
+    blocksWS = 0;
+    blocksHS = 0;
+    blocksW = 2;
+    blocksH = 2;
+
+    blocksHS = 1;
+    
+    var miniBlockCrop = 8;
+    for(var bY = 0; bY < blocksH; bY++){
+        BloquePos._x = getCell(self.game,blockSize,6,11)._x;
+        for(var bX = 0; bX < blocksW; bX++){
+            if (bX >= blocksWS && bY >= blocksHS){
+                protection1 = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'metal', 'Metal');
+                
+                protection1.crop(new Phaser.Rectangle(8*bX,8*bY,miniBlockCrop,miniBlockCrop));
+                protection1.body.immovable = true;
+                protection1.anchor.setTo(0,0);
+                protection1.body.collideWorldBounds = true;
+                protection1.body.setSize(8, 8);
+                bloquesGroup.add(protection1);
+            }
+            BloquePos._x += 24;
+        }
+        BloquePos._y += 24;
+    }
+
+    //Top Right
+    BloquePos = getCell(self.game,blockSize,7,11);
+    
+    blocksWS = 0;
+    blocksHS = 0;
+    blocksW = 2;
+    blocksH = 2;
+
+    blocksHS = 1;
+    blocksW = 1;
+    
+    var miniBlockCrop = 8;
+    for(var bY = 0; bY < blocksH; bY++){
+        BloquePos._x = getCell(self.game,blockSize,7,11)._x;
+        for(var bX = 0; bX < blocksW; bX++){
+            if (bX >= blocksWS && bY >= blocksHS){
+                protection1 = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'metal', 'Metal');
+                
+                protection1.crop(new Phaser.Rectangle(8*bX,8*bY,miniBlockCrop,miniBlockCrop));
+                protection1.body.immovable = true;
+                protection1.anchor.setTo(0,0);
+                protection1.body.collideWorldBounds = true;
+                protection1.body.setSize(8, 8);
+                bloquesGroup.add(protection1);
+            }
+            BloquePos._x += 24;
+        }
+        BloquePos._y += 24;
+    }
+}
+
+//This creates the base that the player has to protect (with bricks)
+function createFortBrickWalls(self, objectsScale, blockSize, bloquesGroup){
+    var newBloque;
+
+    //Left
+    var BloquePos = getCell(self.game,blockSize,5,12);
+    
+    var blocksWS = 0;
+    var blocksHS = 0;
+    var blocksW = 4;
+    var blocksH = 4;
+
+    blocksWS = 2;
+    
+    var miniBlockCrop = 4;
+    for(var bY = 0; bY < blocksH; bY++){
+        BloquePos._x = getCell(self.game,blockSize,5,12)._x;
+        for(var bX = 0; bX < blocksW; bX++){
+            if (bX >= blocksWS && bY >= blocksHS){
+                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'Brick');
+                
+                newBloque.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
+                newBloque.body.immovable = true;
+                newBloque.anchor.setTo(0,0);
+                newBloque.body.collideWorldBounds = true;
+                newBloque.body.setSize(4, 4);
+                bloquesGroup.add(newBloque);
+            }
+            BloquePos._x += 12;
+        }
+        BloquePos._y += 12;
+    }
+
+    //Right
+    BloquePos = getCell(self.game,blockSize,7,12);
+
+    blocksWS = 0;
+    blocksHS = 0;
+    blocksW = 4;
+    blocksH = 4;
+
+    blocksW = 2;
+    
+    var miniBlockCrop = 4;
+    for(var bY = 0; bY < blocksH; bY++){
+        BloquePos._x = getCell(self.game,blockSize,7,12)._x;
+        for(var bX = 0; bX < blocksW; bX++){
+            if (bX >= blocksWS && bY >= blocksHS){
+                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'Brick');
+                
+                newBloque.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
+                newBloque.body.immovable = true;
+                newBloque.anchor.setTo(0,0);
+                newBloque.body.collideWorldBounds = true;
+                newBloque.body.setSize(4, 4);
+                bloquesGroup.add(newBloque);
+            }
+            BloquePos._x += 12;
+        }
+        BloquePos._y += 12;
+    }
+
+    //Top Left
+    BloquePos = getCell(self.game,blockSize,5,11);
+    
+    blocksWS = 0;
+    blocksHS = 0;
+    blocksW = 4;
+    blocksH = 4;
+
+    blocksHS = 2;
+    blocksWS = 2;
+    
+    var miniBlockCrop = 4;
+    for(var bY = 0; bY < blocksH; bY++){
+        BloquePos._x = getCell(self.game,blockSize,5,11)._x;
+        for(var bX = 0; bX < blocksW; bX++){
+            if (bX >= blocksWS && bY >= blocksHS){
+                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'Brick');
+                
+                newBloque.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
+                newBloque.body.immovable = true;
+                newBloque.anchor.setTo(0,0);
+                newBloque.body.collideWorldBounds = true;
+                newBloque.body.setSize(4, 4);
+                bloquesGroup.add(newBloque);
+            }
+            BloquePos._x += 12;
+        }
+        BloquePos._y += 12;
+    }
+    
+    //Top Center
+    BloquePos = getCell(self.game,blockSize,6,11);
+    
+    blocksWS = 0;
+    blocksHS = 0;
+    blocksW = 4;
+    blocksH = 4;
+
+    blocksHS = 2;
+    
+    var miniBlockCrop = 4;
+    for(var bY = 0; bY < blocksH; bY++){
+        BloquePos._x = getCell(self.game,blockSize,6,11)._x;
+        for(var bX = 0; bX < blocksW; bX++){
+            if (bX >= blocksWS && bY >= blocksHS){
+                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'Brick');
+                
+                newBloque.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
+                newBloque.body.immovable = true;
+                newBloque.anchor.setTo(0,0);
+                newBloque.body.collideWorldBounds = true;
+                newBloque.body.setSize(4, 4);
+                bloquesGroup.add(newBloque);
+            }
+            BloquePos._x += 12;
+        }
+        BloquePos._y += 12;
+    }
+
+    //Top Right
+    BloquePos = getCell(self.game,blockSize,7,11);
+    
+    blocksWS = 0;
+    blocksHS = 0;
+    blocksW = 4;
+    blocksH = 4;
+
+    blocksHS = 2;
+    blocksW = 2;
+    
+    var miniBlockCrop = 4;
+    for(var bY = 0; bY < blocksH; bY++){
+        BloquePos._x = getCell(self.game,blockSize,7,11)._x;
+        for(var bX = 0; bX < blocksW; bX++){
+            if (bX >= blocksWS && bY >= blocksHS){
+                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'Brick');
+                
+                newBloque.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
+                newBloque.body.immovable = true;
+                newBloque.anchor.setTo(0,0);
+                newBloque.body.collideWorldBounds = true;
+                newBloque.body.setSize(4, 4);
+                bloquesGroup.add(newBloque);
+            }
+            BloquePos._x += 12;
+        }
+        BloquePos._y += 12;
+    }
 }

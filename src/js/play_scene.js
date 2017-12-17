@@ -43,6 +43,11 @@ var spawned = false;
 
 var levelData;
 
+var gameover = false;
+var gameoverSprite;
+
+var hq;
+
 var PlayScene = {
     preload: function(){
         this.load.text('levels', 'levels/levels.json');
@@ -143,6 +148,10 @@ var PlayScene = {
         createWalls(this.game, wallsGroup, objectsScale, blockSize); //Crea los limites del mapa
 
         loadMap(this, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, levelData, 1); //Inicializa el mapa creando todos los bloques 
+
+        //gameOver(this.game);
+        var hqPos = getCenteredCell(this.game, blockSize,6,12);
+        hq = new Collider(this.game, hqPos, objectsScale, 'sprites_atlas', 'base_1');
     },
     
     update: function(){
@@ -155,31 +164,28 @@ var PlayScene = {
         this.game.physics.arcade.overlap(enemyGroup, wallsGroup, collisionChangeDirEnemy, null, this);
         this.game.physics.arcade.collide(enemyGroup, enemyGroup);
 
+        //Player Bullets Collisions
         this.game.physics.arcade.overlap(playerBullets, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(playerBullets, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(bulletCollider, bloquesGroup, destructionHandler, null, this);
         this.game.physics.arcade.overlap(playerBullets, enemyGroup, collisionKillEnemy, null, this);
 
-        //Enemy Bullets collisions
+        //Enemy Bullets collisions with Walls
         this.game.physics.arcade.overlap(enemyBullets1, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, collisionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
-        this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, destructionHandlerEnemy, null, this);
 
         this.game.physics.arcade.overlap(enemyBullets2, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(enemyBullets2, bloquesGroup, collisionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
-        this.game.physics.arcade.overlap(enemyBullets2, bloquesGroup, destructionHandlerEnemy, null, this);
 
         this.game.physics.arcade.overlap(enemyBullets3, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(enemyBullets3, bloquesGroup, collisionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
-        this.game.physics.arcade.overlap(enemyBullets3, bloquesGroup, destructionHandlerEnemy, null, this);
 
         this.game.physics.arcade.overlap(enemyBullets4, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(enemyBullets4, bloquesGroup, collisionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
-        this.game.physics.arcade.overlap(enemyBullets4, bloquesGroup, destructionHandlerEnemy, null, this);
 
         //EnemyBullets collision with player
         this.game.physics.arcade.overlap(player, enemyBullets1, collisionHitPlayer, null, this);
@@ -198,6 +204,13 @@ var PlayScene = {
             spawned = true;
             enemyCount++;
             spawnCount++;
+        }
+
+        if (gameover){
+            if(gameoverSprite.y >= this.game.height/2)
+                gameoverSprite.body.velocity.y = -140;
+            else
+                gameoverSprite.body.velocity.y = 0;
         }
     },
 
@@ -309,6 +322,12 @@ function collisionChangeDirEnemy (enemy, block){
     }
 }
 
+function gameOver(game){
+    var posTemp = new Par(game.width/2,game.height+100);
+    var scaleTemp = new Par(3,3);
+    gameoverSprite = new Collider(game, posTemp, scaleTemp,'game_over');
+    gameover = true;
+}
 
 function createEnemyBullets(game){
     enemyBullets1 = game.add.group();
