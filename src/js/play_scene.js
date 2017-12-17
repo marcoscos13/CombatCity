@@ -46,6 +46,8 @@ var levelData;
 var gameover = false;
 var gameoverSprite;
 
+var hq;
+
 var PlayScene = {
     preload: function(){
         this.load.text('levels', 'levels/levels.json');
@@ -148,6 +150,8 @@ var PlayScene = {
         loadMap(this, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, levelData, 1); //Inicializa el mapa creando todos los bloques 
 
         //gameOver(this.game);
+        var hqPos = getCenteredCell(this.game, blockSize,6,12);
+        hq = new Collider(this.game, hqPos, objectsScale, 'sprites_atlas', 'base_1');
     },
     
     update: function(){
@@ -197,12 +201,12 @@ var PlayScene = {
         this.game.physics.arcade.overlap(playerBullets, enemyBullets3, collisionBullets, null, this);
         this.game.physics.arcade.overlap(playerBullets, enemyBullets4, collisionBullets, null, this);
 
-        if(enemyCount < 4 && spawnCount < 20 && !spawned){
-            this.game.time.events.add(Phaser.Timer.SECOND * 1.5, spawnEnemy, this);
-            spawned = true;
-            enemyCount++;
-            spawnCount++;
-        }
+        // if(enemyCount < 4 && spawnCount < 20 && !spawned){
+        //     this.game.time.events.add(Phaser.Timer.SECOND * 1.5, spawnEnemy, this);
+        //     spawned = true;
+        //     enemyCount++;
+        //     spawnCount++;
+        // }
 
         if (gameover){
             if(gameoverSprite.y >= this.game.height/2)
