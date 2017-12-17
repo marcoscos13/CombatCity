@@ -252,25 +252,25 @@ Player.prototype.update = function(){
 
 var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     if (typeId === 'armor'){
-        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 300, 270, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 300, 500, 'sprites_atlas']);
         this._lives = 3;
         this.animations.add('enemy_armor_right_off', ['enemy_armor_right1'], 1, true);
         this.animations.play('enemy_armor_right_off');
     }
     else if (typeId === 'power'){
-        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 300, 135, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 300, 500, 'sprites_atlas']);
         this._lives = 1;
         this.animations.add('enemy_power_right_off', ['enemy_power_right1'], 1, true);
         this.animations.play('enemy_power_right_off');
     }
     else if (typeId === 'fast'){
-        Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 300, 270, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 300, 250, 'sprites_atlas']);
         this._lives = 1;
         this.animations.add('enemy_fast_right_off', ['enemy_fast_right1'], 1, true);
         this.animations.play('enemy_fast_right_off');
     }
     else{
-        Shooter.apply(this, [game, pos, scale, new Par(100, 100), new Par(0, 1), bulletsGroup, 300, 270, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(100, 100), new Par(0, 1), bulletsGroup, 300, 1000, 'sprites_atlas']);
         this._lives = 1;
         this.animations.add('enemy_basic_right_off', ['enemy_basic_right1'], 1, true);
         this.animations.play('enemy_basic_right_off');
@@ -282,14 +282,18 @@ var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     this._velyAux = this._velocity._y;
     this.body.immovable = true;
     this._changeStarted = false;
+    this._changeCalled = false;
     this._timer = this.game.time.create(false);
-    this.body.onCollide = new Phaser.Signal();
-    this.body.onCollide.add(function(){
-        if (this._velocity._x !== 0 || this._velocity._y !== 0){
-            this.stop();
-            this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.change_dir, this);
-        }
-    }, this);
+    this._timerbullets = this.game.time.create(true);
+    // this.body.onCollide = new Phaser.Signal();
+    // this.body.onCollide.add(function(){
+    //     if (this._velocity._x !== 0 || this._velocity._y !== 0){
+    //         this.stop();
+    //         this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.change_dir, this);
+    //     }
+    // }, this);
+    this._timerbullets.loop(250, this.fire_bullet, this);
+    this._timerbullets.start();
 
     //Inicializa el enemigo mirando hacia abajo
     this.angle = 90; 
@@ -308,9 +312,6 @@ Enemy.prototype.update = function(){
         this.body.velocity.x = this._direction._x * this._velocity._x;
         this.body.velocity.y = this._direction._y * this._velocity._y;
     }
-    var rnd = this.game.rnd.integerInRange(0, 1)
-    if (rnd === 1) this.fire_bullet();
-    //this.changeDir();
 }
 
 Enemy.prototype.stop = function(){
@@ -318,6 +319,8 @@ Enemy.prototype.stop = function(){
     this._velocity._y = 0;
 }
 Enemy.prototype.change_dir = function(){
+    this._changeCalled = false;
+    
     var dirxaux = this._direction._x;
     var diryaux = this._direction._y;
     

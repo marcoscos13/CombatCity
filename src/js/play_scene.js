@@ -157,9 +157,10 @@ var PlayScene = {
         this.game.physics.arcade.collide(player, bloquesGroup);
         this.game.physics.arcade.collide(player, waterGroup);
         this.game.physics.arcade.collide(player, wallsGroup);
-        this.game.physics.arcade.collide(enemyGroup, bloquesGroup);
-        this.game.physics.arcade.collide(enemyGroup, waterGroup);
-        this.game.physics.arcade.collide(enemyGroup, wallsGroup);
+
+        this.game.physics.arcade.overlap(enemyGroup, bloquesGroup, collisionChangeDirEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyGroup, waterGroup, collisionChangeDirEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyGroup, wallsGroup, collisionChangeDirEnemy, null, this);
         this.game.physics.arcade.collide(enemyGroup, enemyGroup);
 
         //Player Bullets Collisions
@@ -278,7 +279,7 @@ function collisionHandlerEnemy (bullet, block) {
     bullet.kill();
 }
 
-//Called if the bullet hits an enemy
+// Called if the bullet hits an enemy
 function collisionKillEnemy (bullet, enemy) {
     if (enemy._lives > 1) enemy._lives--;
     else {
@@ -288,19 +289,20 @@ function collisionKillEnemy (bullet, enemy) {
         else if (enemy._bulletN === 4) bulletsUsed4 = false;
         enemyCount--;
         enemyGroup.remove(enemy);
+        enemy._timerbullets.stop();
         enemy.kill();
     }
     bullet.kill();
 }
 
-//Called if an enemy bullet hits the player
+// Called if an enemy bullet hits the player
 function collisionHitPlayer (_player, enemyBullet) {
     enemyBullet.kill();
     player.resetPos();
     _player.lives--;
 }
 
-//Called if two bullets collide;
+// Called if two bullets collide;
 function collisionBullets (playerBullet, enemyBullet) {
     enemyBullet.kill();
     playerBullet.kill();
@@ -328,6 +330,22 @@ function collisionHQ(hq, _bullet){
         hq.animations.play('hq_2');
         gameover = true;
     }
+}
+
+// Called if an enemy hits a wall, etc.
+function collisionChangeDirEnemy (enemy, block){
+    if (enemy._velocity._x !== 0 && enemy._velocity._y !== 0 && !enemy._changeCalled){
+        enemy.stop();
+        enemy._changeCalled = true;
+        enemy.game.time.events.add(Phaser.Timer.SECOND * 0.5, enemy.change_dir, enemy);
+    }
+}
+
+function gameOver(game){
+    var posTemp = new Par(game.width/2,game.height+100);
+    var scaleTemp = new Par(3,3);
+    gameoverSprite = new Collider(game, posTemp, scaleTemp,'game_over');
+    gameover = true;
 }
 
 function createEnemyBullets(game){
@@ -379,7 +397,7 @@ function spawnEnemy(){
         bNumber = 4;
         bulletsUsed4 = true;
     }
-    var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, bulletGroup, bNumber, 'fast');
+    var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, bulletGroup, bNumber, levelData.levels[1][13].enemies[spawnCount]);
     enemyGroup.add(spawnedEnemy);
     spawned = false;
     spawnIndex++;
