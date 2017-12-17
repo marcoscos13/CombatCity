@@ -347,7 +347,6 @@ function spawnEnemy(){
         bNumber = 4;
         bulletsUsed4 = true;
     }
-    console.debug(bulletGroup);
     var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, bulletGroup, bNumber, 'fast');
     spawnedEnemy.animations.add('enemy_basic_right_off', ['enemy_basic_right1'], 1, true);
     spawnedEnemy.animations.play('enemy_basic_right_off');

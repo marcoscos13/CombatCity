@@ -250,7 +250,7 @@ Player.prototype.update = function(){
     }
 }
 
-var Enemy = function(game, pos, scale, bulletsGroup, typeId){
+var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     if (typeId === 'armor'){
         Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 300, 270, 'sprites_atlas']);
         this._lives = 3;
