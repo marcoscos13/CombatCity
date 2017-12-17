@@ -21,7 +21,7 @@ var bullet;
 var bulletCollider;
 
 //Powerups
-var powerupTypes = ['powerup_star', 'powerup_grenade'];
+var powerupTypes = ['powerup_grenade', 'powerup_tank', 'powerup_helmets', 'powerup_star'];
 
 //Enemies
 var enemy;
@@ -344,7 +344,7 @@ function collisionKillEnemy (bullet, enemy) {
 // Called if an enemy bullet hits the player
 function collisionHitPlayer (_player, enemyBullet) {
     enemyBullet.kill();
-    if (_player.lives >= 0){
+    if (_player.lives >= 0 && !_player.helmet){
         _player.lives--;
         _player.resetPos();
     }
@@ -418,6 +418,14 @@ function powerupHandler (player, powerup){
             enemyKilledCount++;
         });
     }
+    else if (powerup.blockType === 'powerup_tank'){
+        player.lives++;
+    }
+    else if (powerup.blockType === 'powerup_helmets'){
+        console.debug('Invencible');
+        player.helmet = true;
+        this.game.time.events.add(Phaser.Timer.SECOND * 5, player.helmet_off, player);
+    }
     powerup.kill();
 }
 
@@ -479,7 +487,7 @@ function spawnEnemy(){
 }
 
 function spawnPowerup(game){
-    var rnd = game.rnd.integerInRange(0, 1);
+    var rnd = game.rnd.integerInRange(0, 3);
     var id = powerupTypes[rnd];
     var powerup = new Block(game, getCenteredCell(game, blockSize, game.rnd.integerInRange(0, 12), game.rnd.integerInRange(0, 12)), objectsScale, 'sprites_atlas', id, id);
     powerup.animations.add('blink', [id, 'empty'], 4, true);

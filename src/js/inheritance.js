@@ -121,6 +121,7 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.boolU = false;
     this.lives = 3;
     this.canMove = true;
+    this.helmet = false;
 
     //Inicializa el player mirando hacia arriba
     this._direction._x = 0;
@@ -143,6 +144,11 @@ Player.prototype.resetPos = function(){
         this.visible = false;
         console.debug("HOLA");
     }
+}
+
+Player.prototype.helmet_off = function(){
+    console.debug('Vencible');
+    this.helmet = false;
 }
 
 Player.prototype.update = function(){
