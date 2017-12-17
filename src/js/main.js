@@ -1,7 +1,6 @@
 'use strict';
 
 var PlayScene = require('./play_scene.js');
-var LevelManager = require('./levelManager_scene.js');
 //var TestScene = require('./test_scene.js');
 //var TestScene2 = require('./test_scene2.js');
 //var Stack = require('./stack.js');
@@ -21,11 +20,6 @@ var BootScene = {
 
 var PreloaderScene = {
   preload: function () {
-    //this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
-    //this.loadingBar.anchor.setTo(0, 0.5);
-    //this.load.setPreloadSprite(this.loadingBar);
-
-    // TODO: load here the assets for the game    
     // this.game.load.baseURL = 'https://marcoscos13.github.io/CombatCity/src/';
     // this.game.load.crossOrigin = 'anonymous';
     this.game.load.image('bullet', 'images/bullet.png');
@@ -38,7 +32,6 @@ var PreloaderScene = {
 
   create: function () {
     this.game.state.start('play');
-    //this.game.state.start('levelManager',true,false);
   }
 };
 
@@ -49,9 +42,6 @@ window.onload = function () {
   game.state.add('boot', BootScene);
   game.state.add('preloader', PreloaderScene);
   game.state.add('play', PlayScene); //Escena de juego
-  game.state.add('levelManager', LevelManager); //Escena de elegir nivel
-  //game.state.add('play', TestScene); //Escena de testing ------------------------------
-  //game.state.add('play', TestScene2); //Escena de testing 2 ------------------------------
 
   game.state.start('boot');
 };

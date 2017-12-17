@@ -37,12 +37,13 @@ var enemyBulletCollider;
 
 var spawnIndex = 0;
 var spawnPos = new Array();
-var spawnCount = 0;
+var spawnCount = -1;
 var enemyCount = 0;
 var enemyKilledCount = 0;
 var spawned = false;
 
 var levelData;
+var levelN = 1;
 
 var gameover = false;
 var gameoverSprite;
@@ -52,6 +53,7 @@ var hq;
 var PlayScene = {
     preload: function(){
         this.load.text('levels', 'levels/levels.json');
+        resetScene();
     },
 
     create: function(){
@@ -143,7 +145,7 @@ var PlayScene = {
 
         ////////////////////////Mapa    
         createWalls(this.game, wallsGroup, objectsScale, blockSize); //Crea los limites del mapa
-        loadMap(this, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, levelData, 1); //Inicializa el mapa creando todos los bloques 
+        loadMap(this, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, levelData, levelN); //Inicializa el mapa creando todos los bloques 
 
         //Game Over prite
         var posTemp = new Par(this.game.width/2, this.game.height+100);
@@ -152,9 +154,9 @@ var PlayScene = {
     },
     
     update: function(){
-        // if (this.game.input.keyboard.isDown(Phaser.Keyboard.ENTER)){
-        //     this.game.state.start('levelManager', false, false, 2);
-        // }
+        if (this.game.input.keyboard.isDown(Phaser.Keyboard.ENTER) || enemyKilledCount >= 20){
+            this.game.time.events.add(Phaser.Timer.SECOND * 1, nextLevel, this);
+        }
 
         this.game.physics.arcade.collide(player, bloquesGroup);
         this.game.physics.arcade.collide(player, waterGroup);
@@ -211,7 +213,7 @@ var PlayScene = {
         this.game.physics.arcade.overlap(hq, enemyBullets3, collisionHQ, null, this);
         this.game.physics.arcade.overlap(hq, enemyBullets4, collisionHQ, null, this);
 
-        if(enemyCount < 1 && spawnCount < 20 && !spawned){
+        if(enemyCount < 4 && spawnCount < 20 && !spawned){
             this.game.time.events.add(Phaser.Timer.SECOND * 1.5, spawnEnemy, this);
             spawned = true;
             enemyCount++;
@@ -247,6 +249,28 @@ var PlayScene = {
 };
 
 module.exports = PlayScene;
+
+function nextLevel(){
+    if(levelN < 2)
+      levelN++;
+      else
+      levelN = 1;
+    this.game.state.restart('play', false, false);
+}
+
+//Resets the variables scenes
+function resetScene(){
+    bulletsUsed1 = false;
+    bulletsUsed2 = false;
+    bulletsUsed3 = false;
+    bulletsUsed4 = false;
+    spawnIndex = 0;
+    spawnCount = -1;
+    enemyCount = 0;
+    enemyKilledCount = 0;
+    spawned = false;
+    gameover = false;
+}
 
 //Called if the bullet goes out of the screen
 function resetBullet (_bullet) {
@@ -388,6 +412,7 @@ function createEnemyBullets(game){
 }
 
 function spawnEnemy(){
+    console.debug(spawnCount);
     var bulletGroup;
     var bNumber;
     if (!bulletsUsed1){
@@ -410,7 +435,7 @@ function spawnEnemy(){
         bNumber = 4;
         bulletsUsed4 = true;
     }
-    var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, bulletGroup, bNumber, levelData.levels[1][13].enemies[spawnCount]);
+    var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, bulletGroup, bNumber, levelData.levels[levelN][13].enemies[spawnCount]);
     enemyGroup.add(spawnedEnemy);
     spawned = false;
     spawnIndex++;

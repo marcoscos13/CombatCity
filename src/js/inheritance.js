@@ -110,7 +110,6 @@ Shooter.prototype.fire_bullet = function()
 ////Clase Player y sus métodos
 var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, cursors, sprite){
     Shooter.apply(this, [game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, sprite]);
-    //Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
     this._cursors = cursors;
     this.angle = 0;
     this.dirStack = new SmartStack();
@@ -120,7 +119,7 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.boolR = false;
     this.boolD = false;
     this.boolU = false;
-    this.lives = 1;
+    this.lives = 3;
     this.canMove = true;
 
     //Inicializa el player mirando hacia arriba
