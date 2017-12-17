@@ -39,6 +39,7 @@ var spawnIndex = 0;
 var spawnPos = new Array();
 var spawnCount = 0;
 var enemyCount = 0;
+var enemyKilledCount = 0;
 var spawned = false;
 
 var levelData;
@@ -51,7 +52,6 @@ var hq;
 var PlayScene = {
     preload: function(){
         this.load.text('levels', 'levels/levels.json');
-       
     },
 
     create: function(){
@@ -116,8 +116,6 @@ var PlayScene = {
         enemyBulletCollider = new Collider(this.game, new Par(50,50), objectsScale);
         enemyBulletCollider.width = blockSize;
         enemyBulletCollider.height = blockSize/2;
-
-        
 
         //Player
         player = new Player(this.game, playerPos, objectsScale, playerVel, playerDir, playerBullets, bulletVel, bulletTime,  cursors, 'sprites_atlas');
@@ -216,6 +214,10 @@ var PlayScene = {
             spawnCount++;
         }
 
+        //Si el jugador se ha quedado sin vidas
+        if (player.lives < 0)
+            gameOver();
+
         if (gameover){
             if(gameoverSprite.y >= this.game.height/2)
                 gameoverSprite.body.velocity.y = -140;
@@ -232,7 +234,11 @@ var PlayScene = {
         //this.game.debug.text(bloquesGroup.length, 50, 140);
         //this.game.debug.body(player);
         //this.game.debug.body(bulletCollider);
-        this.game.debug.text("Player lives: " + player.lives, 50, 80);
+        this.game.debug.text("Lives: " + player.lives, 5, 60);
+        this.game.debug.text("Enemies", 5, 90);
+        this.game.debug.text("remaining: " + (20-spawnCount), 5, 110);
+        this.game.debug.text("Enemies", 5, 140);
+        this.game.debug.text("destroyed: " + enemyKilledCount, 5, 160);
     }
 };
 
@@ -291,6 +297,7 @@ function collisionKillEnemy (bullet, enemy) {
         enemyGroup.remove(enemy);
         enemy._timerbullets.stop();
         enemy.kill();
+        enemyKilledCount++;
     }
     bullet.kill();
 }
@@ -298,8 +305,10 @@ function collisionKillEnemy (bullet, enemy) {
 // Called if an enemy bullet hits the player
 function collisionHitPlayer (_player, enemyBullet) {
     enemyBullet.kill();
-    player.resetPos();
-    _player.lives--;
+    if (_player.lives >= 0){
+        _player.lives--;
+        _player.resetPos();
+    }
 }
 
 // Called if two bullets collide;
@@ -324,11 +333,18 @@ function destructionHandlerEnemy (bulletC, block){
 
 //Collision bewteen bullets and hq
 function collisionHQ(hq, _bullet){
+    _bullet.kill();
     if (!gameover){
-        _bullet.kill();
         hq.animations.add('hq_2', ['base_2'], 1, true);
         hq.animations.play('hq_2');
+        gameOver();
+    }
+}
+
+function gameOver(){
+    if (!gameover){
         gameover = true;
+        player.canMove = false;
     }
 }
 
@@ -339,13 +355,6 @@ function collisionChangeDirEnemy (enemy, block){
         enemy._changeCalled = true;
         enemy.game.time.events.add(Phaser.Timer.SECOND * 0.5, enemy.change_dir, enemy);
     }
-}
-
-function gameOver(game){
-    var posTemp = new Par(game.width/2,game.height+100);
-    var scaleTemp = new Par(3,3);
-    gameoverSprite = new Collider(game, posTemp, scaleTemp,'game_over');
-    gameover = true;
 }
 
 function createEnemyBullets(game){
