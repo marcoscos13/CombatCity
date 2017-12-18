@@ -266,12 +266,15 @@ var PlayScene = {
         //this.game.debug.text(bloquesGroup.length, 50, 140);
         //this.game.debug.body(player);
         //this.game.debug.body(bulletCollider);
-        this.game.debug.text("Lives: " + player.lives, 5, 60);
-        this.game.debug.text("Enemies", 5, 90);
-        this.game.debug.text("remaining: " + (20-spawnCount), 5, 110);
-        this.game.debug.text("Enemies", 5, 140);
-        this.game.debug.text("destroyed: " + enemyKilledCount, 5, 160);
-        this.game.debug.text("TankLevel: " + player.tankLevel, 5, 190);
+        if (player.lives >= 0){
+            this.game.debug.text("Vidas", 10, 60);
+            this.game.debug.text("Restantes: " + player.lives, 10, 80);
+        }
+        //this.game.debug.text("Enemies", 5, 90);
+        //this.game.debug.text("remaining: " + (20-spawnCount), 5, 110);
+        //this.game.debug.text("Enemies", 5, 140);
+        //this.game.debug.text("destroyed: " + enemyKilledCount, 5, 160);
+        //this.game.debug.text("TankLevel: " + player.tankLevel, 5, 190);
     }
 };
 
