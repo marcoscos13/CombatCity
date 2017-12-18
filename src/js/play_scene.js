@@ -21,7 +21,7 @@ var bullet;
 var bulletCollider;
 
 //Powerups
-var powerupTypes = ['powerup_grenade', 'powerup_tank', 'powerup_helmets', 'powerup_star'];
+var powerupTypes = ['powerup_star', 'powerup_tank', 'powerup_helmets', 'powerup_star'];
 
 //Enemies
 var enemy;
@@ -355,7 +355,10 @@ function collisionKillEnemy (bullet, enemy) {
         enemy._timerbullets.stop();
         enemy.kill();
         enemyKilledCount++;
-        spawnPowerup(this.game);
+
+        var rnd = this.game.rnd.integerInRange(0, 3);
+        if (rnd === 3)
+            spawnPowerup(this.game);
     }
     bullet.kill();
 }
