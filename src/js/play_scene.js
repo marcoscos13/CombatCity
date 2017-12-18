@@ -366,6 +366,7 @@ function collisionHitPlayer (_player, enemyBullet) {
     if (_player.lives >= 0 && !_player.helmet){
         _player.lives--;
         player.resetPos();
+        player.animations.play('player1_level1_right_off');
     }
 }
 
