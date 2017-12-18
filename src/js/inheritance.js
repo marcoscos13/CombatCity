@@ -147,7 +147,8 @@ Player.prototype.resetPos = function(){
     }
     this.helmet = false;
     if (this.tankLevel >= 3){
-        this._bulletsGroup.remove(this._bulletsGroup.getFirstExists(false));
+        if (this._bulletsGroup.length > 1)
+            this._bulletsGroup.remove(this._bulletsGroup.getFirstExists(false));
     }
     this._bulletVel = 300;
     this.tankLevel = 1;
