@@ -134,7 +134,6 @@ Player.prototype = Object.create(Shooter.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.resetPos = function(){
-    this.tankLevel = 1;
     this.animations.play('player1_level1_right_off');
     if (this.lives >= 0){
         var posTemp = getCenteredCell(this.game, 48, 4, 12);
@@ -151,11 +150,10 @@ Player.prototype.resetPos = function(){
         this._bulletsGroup.remove(this._bulletsGroup.getFirstExists(false));
     }
     this._bulletVel = 300;
-    this.tankLevel = 0;
+    this.tankLevel = 1;
 }
 
 Player.prototype.helmet_off = function(){
-    console.debug('Vencible');
     this.helmet = false;
 }
 

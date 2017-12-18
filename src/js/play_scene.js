@@ -514,7 +514,7 @@ function spawnEnemy(){
 function spawnPowerup(game){
     var rnd = game.rnd.integerInRange(0, 3);
     var id = powerupTypes[rnd];
-    var powerup = new Block(game, getCenteredCell(game, blockSize, game.rnd.integerInRange(0, 12), game.rnd.integerInRange(0, 12)), objectsScale, 'sprites_atlas', id, id);
+    var powerup = new Block(game, getCell(game, blockSize, game.rnd.integerInRange(1, 11), game.rnd.integerInRange(1, 11)), objectsScale, 'sprites_atlas', id, id);
     powerup.animations.add('blink', [id, 'empty'], 4, true);
     powerup.animations.play('blink');
     powerupsGroup.add(powerup);
