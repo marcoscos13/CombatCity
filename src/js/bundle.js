@@ -21,8 +21,8 @@ var BootScene = {
 
 var PreloaderScene = {
   preload: function () {
-    // this.game.load.baseURL = 'https://marcoscos13.github.io/CombatCity/src/';
-    // this.game.load.crossOrigin = 'anonymous';
+    this.game.load.baseURL = 'https://marcoscos13.github.io/CombatCity/src/';
+    this.game.load.crossOrigin = 'anonymous';
     this.game.load.image('bullet', 'images/bullet.png');
     this.game.load.image('game_over', 'images/game_over.png');
     this.game.load.image('background', 'images/background.png');
