@@ -162,7 +162,8 @@ Player.prototype.update = function(){
     if (this.canMove){
         if (!this._cursors.left.isDown && !this._cursors.right.isDown && !this._cursors.down.isDown && !this._cursors.up.isDown)
             this.dirChar = ' ';
-        else this.dirChar = this.dirStack.top.data;
+        else if (this.dirStack.size > 0)
+            this.dirChar = this.dirStack.top.data;
 
         this._cursors.left.onDown.add(function(){
             if(!this.boolL){
