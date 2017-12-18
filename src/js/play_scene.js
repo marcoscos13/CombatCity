@@ -49,11 +49,13 @@ var powerupsGroup;
 
 var levelData;
 var levelN = 1;
+var tankL = 1;
 
 var gameover = false;
 var gameoverSprite;
 
 var hq;
+var tempBool = false;
 
 var PlayScene = {
     preload: function(){
@@ -131,11 +133,25 @@ var PlayScene = {
         player = new Player(this.game, playerPos, objectsScale, playerVel, playerDir, playerBullets, bulletVel, bulletTime,  cursors, 'sprites_atlas');
         //player.animations.add('player1_right_on', ['player1_level1_right1','player1_level1_right2'], 2, true);
         //player.animations.play('player1_right_on');
-        player.animations.add('player1_right_off', ['player1_level1_right1'], 1, true);
-        player.animations.play('player1_right_off');
+        player.animations.add('player1_level1_right_off', ['player1_level1_right1'], 1, true);
+        player.animations.add('player1_level2_right_off', ['player1_level2_right1'], 1, true);
+        player.animations.add('player1_level3_right_off', ['player1_level3_right1'], 1, true);
+        player.animations.add('player1_level4_right_off', ['player1_level4_right1'], 1, true);
+
+        player.tankLevel = tankL;
+        if(player.tankLevel === 1)
+        player.animations.play('player1_level1_right_off');
+        else if(player.tankLevel === 2)
+            player.animations.play('player1_level2_right_off');
+        else if (player.tankLevel === 3) 
+            player.animations.play('player1_level3_right_off');
+        else if (player.tankLevel === 4)
+            player.animations.play('player1_level4_right_off');
+        
         player.body.collideWorldBounds = true;
         player._direction._x = 1;
         player._direction._y = 0; 
+        
 
         //EnemySpawns
         spawnPos[0] = getCenteredCell(this.game, blockSize, 0, 0);
@@ -255,6 +271,7 @@ var PlayScene = {
         this.game.debug.text("remaining: " + (20-spawnCount), 5, 110);
         this.game.debug.text("Enemies", 5, 140);
         this.game.debug.text("destroyed: " + enemyKilledCount, 5, 160);
+        this.game.debug.text("TankLevel: " + player.tankLevel, 5, 190);
     }
 };
 
@@ -263,8 +280,10 @@ module.exports = PlayScene;
 function nextLevel(){
     if(levelN < 2)
       levelN++;
-      else
+    else
       levelN = 1;
+
+    tankL = player.tankLevel;
     this.game.state.restart('play', false, false);
 }
 
@@ -290,7 +309,7 @@ function resetBullet (_bullet) {
 //Called if the bullet hits one of the block sprites
 function collisionHandler (bullet, block) {
     var distance;
-    if (player.tankLevel < 3)
+    if (player.tankLevel < 4)
         distance = 12;
     else
         distance = 24;
@@ -346,7 +365,7 @@ function collisionHitPlayer (_player, enemyBullet) {
     enemyBullet.kill();
     if (_player.lives >= 0 && !_player.helmet){
         _player.lives--;
-        _player.resetPos();
+        player.resetPos();
     }
 }
 
@@ -360,7 +379,7 @@ function collisionBullets (playerBullet, enemyBullet) {
 function destructionHandler (bulletC, block){
     if (block.blockType != 'Metal')
         block.kill();
-    else if (player.tankLevel >= 3)
+    else if (player.tankLevel >= 4)
         block.kill();
 }
 
@@ -398,19 +417,26 @@ function collisionChangeDirEnemy (enemy, block){
 
 // Called if a powerup is taken
 function powerupHandler (player, powerup){
-    if (powerup.blockType === 'powerup_star' && player.tankLevel < 3){
+    if (powerup.blockType === 'powerup_star' && player.tankLevel < 4){
         player.tankLevel++;
-        if(player.tankLevel === 1) player._bulletVel = 500;
-        else if (player.tankLevel === 2) {
+        if(player.tankLevel === 2){
+            player._bulletVel = 500;
+            player.animations.play('player1_level2_right_off');
+        }
+        else if (player.tankLevel === 3) {
             playerBullets.add(new Bullet(this.game, new Par(0,0), objectsScale, 500, new Par(0,0), 'bullet'));
+            player.animations.play('player1_level3_right_off');
+        }
+        else if (player.tankLevel === 4) {
+            player.animations.play('player1_level4_right_off');
         }
     }
     else if (powerup.blockType === 'powerup_grenade'){
+        bulletsUsed1 = false;
+        bulletsUsed2 = false;
+        bulletsUsed3 = false;
+        bulletsUsed4 = false;
         enemyGroup.forEach(function (e) {
-            if (e._bulletN === 1) bulletsUsed1 = false;
-            else if (e._bulletN === 2) bulletsUsed2 = false;
-            else if (e._bulletN === 3) bulletsUsed3 = false;
-            else if (e._bulletN === 4) bulletsUsed4 = false;
             enemyCount--;
             enemyGroup.remove(e);
             e._timerbullets.stop();
@@ -422,7 +448,6 @@ function powerupHandler (player, powerup){
         player.lives++;
     }
     else if (powerup.blockType === 'powerup_helmets'){
-        console.debug('Invencible');
         player.helmet = true;
         this.game.time.events.add(Phaser.Timer.SECOND * 5, player.helmet_off, player);
     }
@@ -456,7 +481,6 @@ function createEnemyBullets(game){
 }
 
 function spawnEnemy(){
-    console.debug(spawnCount);
     var bulletGroup;
     var bNumber;
     if (!bulletsUsed1){

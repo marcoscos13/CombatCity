@@ -114,7 +114,7 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.angle = 0;
     this.dirStack = new SmartStack();
     this.dirChar = ' ';
-    this.tankLevel = 0;
+    this.tankLevel = 1;
     this.boolL = false;
     this.boolR = false;
     this.boolD = false;
@@ -134,6 +134,8 @@ Player.prototype = Object.create(Shooter.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.resetPos = function(){
+    this.tankLevel = 1;
+    this.animations.play('player1_level1_right_off');
     if (this.lives >= 0){
         var posTemp = getCenteredCell(this.game, 48, 4, 12);
         this.x = posTemp._x;
