@@ -100,6 +100,7 @@ var powerupsGroup;
 var levelData;
 var levelN = 1;
 var tankL = 1;
+var livesN = 3;
 
 var gameover = false;
 var gameoverSprite;
@@ -188,15 +189,22 @@ var PlayScene = {
         player.animations.add('player1_level3_right_off', ['player1_level3_right1'], 1, true);
         player.animations.add('player1_level4_right_off', ['player1_level4_right1'], 1, true);
 
+        player.lives = livesN;
         player.tankLevel = tankL;
-        if(player.tankLevel === 1)
+        
+        if(player.tankLevel >= 1)
         player.animations.play('player1_level1_right_off');
-        else if(player.tankLevel === 2)
+        if(player.tankLevel >= 2){
+            player._bulletVel = 500;
             player.animations.play('player1_level2_right_off');
-        else if (player.tankLevel === 3) 
+        }
+        if (player.tankLevel >= 3) {
+            playerBullets.add(new Bullet(this.game, new Par(0,0), objectsScale, 500, new Par(0,0), 'bullet'));
             player.animations.play('player1_level3_right_off');
-        else if (player.tankLevel === 4)
+        }
+        if (player.tankLevel >= 4) {
             player.animations.play('player1_level4_right_off');
+        }
         
         player.body.collideWorldBounds = true;
         player._direction._x = 1;
@@ -336,6 +344,7 @@ function nextLevel(){
     else
       levelN = 1;
 
+    livesN = player.lives;
     tankL = player.tankLevel;
     this.game.state.restart('play', false, false);
 }
