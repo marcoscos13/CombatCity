@@ -391,6 +391,7 @@ Enemy.prototype.change_dir = function(){
     }
 
     if (this._velocity._x === 0 && this._velocity._y === 0){
+        this._timer.start();
         this._velocity._x = this._velxAux;
         this._velocity._y = this._velyAux;
     }

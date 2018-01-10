@@ -424,10 +424,20 @@ function gameOver(){
 
 // Called if an enemy hits a wall, etc.
 function collisionChangeDirEnemy (enemy, block){
-    if (enemy._velocity._x !== 0 && enemy._velocity._y !== 0 && !enemy._changeCalled){
-        enemy.stop();
+    if (enemy._direction._x !== 0){
+        enemy.x += enemy.gapH;
+        enemy.x = 24 * Math.round(enemy.x/24) - enemy.gapH;
+    }
+    if (enemy._direction._y !== 0){
+        enemy.y += enemy.gapW;
+        enemy.y = 24 * Math.round(enemy.y/24) - enemy.gapW;
+    }
+    enemy.stop();
+    //console.debug('hit!');
+    if (!enemy._changeCalled){
+        enemy._timer.stop();
         enemy._changeCalled = true;
-        enemy.game.time.events.add(Phaser.Timer.SECOND * 0.5, enemy.change_dir, enemy);
+        enemy.game.time.events.add(Phaser.Timer.SECOND * 0.25, enemy.change_dir, enemy);
     }
 }
 
