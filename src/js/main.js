@@ -28,11 +28,19 @@ var PreloaderScene = {
     this.game.load.image('white', 'images/white.png');
     this.game.load.image('grey', 'images/grey.png');
     this.game.load.atlas('sprites_atlas', 'images/sprites_atlas.png', 'images/sprites_atlas.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
+    this.game.load.audio('shoot', 'sounds/shoot.ogg');
+    this.game.load.audio('boomenemy', 'sounds/boomenemy.ogg');
+    this.game.load.audio('boombase', 'sounds/boombase.ogg');
+    this.game.load.audio('boomplayer', 'sounds/boomplayer.ogg');
+    this.game.load.audio('bulletbrick', 'sounds/bulletbrick.ogg');
+    this.game.load.audio('bulletmetal', 'sounds/bulletmetal.ogg');
+    this.game.load.audio('enemyhurt', 'sounds/enemyhurt.ogg');
+    this.game.load.audio('powerup', 'sounds/powerup.ogg');
   },
 
   create: function () {
-    this.game.state.start('menu');
-    //this.game.state.start('play');
+    //this.game.state.start('menu');
+    this.game.state.start('play');
   }
 };
 

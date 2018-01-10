@@ -58,6 +58,10 @@ var gameoverSprite;
 var hq;
 var tempBool = false;
 
+//Sonidos
+var powerupSound;
+var boombaseSound;
+
 var PlayScene = {
     preload: function(){
         this.load.text('levels', 'levels/levels.json');
@@ -179,10 +183,15 @@ var PlayScene = {
         createWalls(this.game, wallsGroup, objectsScale, blockSize); //Crea los limites del mapa
         loadMap(this, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, levelData, levelN); //Inicializa el mapa creando todos los bloques 
 
-        //Game Over prite
+        //Game Over Sprite
         var posTemp = new Par(this.game.width/2, this.game.height+100);
         var scaleTemp = new Par(3,3);
         gameoverSprite = new Collider(this.game, posTemp, scaleTemp,'game_over');
+
+        //Sonidos
+        powerupSound = this.game.add.audio('powerup');
+        boombaseSound = this.game.add.audio('boombase');
+
     },
     
     update: function(){
@@ -357,7 +366,10 @@ function collisionHandlerEnemy (bullet, block) {
 
 // Called if the bullet hits an enemy
 function collisionKillEnemy (bullet, enemy) {
-    if (enemy._lives > 1) enemy._lives--;
+    if (enemy._lives > 1){
+        enemy._lives--;
+        enemy._hitSound.play();
+    }
     else {
         if (enemy._bulletN === 1) bulletsUsed1 = false;
         else if (enemy._bulletN === 2) bulletsUsed2 = false;
@@ -368,6 +380,8 @@ function collisionKillEnemy (bullet, enemy) {
         enemy._timerbullets.stop();
         enemy.kill();
         enemyKilledCount++;
+
+        enemy._destroySound.play();
 
         var rnd = this.game.rnd.integerInRange(0, 3);
         if (rnd === 3)
@@ -380,9 +394,10 @@ function collisionKillEnemy (bullet, enemy) {
 function collisionHitPlayer (_player, enemyBullet) {
     enemyBullet.kill();
     if (_player.lives >= 0 && !_player.helmet){
+        _player._destroySound.play();
         _player.lives--;
-        player.resetPos();
-        player.animations.play('player1_level1_right_off');
+        _player.resetPos();
+        _player.animations.play('player1_level1_right_off');
     }
 }
 
@@ -410,6 +425,7 @@ function destructionHandlerEnemy (bulletC, block){
 function collisionHQ(hq, _bullet){
     _bullet.kill();
     if (!gameover){
+        boombaseSound.play();
         hq.animations.add('hq_2', ['base_2'], 1, true);
         hq.animations.play('hq_2');
         gameOver();
@@ -444,6 +460,7 @@ function collisionChangeDirEnemy (enemy, block){
 
 // Called if a powerup is taken
 function powerupHandler (player, powerup){
+    powerupSound.play();
     if (powerup.blockType === 'powerup_star' && player.tankLevel < 4){
         player.tankLevel++;
         if(player.tankLevel === 2){

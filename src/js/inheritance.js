@@ -58,13 +58,15 @@ Bullet.prototype = Object.create(Movable.prototype);
 Bullet.prototype.constructor = Bullet;
 
 ////Clase Shooter y sus métodos
-var Shooter = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, sprite){
+var Shooter = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, hasSound, sprite){
     Movable.apply(this, [game, pos, scale, vel, dir, sprite]);
     this._bulletsGroup = bulletsGroup;
     this._bulletVel = bulletVel;
     this._bulletTime = bulletTime;
     this._bulletSince = 0;
     this._game = game;
+    this._hasSound = hasSound;
+    this.audioDisparo = game.add.audio('shoot');
     var grayW = (this.game.height - 48*13)/2;
     var grayH = (this.game.width - 48*13)/2;
     this.gapW = grayW - Math.trunc(grayW/24)*24;
@@ -83,6 +85,7 @@ Shooter.prototype.fire_bullet = function()
         var bullet = this._bulletsGroup.getFirstExists(false);
         if (bullet)
         {
+            if (this._hasSound) this.audioDisparo.play();
             bullet.angle = 0;
             if (bullet.scale.x < 0)
                 bullet.scale.x *= -1;
@@ -109,7 +112,7 @@ Shooter.prototype.fire_bullet = function()
 
 ////Clase Player y sus métodos
 var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, cursors, sprite){
-    Shooter.apply(this, [game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, sprite]);
+    Shooter.apply(this, [game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, true, sprite]);
     this._cursors = cursors;
     this.angle = 0;
     this.dirStack = new SmartStack();
@@ -122,6 +125,8 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.lives = 3;
     this.canMove = true;
     this.helmet = false;
+
+    this._destroySound = game.add.audio('boomplayer');
 
     //Inicializa el player mirando hacia arriba
     this._direction._x = 0;
@@ -267,7 +272,7 @@ Player.prototype.update = function(){
 
         //Disparo
         if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
-            this.fire_bullet();
+            this.fire_bullet(true);
         }
     }else{
         this.body.velocity.x = 0;
@@ -277,30 +282,31 @@ Player.prototype.update = function(){
 
 var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     if (typeId === 'armor'){
-        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 300, 500, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 300, 500, false, 'sprites_atlas']);
         this._lives = 3;
         this.animations.add('enemy_armor_right_off', ['enemy_armor_right1'], 1, true);
         this.animations.play('enemy_armor_right_off');
     }
     else if (typeId === 'power'){
-        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 500, 500, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 500, 500, false, 'sprites_atlas']);
         this._lives = 1;
         this.animations.add('enemy_power_right_off', ['enemy_power_right1'], 1, true);
         this.animations.play('enemy_power_right_off');
     }
     else if (typeId === 'fast'){
-        Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 300, 500, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 300, 500, false, 'sprites_atlas']);
         this._lives = 1;
         this.animations.add('enemy_fast_right_off', ['enemy_fast_right1'], 1, true);
         this.animations.play('enemy_fast_right_off');
     }
     else{
-        Shooter.apply(this, [game, pos, scale, new Par(100, 100), new Par(0, 1), bulletsGroup, 300, 1000, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(100, 100), new Par(0, 1), bulletsGroup, 300, 1000, false, 'sprites_atlas']);
         this._lives = 1;
         this.animations.add('enemy_basic_right_off', ['enemy_basic_right1'], 1, true);
         this.animations.play('enemy_basic_right_off');
     }
-
+    this._hitSound = game.add.audio('enemyhurt');
+    this._destroySound = game.add.audio('boomenemy');
     this._bulletN = bulletN;
     this._moving = true;
     this._velxAux = this._velocity._x;
@@ -317,7 +323,7 @@ var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     //         this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.change_dir, this);
     //     }
     // }, this);
-    this._timerbullets.loop(500, this.fire_bullet, this);
+    this._timerbullets.loop(this.game.rnd.realInRange(400, 600), this.fire_bullet, this);
     this._timerbullets.start();
 
     //Inicializa el enemigo mirando hacia abajo
