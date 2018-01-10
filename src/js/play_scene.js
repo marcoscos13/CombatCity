@@ -247,6 +247,7 @@ var PlayScene = {
         this.game.physics.arcade.overlap(hq, enemyBullets3, collisionHQ, null, this);
         this.game.physics.arcade.overlap(hq, enemyBullets4, collisionHQ, null, this);
 
+        //Controla el spawn de los enemigos: hay 4 en pantalla como máximo y 20 por nivel
         if(enemyCount < 4 && spawnCount < 20 && !spawned){
             this.game.time.events.add(Phaser.Timer.SECOND * 1.5, spawnEnemy, this);
             spawned = true;
