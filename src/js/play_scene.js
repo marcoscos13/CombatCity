@@ -61,6 +61,8 @@ var tempBool = false;
 //Sonidos
 var powerupSound;
 var boombaseSound;
+var bulletmetalSound;
+var bulletbrickSound;
 
 var PlayScene = {
     preload: function(){
@@ -73,7 +75,7 @@ var PlayScene = {
         
         //Físicas
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.game.stage.backgroundColor = '#464646';
+        this.game.stage.backgroundColor = '#192E38';
         cursors = this.game.input.keyboard.createCursorKeys();
         this.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 
@@ -191,6 +193,8 @@ var PlayScene = {
         //Sonidos
         powerupSound = this.game.add.audio('powerup');
         boombaseSound = this.game.add.audio('boombase');
+        bulletmetalSound = this.game.add.audio('bulletmetal');
+        bulletbrickSound = this.game.add.audio('bulletbrick');
 
     },
     
@@ -211,7 +215,7 @@ var PlayScene = {
         this.game.physics.arcade.overlap(player, powerupsGroup, powerupHandler, null, this);
 
         //Player Bullets Collisions
-        this.game.physics.arcade.overlap(playerBullets, wallsGroup, resetBullet, null, this);
+        this.game.physics.arcade.overlap(playerBullets, wallsGroup, resetPlayerBullet, null, this);
         this.game.physics.arcade.overlap(playerBullets, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(bulletCollider, bloquesGroup, destructionHandler, null, this);
         this.game.physics.arcade.overlap(playerBullets, enemyGroup, collisionKillEnemy, null, this);
@@ -328,8 +332,16 @@ function resetBullet (_bullet) {
     _bullet.kill();
 }
 
+//Called if the player bullet goes out of the screen
+function resetPlayerBullet (_bullet) {
+    _bullet.kill();
+    bulletmetalSound.play();
+}
+
 //Called if the bullet hits one of the block sprites
 function collisionHandler (bullet, block) {
+    if (block.blockType === 'Metal') bulletmetalSound.play();
+    else bulletbrickSound.play();
     var distance;
     if (player.tankLevel < 4)
         distance = 12;
