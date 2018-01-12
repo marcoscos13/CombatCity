@@ -57,7 +57,6 @@ var MenuScene = {
        }
 
        selector.y = buttonsArray[selectorN].y;
-       console.debug(selectorN);
     },
 
     render: function(){

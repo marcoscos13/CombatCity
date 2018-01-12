@@ -145,8 +145,6 @@ var PlayScene = {
 
         //Player
         player = new Player(this.game, playerPos, objectsScale, playerVel, playerDir, playerBullets, bulletVel, bulletTime,  cursors, 'sprites_atlas');
-        //player.animations.add('player1_right_on', ['player1_level1_right1','player1_level1_right2'], 2, true);
-        //player.animations.play('player1_right_on');
         player.animations.add('player1_level1_right_off', ['player1_level1_right1'], 1, true);
         player.animations.add('player1_level2_right_off', ['player1_level2_right1'], 1, true);
         player.animations.add('player1_level3_right_off', ['player1_level3_right1'], 1, true);
@@ -169,10 +167,7 @@ var PlayScene = {
             player.animations.play('player1_level4_right_off');
         }
         
-        player.body.collideWorldBounds = true;
-        player._direction._x = 1;
-        player._direction._y = 0; 
-        
+        player.body.collideWorldBounds = true;        
 
         //EnemySpawns
         spawnPos[0] = getCenteredCell(this.game, blockSize, 0, 0);
@@ -200,11 +195,13 @@ var PlayScene = {
         /////////////////////////HUD
 
         //Enemigos Restantes
+        var elemsCreated = 0;
         for (var i = 0; i < 10; i++){
             for (var j = 0; j < 2; j++){
-                HUD_enemiesArray[i] = this.game.add.sprite(this.game.world.centerX + bg.width/2 + 45 + (50*j), 100 + (30*i),'sprites_atlas', 'grass');
-                HUD_enemiesArray[i].scale.setTo(3,3);
-                HUD_enemiesArray[i].anchor.setTo(0.5,0.5);
+                HUD_enemiesArray[elemsCreated] = this.game.add.sprite(this.game.world.centerX + bg.width/2 + 45 + (50*j), 100 + (30*i),'sprites_atlas', 'grass');
+                HUD_enemiesArray[elemsCreated].scale.setTo(3,3);
+                HUD_enemiesArray[elemsCreated].anchor.setTo(0.5,0.5);
+                elemsCreated++;
             }
         }
 
@@ -248,6 +245,7 @@ var PlayScene = {
         //HUD Update
         if (player.lives >= 0) HUD_Lives.text = player.lives;
         HUD_Level.text = levelN;
+
 
         if (this.game.input.keyboard.isDown(Phaser.Keyboard.ENTER) || enemyKilledCount >= 20){
             this.game.time.events.add(Phaser.Timer.SECOND * 1, nextLevel, this);
@@ -442,6 +440,10 @@ function collisionKillEnemy (bullet, enemy) {
         enemy._timerbullets.stop();
         enemy.kill();
         enemyKilledCount++;
+
+        //HUD Enemies left Update
+        HUD_enemiesArray[HUD_enemiesArray.length-1].destroy();
+        HUD_enemiesArray.length--;
 
         enemy._destroySound.play();
 
