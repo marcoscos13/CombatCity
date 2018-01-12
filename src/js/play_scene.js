@@ -39,7 +39,7 @@ var enemyBulletCollider;
 
 var spawnIndex = 0;
 var spawnPos = new Array();
-var spawnCount = -1;
+var spawnCount = 0;
 var enemyCount = 0;
 var enemyKilledCount = 0;
 var spawned = false;
@@ -57,6 +57,13 @@ var gameoverSprite;
 
 var hq;
 var tempBool = false;
+
+//HUD
+var HUD_enemiesArray = new Array(20);
+var HUD_LivesSprite;
+var HUD_Lives;
+var HUD_LevelSprite;
+var HUD_Level;
 
 //Sonidos
 var powerupSound;
@@ -190,15 +197,58 @@ var PlayScene = {
         var scaleTemp = new Par(3,3);
         gameoverSprite = new Collider(this.game, posTemp, scaleTemp,'game_over');
 
-        //Sonidos
+        /////////////////////////HUD
+
+        //Enemigos Restantes
+        for (var i = 0; i < 10; i++){
+            for (var j = 0; j < 2; j++){
+                HUD_enemiesArray[i] = this.game.add.sprite(this.game.world.centerX + bg.width/2 + 45 + (50*j), 100 + (30*i),'sprites_atlas', 'grass');
+                HUD_enemiesArray[i].scale.setTo(3,3);
+                HUD_enemiesArray[i].anchor.setTo(0.5,0.5);
+            }
+        }
+
+        //Vidas Sprite
+        HUD_LivesSprite = this.game.add.sprite(Math.round(this.game.world.centerX + bg.width/2 + 24), Math.round(this.game.world.centerY + bg.height/2 - 180),'sprites_atlas', 'player1_level1_up1');
+        HUD_LivesSprite.scale.setTo(3,3);
+        HUD_LivesSprite.anchor.setTo(0,0.5);
+
+        //Vidas Texto
+        HUD_Lives = this.game.add.text(this.game.world.centerX + bg.width/2 + 88, HUD_LivesSprite.y + 8, player.lives);
+        HUD_Lives.anchor.setTo(0,0.5);
+        HUD_Lives.font = 'Press Start 2P';
+        HUD_Lives.fontSize = 26;
+        HUD_Lives.fill = '#bcbcbc';
+
+        //Nivel Sprite
+        HUD_LevelSprite = this.game.add.sprite(this.game.world.centerX + bg.width/2 + 24, bg.height - 50,'sprites_atlas', 'water_1');
+        HUD_LevelSprite.scale.setTo(3,3);
+        HUD_LevelSprite.anchor.setTo(0,0.5);
+
+        //Nivel Texto
+        HUD_Level = this.game.add.text(this.game.world.centerX + bg.width/2 + 88, HUD_LevelSprite.y + 2, levelN);
+        HUD_Level.anchor.setTo(0,0.5);
+        HUD_Level.font = 'Press Start 2P';
+        HUD_Level.fontSize = 26;
+        HUD_Level.fill = '#bcbcbc';
+        
+        ///////////////////////Sonidos
         powerupSound = this.game.add.audio('powerup');
         boombaseSound = this.game.add.audio('boombase');
         bulletmetalSound = this.game.add.audio('bulletmetal');
         bulletbrickSound = this.game.add.audio('bulletbrick');
 
+        //this.game.state.start('levelAnimation', true, false, 2);
+
     },
     
     update: function(){
+        //console.debug("Enemies Spawned: " + spawnCount + " Enemies Killed: " + enemyKilledCount);
+
+        //HUD Update
+        if (player.lives >= 0) HUD_Lives.text = player.lives;
+        HUD_Level.text = levelN;
+
         if (this.game.input.keyboard.isDown(Phaser.Keyboard.ENTER) || enemyKilledCount >= 20){
             this.game.time.events.add(Phaser.Timer.SECOND * 1, nextLevel, this);
         }
@@ -320,7 +370,7 @@ function resetScene(){
     bulletsUsed3 = false;
     bulletsUsed4 = false;
     spawnIndex = 0;
-    spawnCount = -1;
+    spawnCount = 0;
     enemyCount = 0;
     enemyKilledCount = 0;
     spawned = false;

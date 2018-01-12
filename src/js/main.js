@@ -2,6 +2,7 @@
 
 var PlayScene = require('./play_scene.js');
 var MenuScene = require('./menu_scene.js');
+var LevelAnimationScene = require('./levelAnimation_scene.js');
 //var TestScene = require('./test_scene.js');
 //var TestScene2 = require('./test_scene2.js');
 //var Stack = require('./stack.js');
@@ -60,6 +61,7 @@ window.onload = function () {
   game.state.add('preloader', PreloaderScene);
   game.state.add('menu', MenuScene); //Escena del menu
   game.state.add('play', PlayScene); //Escena de juego
+  game.state.add('levelAnimation', LevelAnimationScene); //Escena de juego
 
   game.state.start('boot');
 };
