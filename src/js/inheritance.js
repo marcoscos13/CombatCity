@@ -126,12 +126,33 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.canMove = true;
     this.helmet = false;
 
+    this.animations.add('player1_level1_right', ['player1_level1_right1', 'player1_level1_right2'], 4, true);
+    this.animations.add('player1_level2_right', ['player1_level2_right1', 'player1_level2_right2'], 4, true);
+    this.animations.add('player1_level3_right', ['player1_level3_right1', 'player1_level3_right2'], 4, true);
+    this.animations.add('player1_level4_right', ['player1_level4_right1', 'player1_level4_right2'], 4, true);
+
+    this.animations.add('player1_level1_left', ['player1_level1_left1', 'player1_level1_left2'], 4, true);
+    this.animations.add('player1_level2_left', ['player1_level2_left1', 'player1_level2_left2'], 4, true);
+    this.animations.add('player1_level3_left', ['player1_level3_left1', 'player1_level3_left2'], 4, true);
+    this.animations.add('player1_level4_left', ['player1_level4_left1', 'player1_level4_left2'], 4, true);
+
+    this.animations.add('player1_level1_up', ['player1_level1_up1', 'player1_level1_up2'], 4, true);
+    this.animations.add('player1_level2_up', ['player1_level2_up1', 'player1_level2_up2'], 4, true);
+    this.animations.add('player1_level3_up', ['player1_level3_up1', 'player1_level3_up2'], 4, true);
+    this.animations.add('player1_level4_up', ['player1_level4_up1', 'player1_level4_up2'], 4, true);
+
+    this.animations.add('player1_level1_down', ['player1_level1_down1', 'player1_level1_down2'], 4, true);
+    this.animations.add('player1_level2_down', ['player1_level2_down1', 'player1_level2_down2'], 4, true);
+    this.animations.add('player1_level3_down', ['player1_level3_down1', 'player1_level3_down2'], 4, true);
+    this.animations.add('player1_level4_down', ['player1_level4_down1', 'player1_level4_down2'], 4, true);
+
     this._destroySound = game.add.audio('boomplayer');
 
     //Inicializa el player mirando hacia arriba
     this._direction._x = 0;
     this._direction._y = -1;
-    this.angle = 270;    
+    this.animations.play('player1_level1_up');
+    this.animations.stop();
 }
 
 //Player.prototype = Object.create(Shooter.prototype);
@@ -139,7 +160,9 @@ Player.prototype = Object.create(Shooter.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.resetPos = function(){
-    this.animations.play('player1_level1_right_off');
+    this.animations.play('player1_level1_up');
+    this._direction._x = 0;
+    this._direction._y = -1;
     if (this.lives >= 0){
         var posTemp = getCenteredCell(this.game, 48, 4, 12);
         this.x = posTemp._x;
@@ -230,7 +253,7 @@ Player.prototype.update = function(){
             this.body.velocity.x = -this._velocity._x;
             this._direction._x = -1;
             this._direction._y = 0;
-            this.angle = 180;
+            this.animations.play('player1_level' + this.tankLevel + '_left')
         }
         else if (this.dirChar === 'r'){
             if (this._direction._x !== 0){
@@ -241,7 +264,7 @@ Player.prototype.update = function(){
             this.body.velocity.x = this._velocity._x;
             this._direction._x = 1;
             this._direction._y = 0;
-            this.angle = 0;
+            this.animations.play('player1_level' + this.tankLevel + '_right')
         }
         else if (this.dirChar === 'd'){
             if (this._direction._y !== 0){
@@ -252,7 +275,7 @@ Player.prototype.update = function(){
             this.body.velocity.y = this._velocity._y;
             this._direction._x = 0;
             this._direction._y = 1;
-            this.angle = 90;
+            this.animations.play('player1_level' + this.tankLevel + '_down')
         }
         else if (this.dirChar === 'u'){
             if (this._direction._y !== 0){
@@ -263,11 +286,12 @@ Player.prototype.update = function(){
             this.body.velocity.y = -this._velocity._y;
             this._direction._x = 0;
             this._direction._y = -1;
-            this.angle = 270;
+            this.animations.play('player1_level' + this.tankLevel + '_up')
         }
         else{
             this.body.velocity.x = 0;
             this.body.velocity.y = 0;
+            this.animations.stop();
         }
 
         //Disparo
