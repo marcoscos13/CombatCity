@@ -12,8 +12,10 @@ var SingleAnimation = function (game, pos, scale, animID) {
         this.animations.play('explosion', 6, false, true);
     }
     else if (animID == "enemySpawn"){ //Animacion que indica donde va a spawnear un enemigo
-        this.animations.add('enemySpawn', ['powerup_star', 'powerup_tank', 'powerup_helmets'], 1, false);
-        this.animations.play('enemySpawn', 3, false, true);
+        this.animations.add('enemySpawn', ['enemySpawn_1', 'enemySpawn_2', 'enemySpawn_3','enemySpawn_4',
+        'enemySpawn_3', 'enemySpawn_2','enemySpawn_3','enemySpawn_4','enemySpawn_3', 'enemySpawn_2',
+        'enemySpawn_3', 'enemySpawn_4','enemySpawn_3','enemySpawn_2','enemySpawn_1'], 1, false);
+        this.animations.play('enemySpawn', 12, false, true);
     }
 
     this.smoothed = false;
@@ -43,9 +45,10 @@ Collider.prototype = Object.create(Phaser.Sprite.prototype);
 Collider.prototype.constructor = Collider;
 
 ////Clase Block y sus métodos
-var Block = function (game, pos, scale, sprite, spriteID, bType){
+var Block = function (game, pos, scale, sprite, spriteID, bType, nPoints = 0){
     Collider.apply(this, [game, pos, scale, sprite, spriteID]);
     this.blockType = bType;
+    this.points = nPoints;
 }
 
 Block.prototype = Object.create(Collider.prototype);
@@ -332,24 +335,28 @@ var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     if (typeId === 'armor'){
         Shooter.apply(this, [game, pos, scale, new Par(70, 70), new Par(0, 1), bulletsGroup, 300, 500, false, 'sprites_atlas']);
         this._lives = 3;
+        this.points = 400;
         this.animations.add('enemy_armor_right_off', ['enemy_armor_right1'], 1, true);
         this.animations.play('enemy_armor_right_off');
     }
     else if (typeId === 'power'){
         Shooter.apply(this, [game, pos, scale, new Par(100, 100), new Par(0, 1), bulletsGroup, 400, 500, false, 'sprites_atlas']);
         this._lives = 1;
+        this.points = 200;
         this.animations.add('enemy_power_right_off', ['enemy_power_right1'], 1, true);
         this.animations.play('enemy_power_right_off');
     }
     else if (typeId === 'fast'){
         Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 400, 500, false, 'sprites_atlas']);
         this._lives = 1;
+        this.points = 300;
         this.animations.add('enemy_fast_right_off', ['enemy_fast_right1'], 1, true);
         this.animations.play('enemy_fast_right_off');
     }
     else{
         Shooter.apply(this, [game, pos, scale, new Par(100, 100), new Par(0, 1), bulletsGroup, 300, 1000, false, 'sprites_atlas']);
         this._lives = 1;
+        this.points = 100;
         this.animations.add('enemy_basic_right_off', ['enemy_basic_right1'], 1, true);
         this.animations.play('enemy_basic_right_off');
     }

@@ -1,7 +1,8 @@
 'use strict';
 
-
 var cursors;
+
+var _game;
 
 var objectsScale = new Par(3, 3);
 var blockSize = 48;
@@ -10,6 +11,8 @@ var bloquesGroup;
 var waterGroup;
 var iceGroup;
 var wallsGroup;
+var baseGroup;
+var baseMetalGroup;
 
 //Player
 var player;
@@ -21,7 +24,7 @@ var bullet;
 var bulletCollider;
 
 //Powerups
-var powerupTypes = ['powerup_star', 'powerup_tank', 'powerup_helmets', 'powerup_star'];
+var powerupTypes = ['powerup_star', 'powerup_tank', 'powerup_helmets', 'powerup_grenade', 'powerup_shovel'];
 
 //Enemies
 var enemy;
@@ -59,6 +62,8 @@ var hq;
 var tempBool = false;
 
 //HUD
+var score = 0;
+var HUD_score;
 var HUD_enemiesArray = new Array(20);
 var HUD_LivesSprite;
 var HUD_Lives;
@@ -77,6 +82,7 @@ var PlayScene = {
     },
 
     preload: function(){
+        _game = this.game;
         this.load.text('levels', 'levels/levels.json');
         resetScene();
     },
@@ -104,6 +110,14 @@ var PlayScene = {
         bloquesGroup = this.game.add.group(); //Grupo de los bloques del mapa
         bloquesGroup.enableBody = true;
         bloquesGroup.physicsBodyType = Phaser.Physics.ARCADE;
+
+        baseGroup = this.game.add.group(); //Grupo de los bloques de ladrillo de la base
+        baseGroup.enableBody = true;
+        baseGroup.physicsBodyType = Phaser.Physics.ARCADE;
+
+        baseMetalGroup = this.game.add.group(); //Grupo de los bloques de metal de la base
+        baseMetalGroup.enableBody = true;
+        baseMetalGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
         wallsGroup = this.game.add.group(); //Grupo de los limites del mapa
         wallsGroup.enableBody = true;
@@ -185,7 +199,9 @@ var PlayScene = {
 
         ////////////////////////Mapa    
         createWalls(this.game, wallsGroup, objectsScale, blockSize); //Crea los limites del mapa
-        loadMap(this, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, levelData, levelN); //Inicializa el mapa creando todos los bloques 
+        loadMap(this, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, baseGroup, baseMetalGroup, levelData, levelN); //Inicializa el mapa creando todos los bloques 
+
+        setBlockGroup(baseMetalGroup, false);
 
         //Game Over Sprite
         var posTemp = new Par(this.game.width/2, this.game.height+100);
@@ -194,11 +210,21 @@ var PlayScene = {
 
         /////////////////////////HUD
 
+        //Vidas Texto
+        HUD_score = this.game.add.text(this.game.world.centerX + bg.width/2 + 25, 50, ("SCORE\n" + score));
+        HUD_score.anchor.setTo(0,0);
+        HUD_score.align = "right";
+        HUD_score.font = 'Press Start 2P';
+        HUD_score.fontSize = 16;
+        HUD_score.fill = '#bcbcbc';
+        HUD_score.stroke = '#000000';
+        HUD_score.strokeThickness = 7;
+
         //Enemigos Restantes
         var elemsCreated = 0;
         for (var i = 0; i < 10; i++){
             for (var j = 0; j < 2; j++){
-                HUD_enemiesArray[elemsCreated] = this.game.add.sprite(this.game.world.centerX + bg.width/2 + 45 + (50*j), 100 + (30*i),'enemyHud');
+                HUD_enemiesArray[elemsCreated] = this.game.add.sprite(this.game.world.centerX + bg.width/2 + 50 + (48*j), 140 + (34*i),'enemyHud');
                 HUD_enemiesArray[elemsCreated].scale.setTo(3,3);
                 HUD_enemiesArray[elemsCreated].anchor.setTo(0.5,0.5);
                 elemsCreated++;
@@ -206,28 +232,34 @@ var PlayScene = {
         }
 
         //Vidas Sprite
-        HUD_LivesSprite = this.game.add.sprite(Math.round(this.game.world.centerX + bg.width/2 + 24), Math.round(this.game.world.centerY + bg.height/2 - 180),'sprites_atlas', 'player1_level1_up1');
+        HUD_LivesSprite = this.game.add.sprite(Math.round(this.game.world.centerX + bg.width/2 + 24), Math.round(this.game.world.centerY + bg.height/2 - 130),'sprites_atlas', 'player1_level1_up1');
         HUD_LivesSprite.scale.setTo(3,3);
         HUD_LivesSprite.anchor.setTo(0,0.5);
 
         //Vidas Texto
-        HUD_Lives = this.game.add.text(this.game.world.centerX + bg.width/2 + 88, HUD_LivesSprite.y + 8, player.lives);
+        HUD_Lives = this.game.add.text(this.game.world.centerX + bg.width/2 + 80, HUD_LivesSprite.y + 2, player.lives);
         HUD_Lives.anchor.setTo(0,0.5);
         HUD_Lives.font = 'Press Start 2P';
         HUD_Lives.fontSize = 26;
+        HUD_Lives.align = "right";
         HUD_Lives.fill = '#bcbcbc';
+        HUD_Lives.stroke = '#000000';
+        HUD_Lives.strokeThickness = 7;
 
         //Nivel Sprite
-        HUD_LevelSprite = this.game.add.sprite(this.game.world.centerX + bg.width/2 + 24, bg.height - 50,'sprites_atlas', 'water_1');
+        HUD_LevelSprite = this.game.add.sprite(this.game.world.centerX + bg.width/2 + 24, bg.height - 15,'sprites_atlas', 'water_1');
         HUD_LevelSprite.scale.setTo(3,3);
         HUD_LevelSprite.anchor.setTo(0,0.5);
 
         //Nivel Texto
-        HUD_Level = this.game.add.text(this.game.world.centerX + bg.width/2 + 88, HUD_LevelSprite.y + 2, levelN);
+        HUD_Level = this.game.add.text(this.game.world.centerX + bg.width/2 + 82, HUD_LevelSprite.y + 2, levelN);
         HUD_Level.anchor.setTo(0,0.5);
         HUD_Level.font = 'Press Start 2P';
         HUD_Level.fontSize = 26;
+        HUD_Level.align = "right";
         HUD_Level.fill = '#bcbcbc';
+        HUD_Level.stroke = '#000000';
+        HUD_Level.strokeThickness = 7;
         
         ///////////////////////Sonidos
         powerupSound = this.game.add.audio('powerup');
@@ -244,6 +276,7 @@ var PlayScene = {
         //HUD Update
         if (player.lives >= 0) HUD_Lives.text = player.lives;
         HUD_Level.text = levelN;
+        HUD_score.text = "SCORE\n" + score;
 
         if (this.game.input.keyboard.isDown(Phaser.Keyboard.ENTER) || enemyKilledCount >= 20){
             this.game.time.events.add(Phaser.Timer.SECOND * 1, nextLevel, this);
@@ -256,39 +289,65 @@ var PlayScene = {
         enemyGroup.forEach(function (e) { e.body.moves = true;});
 
 
+        //Player Collisions
         this.game.physics.arcade.collide(player, bloquesGroup);
         this.game.physics.arcade.collide(player, waterGroup);
         this.game.physics.arcade.collide(player, wallsGroup);
+        this.game.physics.arcade.collide(player, baseGroup);
+        this.game.physics.arcade.collide(player, baseMetalGroup);
 
+        //Enemy Collisions
         this.game.physics.arcade.overlap(enemyGroup, bloquesGroup, collisionChangeDirEnemy, null, this);
         this.game.physics.arcade.overlap(enemyGroup, waterGroup, collisionChangeDirEnemy, null, this);
         this.game.physics.arcade.overlap(enemyGroup, wallsGroup, collisionChangeDirEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyGroup, baseGroup, collisionChangeDirEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyGroup, baseMetalGroup, collisionChangeDirEnemy, null, this);
         this.game.physics.arcade.collide(enemyGroup, enemyGroup);
 
+        //PowerUps
         this.game.physics.arcade.overlap(player, powerupsGroup, powerupHandler, null, this);
 
         //Player Bullets Collisions
         this.game.physics.arcade.overlap(playerBullets, wallsGroup, resetPlayerBullet, null, this);
         this.game.physics.arcade.overlap(playerBullets, bloquesGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(bulletCollider, bloquesGroup, destructionHandler, null, this);
+        this.game.physics.arcade.overlap(playerBullets, baseGroup, collisionHandler, null, this);
+        this.game.physics.arcade.overlap(bulletCollider, baseGroup, destructionHandler, null, this);
+        this.game.physics.arcade.overlap(playerBullets, baseMetalGroup, collisionHandler, null, this);
         this.game.physics.arcade.overlap(playerBullets, enemyGroup, collisionKillEnemy, null, this);
 
         //Enemy Bullets collisions with Walls
         this.game.physics.arcade.overlap(enemyBullets1, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(enemyBullets1, bloquesGroup, collisionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBullets1, baseGroup, collisionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBulletCollider, baseGroup, destructionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBullets1, baseMetalGroup, collisionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBulletCollider, baseMetalGroup, destructionHandlerEnemy, null, this);
 
         this.game.physics.arcade.overlap(enemyBullets2, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(enemyBullets2, bloquesGroup, collisionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBullets2, baseGroup, collisionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBulletCollider, baseGroup, destructionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBullets2, baseMetalGroup, collisionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBulletCollider, baseMetalGroup, destructionHandlerEnemy, null, this);
 
         this.game.physics.arcade.overlap(enemyBullets3, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(enemyBullets3, bloquesGroup, collisionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBullets3, baseGroup, collisionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBulletCollider, baseGroup, destructionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBullets3, baseMetalGroup, collisionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBulletCollider, baseMetalGroup, destructionHandlerEnemy, null, this);
 
         this.game.physics.arcade.overlap(enemyBullets4, wallsGroup, resetBullet, null, this);
         this.game.physics.arcade.overlap(enemyBullets4, bloquesGroup, collisionHandlerEnemy, null, this);
         this.game.physics.arcade.overlap(enemyBulletCollider, bloquesGroup, destructionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBullets4, baseGroup, collisionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBulletCollider, baseGroup, destructionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBullets4, baseMetalGroup, collisionHandlerEnemy, null, this);
+        this.game.physics.arcade.overlap(enemyBulletCollider, baseMetalGroup, destructionHandlerEnemy, null, this);
 
         //EnemyBullets collision with player
         this.game.physics.arcade.overlap(player, enemyBullets1, collisionHitPlayer, null, this);
@@ -304,7 +363,7 @@ var PlayScene = {
 
         //Collision with HQ
         this.game.physics.arcade.collide(player, hq);
-        this.game.physics.arcade.collide(enemyGroup, hq);
+        this.game.physics.arcade.collide(hq, enemyGroup);
 
         //Collision between bullets and HQ
         this.game.physics.arcade.overlap(hq, playerBullets, collisionHQ, null, this);
@@ -355,6 +414,21 @@ var PlayScene = {
 };
 
 module.exports = PlayScene;
+
+function setBlockGroup(bGroup, bBool){
+    if (bBool){
+        bGroup.forEach(function (b) { 
+            b.visible = true;
+            b.body.enable = true;
+        });
+    }
+    else {
+        bGroup.forEach(function (b) { 
+            b.visible = false;
+            b.body.enable = false;
+        });
+    }
+}
 
 function nextLevel(){
     if(levelN < 2)
@@ -444,9 +518,9 @@ function collisionKillEnemy (bullet, enemy) {
         enemyCount--;
         enemyGroup.remove(enemy);
         enemy._timerbullets.stop();
+        score += enemy.points;
         enemy.kill();
-        var posEnemigo = new Par(enemy.x, enemy.y);
-        new SingleAnimation(this.game, posEnemigo, objectsScale, "explosion");
+        new SingleAnimation(this.game, new Par(enemy.x, enemy.y), objectsScale, "explosion");
         enemyKilledCount++;
 
         //HUD Enemies left Update
@@ -481,10 +555,19 @@ function collisionBullets (playerBullet, enemyBullet) {
 
 //Called when the bulletCollider is on top of a block
 function destructionHandler (bulletC, block){
-    if (block.blockType != 'Metal')
+    if (block.blockType == 'BrickBase'){
+        score += block.points;
+        baseGroup.remove(block);
         block.kill();
-    else if (player.tankLevel >= 4)
+    }
+    else if (block.blockType != 'Metal'){
+        score += block.points;
         block.kill();
+    }
+    else if (player.tankLevel >= 4){
+        score += block.points;
+        block.kill();
+    }
 }
 
 //Called when the bulletCollider is on top of a block
@@ -548,17 +631,7 @@ function powerupHandler (player, powerup){
         }
     }
     else if (powerup.blockType === 'powerup_grenade'){
-        bulletsUsed1 = false;
-        bulletsUsed2 = false;
-        bulletsUsed3 = false;
-        bulletsUsed4 = false;
-        enemyGroup.forEach(function (e) {
-            enemyCount--;
-            enemyGroup.remove(e);
-            e._timerbullets.stop();
-            e.kill();
-            enemyKilledCount++;
-        });
+        killEnemiesAlive()
     }
     else if (powerup.blockType === 'powerup_tank'){
         player.lives++;
@@ -567,7 +640,51 @@ function powerupHandler (player, powerup){
         player.helmet = true;
         this.game.time.events.add(Phaser.Timer.SECOND * 5, player.helmet_off, player);
     }
+    else if (powerup.blockType === 'powerup_shovel'){
+        powerUpShovel();
+    }
     powerup.kill();
+}
+
+function powerUpShovel(){
+    powerUpShovelOn();
+    _game.time.events.add(Phaser.Timer.SECOND * 5, powerUpShovelOff, this);
+    _game.time.events.add(Phaser.Timer.SECOND * 5.5, powerUpShovelOn, this);
+    _game.time.events.add(Phaser.Timer.SECOND * 6, powerUpShovelOff, this);
+    _game.time.events.add(Phaser.Timer.SECOND * 6.5, powerUpShovelOn, this);
+    _game.time.events.add(Phaser.Timer.SECOND * 7, powerUpShovelOff, this);
+    _game.time.events.add(Phaser.Timer.SECOND * 7.5, powerUpShovelOn, this);
+    _game.time.events.add(Phaser.Timer.SECOND * 8, powerUpShovelOff, this);
+}
+
+function powerUpShovelOn(){
+    setBlockGroup(baseGroup, false);
+    setBlockGroup(baseMetalGroup, true);
+}
+
+function powerUpShovelOff(){
+    setBlockGroup(baseMetalGroup, false);
+    setBlockGroup(baseGroup, true);
+}
+
+function killEnemiesAlive(){
+    while (enemyGroup.length > 0){
+        enemyGroup.forEach(function (e) { 
+            if (e._bulletN === 1) bulletsUsed1 = false;
+            else if (e._bulletN === 2) bulletsUsed2 = false;
+            else if (e._bulletN === 3) bulletsUsed3 = false;
+            else if (e._bulletN === 4) bulletsUsed4 = false;
+            enemyCount--;
+            e._timerbullets.stop();
+            score += e.points;
+            enemyKilledCount++;
+            new SingleAnimation(_game, new Par(e.x, e.y), objectsScale, "explosion");
+            enemyGroup.remove(e);
+            e.kill();
+            HUD_enemiesArray[HUD_enemiesArray.length-1].destroy();
+            HUD_enemiesArray.length--;
+        });
+    }
 }
 
 function createEnemyBullets(game){

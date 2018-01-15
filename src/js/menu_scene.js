@@ -35,6 +35,8 @@ var MenuScene = {
         bottonInfo.fontSize = 20;
         bottonInfo.fill = '#bcbcbc';
         bottonInfo.align = "center";
+        bottonInfo.stroke = '#000000';
+        bottonInfo.strokeThickness = 8;
 
         buttonsArray[0] = this.game.add.text(this.game.world.centerX, this.game.height + 340, "PLAY");
         buttonsArray[1] = this.game.add.text(this.game.world.centerX, this.game.height + 400, "CREDITS");
@@ -45,6 +47,8 @@ var MenuScene = {
             buttonsArray[i].font = 'Press Start 2P';
             buttonsArray[i].fontSize = 26;
             buttonsArray[i].fill = '#bcbcbc';
+            buttonsArray[i].stroke = '#000000';
+            buttonsArray[i].strokeThickness = 10;
         }
 
         selector = this.game.add.sprite(buttonsArray[0].x - 50, buttonsArray[0].y,'sprites_atlas', 'player1_level1_right1');

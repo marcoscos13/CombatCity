@@ -1,6 +1,6 @@
 'use strict';
 
-function loadMap(self, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, levelData, levelN){
+function loadMap(self, objectsScale, blockSize, bloquesGroup, waterGroup, iceGroup, baseGroup, baseMetalGroup, levelData, levelN){
 
     for (var j = 0; j < 13; j++){
         for (var i = 0; i < 13; i++){
@@ -31,8 +31,8 @@ function loadMap(self, objectsScale, blockSize, bloquesGroup, waterGroup, iceGro
                     BloquePos._x = getCell(self.game,blockSize,i,j)._x;
                     for(var bX = 0; bX < blocksW; bX++){
                         if (bX >= blocksWS && bY >= blocksHS){
-                            newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'Brick');
-                            
+                            newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'Brick', 50);
+
                             newBloque.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
                             newBloque.body.immovable = true;
                             newBloque.anchor.setTo(0,0);
@@ -66,8 +66,8 @@ function loadMap(self, objectsScale, blockSize, bloquesGroup, waterGroup, iceGro
                     BloquePos._x = getCell(self.game,blockSize,i,j)._x;
                     for(var bX = 0; bX < blocksW; bX++){
                         if (bX >= blocksWS && bY >= blocksHS){
-                            newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'metal', 'Metal');
-                            
+                            newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'metal', 'Metal', 200);
+
                             newBloque.crop(new Phaser.Rectangle(8*bX,8*bY,miniBlockCrop,miniBlockCrop));
                             newBloque.body.immovable = true;
                             newBloque.anchor.setTo(0,0);
@@ -106,8 +106,8 @@ function loadMap(self, objectsScale, blockSize, bloquesGroup, waterGroup, iceGro
         }
     }
 
-    createFortBrickWalls(self, objectsScale, blockSize, bloquesGroup);
-    //createFortMetalWalls(self, objectsScale, blockSize, bloquesGroup);
+    createFortBrickWalls(self, objectsScale, blockSize, baseGroup);
+    createFortMetalWalls(self, objectsScale, blockSize, baseMetalGroup);
 }
 
 function createWalls(game, wallsGroup, wallScale, blockSize){
@@ -357,7 +357,7 @@ function createFortBrickWalls(self, objectsScale, blockSize, bloquesGroup){
         BloquePos._x = getCell(self.game,blockSize,5,12)._x;
         for(var bX = 0; bX < blocksW; bX++){
             if (bX >= blocksWS && bY >= blocksHS){
-                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'Brick');
+                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'BrickBase');
                 
                 newBloque.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
                 newBloque.body.immovable = true;
@@ -386,7 +386,7 @@ function createFortBrickWalls(self, objectsScale, blockSize, bloquesGroup){
         BloquePos._x = getCell(self.game,blockSize,7,12)._x;
         for(var bX = 0; bX < blocksW; bX++){
             if (bX >= blocksWS && bY >= blocksHS){
-                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'Brick');
+                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'BrickBase');
                 
                 newBloque.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
                 newBloque.body.immovable = true;
@@ -416,7 +416,7 @@ function createFortBrickWalls(self, objectsScale, blockSize, bloquesGroup){
         BloquePos._x = getCell(self.game,blockSize,5,11)._x;
         for(var bX = 0; bX < blocksW; bX++){
             if (bX >= blocksWS && bY >= blocksHS){
-                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'Brick');
+                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'BrickBase');
                 
                 newBloque.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
                 newBloque.body.immovable = true;
@@ -445,7 +445,7 @@ function createFortBrickWalls(self, objectsScale, blockSize, bloquesGroup){
         BloquePos._x = getCell(self.game,blockSize,6,11)._x;
         for(var bX = 0; bX < blocksW; bX++){
             if (bX >= blocksWS && bY >= blocksHS){
-                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'Brick');
+                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'BrickBase');
                 
                 newBloque.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
                 newBloque.body.immovable = true;
@@ -475,7 +475,7 @@ function createFortBrickWalls(self, objectsScale, blockSize, bloquesGroup){
         BloquePos._x = getCell(self.game,blockSize,7,11)._x;
         for(var bX = 0; bX < blocksW; bX++){
             if (bX >= blocksWS && bY >= blocksHS){
-                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'Brick');
+                newBloque = new Block(self.game, BloquePos, objectsScale, 'sprites_atlas', 'bricks', 'BrickBase');
                 
                 newBloque.crop(new Phaser.Rectangle(4*bX,4*bY,miniBlockCrop,miniBlockCrop));
                 newBloque.body.immovable = true;
