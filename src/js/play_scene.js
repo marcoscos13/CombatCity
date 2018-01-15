@@ -233,6 +233,8 @@ var PlayScene = {
 
         //this.game.state.start('levelAnimation', true, false, 2);
 
+        var posTemporal = new Par(50,50);
+        var exp = new Explosion(this.game, posTemporal, objectsScale);
     },
     
     update: function(){
@@ -242,10 +244,16 @@ var PlayScene = {
         if (player.lives >= 0) HUD_Lives.text = player.lives;
         HUD_Level.text = levelN;
 
-
         if (this.game.input.keyboard.isDown(Phaser.Keyboard.ENTER) || enemyKilledCount >= 20){
             this.game.time.events.add(Phaser.Timer.SECOND * 1, nextLevel, this);
         }
+
+        enemyGroup.forEach(function (e) { e.body.moves = false; });
+        
+        this.game.physics.arcade.collide(player, enemyGroup);
+
+        enemyGroup.forEach(function (e) { e.body.moves = true;});
+
 
         this.game.physics.arcade.collide(player, bloquesGroup);
         this.game.physics.arcade.collide(player, waterGroup);

@@ -4,6 +4,23 @@
 /////CLASES/////
 ////////////////
 
+////Clase Explosion
+var Explosion = function (game, pos, scale) {
+    Phaser.Sprite.call(this, game, pos._x, pos._y, 'sprites_atlas', 'powerup_star');
+    this.animations.add('explosion', ['powerup_star', 'powerup_tank', 'powerup_helmets'], 1, false);
+    this.animations.play('explosion', 1, false, true);
+    //this.animations.killOnComplete = true;
+
+    this.smoothed = false;
+    this._scale = scale;
+    this.scale.setTo(scale._x, scale._y);
+    this.anchor.setTo(0.5, 0.5);
+    game.add.existing(this);
+};
+
+Explosion.prototype = Object.create(Phaser.Sprite.prototype);
+Explosion.prototype.constructor = Explosion;
+
 ////Clase Collider y sus métodos
 var Collider = function (game, pos, scale, sprite, spriteID) {
     Phaser.Sprite.call(this, game, pos._x, pos._y, sprite, spriteID);
