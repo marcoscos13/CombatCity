@@ -332,27 +332,40 @@ var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     if (typeId === 'armor'){
         Shooter.apply(this, [game, pos, scale, new Par(70, 70), new Par(0, 1), bulletsGroup, 300, 500, false, 'sprites_atlas']);
         this._lives = 3;
-        this.animations.add('enemy_armor_right_off', ['enemy_armor_right1'], 1, true);
-        this.animations.play('enemy_armor_right_off');
+        this.animations.add('enemy_armor_right', ['enemy_armor_right1', 'enemy_armor_right2'], 4, true);
+        this.animations.add('enemy_armor_left', ['enemy_armor_left1', 'enemy_armor_left2'], 4, true);
+        this.animations.add('enemy_armor_up', ['enemy_armor_up1', 'enemy_armor_up2'], 4, true);
+        this.animations.add('enemy_armor_down', ['enemy_armor_down1', 'enemy_armor_down2'], 4, true);
+        this.animations.play('enemy_armor_down');
     }
     else if (typeId === 'power'){
         Shooter.apply(this, [game, pos, scale, new Par(100, 100), new Par(0, 1), bulletsGroup, 400, 500, false, 'sprites_atlas']);
         this._lives = 1;
-        this.animations.add('enemy_power_right_off', ['enemy_power_right1'], 1, true);
-        this.animations.play('enemy_power_right_off');
+        this.animations.add('enemy_power_right', ['enemy_power_right1', 'enemy_power_right2'], 4, true);
+        this.animations.add('enemy_power_left', ['enemy_power_left1', 'enemy_power_left2'], 4, true);
+        this.animations.add('enemy_power_up', ['enemy_power_up1', 'enemy_power_up2'], 4, true);
+        this.animations.add('enemy_power_down', ['enemy_power_down1', 'enemy_power_down2'], 4, true);
+        this.animations.play('enemy_power_down');
     }
     else if (typeId === 'fast'){
         Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 400, 500, false, 'sprites_atlas']);
         this._lives = 1;
-        this.animations.add('enemy_fast_right_off', ['enemy_fast_right1'], 1, true);
-        this.animations.play('enemy_fast_right_off');
+        this.animations.add('enemy_fast_right', ['enemy_fast_right1', 'enemy_fast_right2'], 4, true);
+        this.animations.add('enemy_fast_left', ['enemy_fast_left1', 'enemy_fast_left2'], 4, true);
+        this.animations.add('enemy_fast_up', ['enemy_fast_up1', 'enemy_fast_up2'], 4, true);
+        this.animations.add('enemy_fast_down', ['enemy_fast_down1', 'enemy_fast_down2'], 4, true);
+        this.animations.play('enemy_fast_down');
     }
     else{
         Shooter.apply(this, [game, pos, scale, new Par(100, 100), new Par(0, 1), bulletsGroup, 300, 1000, false, 'sprites_atlas']);
         this._lives = 1;
-        this.animations.add('enemy_basic_right_off', ['enemy_basic_right1'], 1, true);
-        this.animations.play('enemy_basic_right_off');
+        this.animations.add('enemy_basic_right', ['enemy_basic_right1', 'enemy_basic_right2'], 4, true);
+        this.animations.add('enemy_basic_left', ['enemy_basic_left1', 'enemy_basic_left2'], 4, true);
+        this.animations.add('enemy_basic_up', ['enemy_basic_up1', 'enemy_basic_up2'], 4, true);
+        this.animations.add('enemy_basic_down', ['enemy_basic_down1', 'enemy_basic_down2'], 4, true);
+        this.animations.play('enemy_basic_down');
     }
+    this._typeId = typeId;
     this._hitSound = game.add.audio('enemyhurt');
     this._destroySound = game.add.audio('boomenemy');
     this._bulletN = bulletN;
@@ -373,9 +386,6 @@ var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     // }, this);
     this._timerbullets.loop(this.game.rnd.realInRange(400, 600), this.fire_bullet, this);
     this._timerbullets.start();
-
-    //Inicializa el enemigo mirando hacia abajo
-    this.angle = 90; 
 }
 
 Enemy.prototype = Object.create(Shooter.prototype);
@@ -424,22 +434,22 @@ Enemy.prototype.change_dir = function(){
     }
 
     if (this._direction._x === 1){
-        this.angle = 0;
+        this.animations.play('enemy_' + this._typeId + '_right');
         this.y += this.gapW;
         this.y = 24 * Math.round(this.y/24) - this.gapW;
     }
     else if (this._direction._x === -1){
-        this.angle = 180;
+        this.animations.play('enemy_' + this._typeId + '_left');
         this.y += this.gapW;
         this.y = 24 * Math.round(this.y/24) - this.gapW;
     }
     else if (this._direction._y === 1){
-        this.angle = 90;
+        this.animations.play('enemy_' + this._typeId + '_down');
         this.x += this.gapH;
         this.x = 24 * Math.round(this.x/24) - this.gapH;
     }
     else if (this._direction._y === -1){
-        this.angle = 270;
+        this.animations.play('enemy_' + this._typeId + '_up');
         this.x += this.gapH;
         this.x = 24 * Math.round(this.x/24) - this.gapH;
     }

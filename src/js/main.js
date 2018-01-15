@@ -38,6 +38,7 @@ var PreloaderScene = {
     this.game.load.audio('bulletmetal', 'sounds/bulletmetal.ogg');
     this.game.load.audio('enemyhurt', 'sounds/enemyhurt.ogg');
     this.game.load.audio('powerup', 'sounds/powerup.ogg');
+    this.game.load.audio('music', 'sounds/music.ogg');
   },
 
   create: function () {

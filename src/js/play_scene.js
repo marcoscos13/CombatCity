@@ -70,6 +70,7 @@ var powerupSound;
 var boombaseSound;
 var bulletmetalSound;
 var bulletbrickSound;
+var music;
 
 var PlayScene = {
     init: function(customParam1) {   
@@ -134,8 +135,7 @@ var PlayScene = {
     
         //Se crean las balas y se añaden al grupo        
         for (var i = 0; i < 1; i++){ //i = numero de balas simultaneas en pantalla
-            var bala = new Bullet(this.game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet');
-            playerBullets.add(bala);
+            playerBullets.add(new Bullet(this.game, new Par(0,0), objectsScale, bulletVel, new Par(0,0), 'bullet'));
         }
         //Collider que destruye los bloques
         bulletCollider = new Collider(this.game, new Par(50,50), objectsScale);
@@ -234,6 +234,8 @@ var PlayScene = {
         boombaseSound = this.game.add.audio('boombase');
         bulletmetalSound = this.game.add.audio('bulletmetal');
         bulletbrickSound = this.game.add.audio('bulletbrick');
+        music = this.game.add.audio('music');
+        music.play();
 
         //this.game.state.start('levelAnimation', true, false, 2);
     },
