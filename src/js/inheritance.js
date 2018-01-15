@@ -5,11 +5,16 @@
 ////////////////
 
 ////Clase Explosion
-var Explosion = function (game, pos, scale) {
+var SingleAnimation = function (game, pos, scale, animID) {
     Phaser.Sprite.call(this, game, pos._x, pos._y, 'sprites_atlas', 'powerup_star');
-    this.animations.add('explosion', ['powerup_star', 'powerup_tank', 'powerup_helmets'], 1, false);
-    this.animations.play('explosion', 6, false, true);
-    //this.animations.killOnComplete = true;
+    if (animID == "explosion"){ //Animacion de explosion
+        this.animations.add('explosion', ['powerup_star', 'powerup_tank', 'powerup_helmets'], 1, false);
+        this.animations.play('explosion', 6, false, true);
+    }
+    else if (animID == "enemySpawn"){ //Animacion que indica donde va a spawnear un enemigo
+        this.animations.add('enemySpawn', ['powerup_star', 'powerup_tank', 'powerup_helmets'], 1, false);
+        this.animations.play('enemySpawn', 3, false, true);
+    }
 
     this.smoothed = false;
     this._scale = scale;
@@ -18,8 +23,8 @@ var Explosion = function (game, pos, scale) {
     game.add.existing(this);
 };
 
-Explosion.prototype = Object.create(Phaser.Sprite.prototype);
-Explosion.prototype.constructor = Explosion;
+SingleAnimation.prototype = Object.create(Phaser.Sprite.prototype);
+SingleAnimation.prototype.constructor = SingleAnimation;
 
 ////Clase Collider y sus métodos
 var Collider = function (game, pos, scale, sprite, spriteID) {
@@ -179,7 +184,7 @@ Player.prototype.constructor = Player;
 Player.prototype.resetPos = function(){
     var posPlayer = new Par(this.x, this.y);
     var objectsScale = new Par(3,3);
-    new Explosion(this.game, posPlayer, objectsScale);
+    new SingleAnimation(this.game, posPlayer, objectsScale, "explosion");
     this.animations.play('player1_level1_up');
     this._direction._x = 0;
     this._direction._y = -1;
@@ -191,7 +196,6 @@ Player.prototype.resetPos = function(){
         this.x = -100;
         this.y = -100;
         this.visible = false;
-        console.debug("HOLA");
     }
     this.helmet = false;
     if (this.tankLevel >= 3){
@@ -326,19 +330,19 @@ Player.prototype.update = function(){
 
 var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     if (typeId === 'armor'){
-        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 300, 500, false, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(70, 70), new Par(0, 1), bulletsGroup, 300, 500, false, 'sprites_atlas']);
         this._lives = 3;
         this.animations.add('enemy_armor_right_off', ['enemy_armor_right1'], 1, true);
         this.animations.play('enemy_armor_right_off');
     }
     else if (typeId === 'power'){
-        Shooter.apply(this, [game, pos, scale, new Par(125, 125), new Par(0, 1), bulletsGroup, 500, 500, false, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(100, 100), new Par(0, 1), bulletsGroup, 400, 500, false, 'sprites_atlas']);
         this._lives = 1;
         this.animations.add('enemy_power_right_off', ['enemy_power_right1'], 1, true);
         this.animations.play('enemy_power_right_off');
     }
     else if (typeId === 'fast'){
-        Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 300, 500, false, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 400, 500, false, 'sprites_atlas']);
         this._lives = 1;
         this.animations.add('enemy_fast_right_off', ['enemy_fast_right1'], 1, true);
         this.animations.play('enemy_fast_right_off');

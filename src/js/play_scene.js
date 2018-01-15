@@ -315,6 +315,7 @@ var PlayScene = {
 
         //Controla el spawn de los enemigos: hay 4 en pantalla como máximo y 20 por nivel
         if(enemyCount < 4 && spawnCount < 20 && !spawned){
+            new SingleAnimation(this.game, spawnPos[spawnIndex], objectsScale, "enemySpawn");
             this.game.time.events.add(Phaser.Timer.SECOND * 1.5, spawnEnemy, this);
             spawned = true;
             enemyCount++;
@@ -341,10 +342,10 @@ var PlayScene = {
         //this.game.debug.text(bloquesGroup.length, 50, 140);
         //this.game.debug.body(player);
         //this.game.debug.body(bulletCollider);
-        if (player.lives >= 0){
-            this.game.debug.text("Vidas", 10, 60);
-            this.game.debug.text("Restantes: " + player.lives, 10, 80);
-        }
+        // if (player.lives >= 0){
+        //     this.game.debug.text("Vidas", 10, 60);
+        //     this.game.debug.text("Restantes: " + player.lives, 10, 80);
+        // }
         //this.game.debug.text("Enemies", 5, 90);
         //this.game.debug.text("remaining: " + (20-spawnCount), 5, 110);
         //this.game.debug.text("Enemies", 5, 140);
@@ -445,7 +446,7 @@ function collisionKillEnemy (bullet, enemy) {
         enemy._timerbullets.stop();
         enemy.kill();
         var posEnemigo = new Par(enemy.x, enemy.y);
-        new Explosion(this.game, posEnemigo, objectsScale);
+        new SingleAnimation(this.game, posEnemigo, objectsScale, "explosion");
         enemyKilledCount++;
 
         //HUD Enemies left Update
