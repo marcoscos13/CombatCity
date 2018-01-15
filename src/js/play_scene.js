@@ -17,6 +17,7 @@ var baseMetalGroup;
 //Player
 var player;
 var playerBullets;
+var playerShield;
 
 var bulletVel;
 var bulletTime;
@@ -163,6 +164,11 @@ var PlayScene = {
 
         //Player
         player = new Player(this.game, playerPos, objectsScale, playerVel, playerDir, playerBullets, bulletVel, bulletTime,  cursors, 'sprites_atlas');
+        //Escudo del player
+        playerShield = player.addChild(this.game.add.sprite(-8, -8,'sprites_atlas', 'shield_1'))
+        playerShield.animations.add('shield', ['shield_1', 'shield_2'], 2, true);
+        playerShield.animations.play('shield', 4, true);
+        playerShield.visible = false;
 
         player.lives = livesN;
         player.tankLevel = tankL;
@@ -459,11 +465,15 @@ function resetScene(){
 
 //Called if the bullet goes out of the screen
 function resetBullet (_bullet) {
+    var bulletAnimPos = new Par(_bullet.x + (blockSize/4 * _bullet._direction._x), _bullet.y + (blockSize/4 * _bullet._direction._y));
+    new SingleAnimation(this.game, bulletAnimPos, objectsScale, "small_explosion");
     _bullet.kill();
 }
 
 //Called if the player bullet goes out of the screen
 function resetPlayerBullet (_bullet) {
+    var bulletAnimPos = new Par(_bullet.x + (blockSize/4 * _bullet._direction._x), _bullet.y + (blockSize/4 * _bullet._direction._y));
+    new SingleAnimation(this.game, bulletAnimPos, objectsScale, "small_explosion");
     _bullet.kill();
     bulletmetalSound.play();
 }
@@ -487,6 +497,8 @@ function collisionHandler (bullet, block) {
         bulletCollider.width = blockSize/2;
         bulletCollider.height = blockSize;
     }
+    var bulletAnimPos = new Par(bullet.x + (blockSize/4 * bullet._direction._x), bullet.y + (blockSize/4 * bullet._direction._y));
+    new SingleAnimation(this.game, bulletAnimPos, objectsScale, "small_explosion");
     bullet.kill();
 }
 
@@ -503,6 +515,8 @@ function collisionHandlerEnemy (bullet, block) {
         enemyBulletCollider.width = blockSize/2;
         enemyBulletCollider.height = blockSize;
     }
+    var bulletAnimPos = new Par(bullet.x + (blockSize/4 * bullet._direction._x), bullet.y + (blockSize/4 * bullet._direction._y));
+    new SingleAnimation(this.game, bulletAnimPos, objectsScale, "small_explosion");
     bullet.kill();
 }
 
@@ -535,6 +549,8 @@ function collisionKillEnemy (bullet, enemy) {
         if (rnd === 3)
             spawnPowerup(this.game);
     }
+    var bulletAnimPos = new Par(bullet.x + (blockSize/4 * bullet._direction._x), bullet.y + (blockSize/4 * bullet._direction._y));
+    new SingleAnimation(this.game, bulletAnimPos, objectsScale, "small_explosion");
     bullet.kill();
 }
 
@@ -640,12 +656,18 @@ function powerupHandler (player, powerup){
     }
     else if (powerup.blockType === 'powerup_helmets'){
         player.helmet = true;
-        this.game.time.events.add(Phaser.Timer.SECOND * 5, player.helmet_off, player);
+        playerShield.visible = true;
+        this.game.time.events.add(Phaser.Timer.SECOND * 5, helmetOff);
     }
     else if (powerup.blockType === 'powerup_shovel'){
         powerUpShovel();
     }
     powerup.kill();
+}
+
+function helmetOff (){
+    player.helmet = false;
+    playerShield.visible = false;
 }
 
 function powerUpShovel(){

@@ -8,8 +8,12 @@
 var SingleAnimation = function (game, pos, scale, animID) {
     Phaser.Sprite.call(this, game, pos._x, pos._y, 'sprites_atlas', 'powerup_star');
     if (animID == "explosion"){ //Animacion de explosion
-        this.animations.add('explosion', ['powerup_star', 'powerup_tank', 'powerup_helmets'], 1, false);
-        this.animations.play('explosion', 6, false, true);
+        this.animations.add('explosion', ['tank_explosion_1', 'tank_explosion_2', 'bullet_explosion_3'], 1, false);
+        this.animations.play('explosion', 8, false, true);
+    }
+    else if (animID == "small_explosion"){ //Animacion de explosion
+        this.animations.add('small_explosion', ['bullet_explosion_3', 'bullet_explosion_2', 'bullet_explosion_1'], 1, false);
+        this.animations.play('small_explosion', 12, false, true);
     }
     else if (animID == "enemySpawn"){ //Animacion que indica donde va a spawnear un enemigo
         this.animations.add('enemySpawn', ['enemySpawn_1', 'enemySpawn_2', 'enemySpawn_3','enemySpawn_4',
