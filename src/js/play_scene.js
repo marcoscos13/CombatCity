@@ -72,6 +72,10 @@ var bulletmetalSound;
 var bulletbrickSound;
 
 var PlayScene = {
+    init: function(customParam1) {   
+        
+    },
+
     preload: function(){
         this.load.text('levels', 'levels/levels.json');
         resetScene();
@@ -232,9 +236,6 @@ var PlayScene = {
         bulletbrickSound = this.game.add.audio('bulletbrick');
 
         //this.game.state.start('levelAnimation', true, false, 2);
-
-        var posTemporal = new Par(50,50);
-        var exp = new Explosion(this.game, posTemporal, objectsScale);
     },
     
     update: function(){
@@ -443,6 +444,8 @@ function collisionKillEnemy (bullet, enemy) {
         enemyGroup.remove(enemy);
         enemy._timerbullets.stop();
         enemy.kill();
+        var posEnemigo = new Par(enemy.x, enemy.y);
+        new Explosion(this.game, posEnemigo, objectsScale);
         enemyKilledCount++;
 
         //HUD Enemies left Update

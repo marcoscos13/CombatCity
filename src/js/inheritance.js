@@ -8,7 +8,7 @@
 var Explosion = function (game, pos, scale) {
     Phaser.Sprite.call(this, game, pos._x, pos._y, 'sprites_atlas', 'powerup_star');
     this.animations.add('explosion', ['powerup_star', 'powerup_tank', 'powerup_helmets'], 1, false);
-    this.animations.play('explosion', 1, false, true);
+    this.animations.play('explosion', 6, false, true);
     //this.animations.killOnComplete = true;
 
     this.smoothed = false;
@@ -177,6 +177,9 @@ Player.prototype = Object.create(Shooter.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.resetPos = function(){
+    var posPlayer = new Par(this.x, this.y);
+    var objectsScale = new Par(3,3);
+    new Explosion(this.game, posPlayer, objectsScale);
     this.animations.play('player1_level1_up');
     this._direction._x = 0;
     this._direction._y = -1;
