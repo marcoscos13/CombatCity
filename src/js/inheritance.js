@@ -180,7 +180,7 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     //Inicializa el player mirando hacia arriba
     this._direction._x = 0;
     this._direction._y = -1;
-    this.animations.play('player1_level1_up');
+    this.animations.play('player1_level' + this.tankLevel + '_up');
     this.animations.stop();
 }
 
