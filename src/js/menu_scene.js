@@ -16,6 +16,10 @@ var selectorN = 0; //Boton actualmente selecionado
 var Enter;
 
 var MenuScene = {
+    init: function(){
+        menuAnimacion = true;
+    },
+
     preload: function(){
         
     },
@@ -51,10 +55,10 @@ var MenuScene = {
             buttonsArray[i].strokeThickness = 10;
         }
 
-        selector = this.game.add.sprite(buttonsArray[0].x - 50, buttonsArray[0].y,'sprites_atlas', 'player1_level1_right1');
+        selector = this.game.add.sprite(buttonsArray[0].x - 50, buttonsArray[0].y,'sprites_atlas', 'HUD_selector');
         selector.smoothed = false;
         selector.anchor.setTo(0.5,0.5);
-        selector.scale.setTo(3,3);
+        selector.scale.setTo(4,4);
     },
     
     update: function(){
@@ -69,7 +73,7 @@ var MenuScene = {
         }else menuAnimacion = false;
        }
 
-       selector.y = buttonsArray[selectorN].y;
+       selector.y = buttonsArray[selectorN].y - 6;
     },
 
     render: function(){
@@ -115,7 +119,7 @@ function createButtons(self){
         }
         else {
             if(selectorN == 0)
-            self.game.state.start('play');
+                self.game.state.start('levelAnimation', true, false, 1);
         }
     }, self);
 }

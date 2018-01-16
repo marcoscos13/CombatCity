@@ -80,7 +80,8 @@ var music;
 
 var PlayScene = {
     init: function(customParam1) {   
-        
+        if (customParam1 > 0)
+            levelN = customParam1;
     },
 
     preload: function(){
@@ -212,7 +213,7 @@ var PlayScene = {
         //Game Over Sprite
         var posTemp = new Par(this.game.width/2, this.game.height+100);
         var scaleTemp = new Par(3,3);
-        gameoverSprite = new Collider(this.game, posTemp, scaleTemp,'game_over');
+        gameoverSprite = new Collider(this.game, posTemp, scaleTemp,'sprites_atlas', 'game_over');
 
         /////////////////////////HUD
 
@@ -230,7 +231,7 @@ var PlayScene = {
         var elemsCreated = 0;
         for (var i = 0; i < 10; i++){
             for (var j = 0; j < 2; j++){
-                HUD_enemiesArray[elemsCreated] = this.game.add.sprite(this.game.world.centerX + bg.width/2 + 50 + (48*j), 140 + (34*i),'enemyHud');
+                HUD_enemiesArray[elemsCreated] = this.game.add.sprite(this.game.world.centerX + bg.width/2 + 50 + (48*j), 140 + (34*i),'sprites_atlas', 'HUD_enemy');
                 HUD_enemiesArray[elemsCreated].scale.setTo(3,3);
                 HUD_enemiesArray[elemsCreated].anchor.setTo(0.5,0.5);
                 elemsCreated++;
@@ -238,7 +239,7 @@ var PlayScene = {
         }
 
         //Vidas Sprite
-        HUD_LivesSprite = this.game.add.sprite(Math.round(this.game.world.centerX + bg.width/2 + 24), Math.round(this.game.world.centerY + bg.height/2 - 130),'sprites_atlas', 'player1_level1_up1');
+        HUD_LivesSprite = this.game.add.sprite(Math.round(this.game.world.centerX + bg.width/2 + 24), Math.round(this.game.world.centerY + bg.height/2 - 130),'sprites_atlas', 'HUD_lives');
         HUD_LivesSprite.scale.setTo(3,3);
         HUD_LivesSprite.anchor.setTo(0,0.5);
 
@@ -253,7 +254,7 @@ var PlayScene = {
         HUD_Lives.strokeThickness = 7;
 
         //Nivel Sprite
-        HUD_LevelSprite = this.game.add.sprite(this.game.world.centerX + bg.width/2 + 24, bg.height - 15,'sprites_atlas', 'water_1');
+        HUD_LevelSprite = this.game.add.sprite(this.game.world.centerX + bg.width/2 + 24, bg.height - 15,'sprites_atlas', 'HUD_level');
         HUD_LevelSprite.scale.setTo(3,3);
         HUD_LevelSprite.anchor.setTo(0,0.5);
 
@@ -439,14 +440,19 @@ function setBlockGroup(bGroup, bBool){
 }
 
 function nextLevel(){
-    if(levelN < 2)
+    if(levelN < levelData.levels.length - 1)
       levelN++;
     else
       levelN = 1;
 
     livesN = player.lives;
     tankL = player.tankLevel;
-    this.game.state.restart('play', false, false);
+    this.game.state.start('levelAnimation', true, false, levelN);
+}
+
+function goToMenu(){
+    score = 0;
+    _game.state.start('menu');
 }
 
 //Resets the variables scenes
@@ -609,6 +615,7 @@ function gameOver(){
     if (!gameover){
         gameover = true;
         player.canMove = false;
+        _game.time.events.add(Phaser.Timer.SECOND * 7, goToMenu, this);
     }
 }
 

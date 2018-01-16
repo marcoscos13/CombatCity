@@ -213,10 +213,6 @@ Player.prototype.resetPos = function(){
     this.tankLevel = 1;
 }
 
-Player.prototype.helmet_off = function(){
-    this.helmet = false;
-}
-
 Player.prototype.update = function(){
     if (this.canMove){
         if (!this._cursors.left.isDown && !this._cursors.right.isDown && !this._cursors.down.isDown && !this._cursors.up.isDown)
