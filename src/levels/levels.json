@@ -56,6 +56,24 @@
                 
                 {"enemies": ["armor","armor","fast","fast","fast","fast","basic","basic","basic","basic",
                              "basic","basic","basic","basic","basic","basic","basic","basic","basic","basic"]}
+            ],
+			
+			[
+                ["EE","EE","EE","EE","BF","EE","EE","EE","BF","EE","EE","EE","EE"],
+                ["EE","GG","GG","GG","BF","EE","EE","EE","EE","EE","MD","MD","MD"],
+                ["BF","GG","GG","GG","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["GG","GG","GG","GG","EE","EE","EE","BF","EE","BF","BF","BF","BL"],
+                ["GG","GG","GG","GG","BF","BF","BF","BU","EE","BF","EE","BR","EE"],
+                ["GG","GG","GG","GG","EE","EE","BF","EE","EE","EE","EE","BR","EE"],
+                ["EE","GG","EE","EE","EE","EE","MF","MF","MF","EE","EE","GG","EE"],
+                ["EE","BD","EE","BD","EE","EE","EE","EE","EE","GG","GG","GG","GG"],
+                ["BF","BL","BR","BF","BL","BR","BU","BU","BU","GG","GG","GG","GG"],
+                ["EE","EE","EE","EE","EE","BF","EE","EE","EE","GG","GG","GG","GG"],
+                ["BF","EE","EE","ML","EE","EE","EE","BF","BF","GG","GG","GG","EE"],
+                ["BF","BF","EE","ML","EE","EE","EE","EE","EE","GG","GG","GG","EE"],
+                ["MF","BF","BF","EE","EE","EE","EE","EE","EE","BF","EE","EE","EE"],
+                {"enemies": ["basic","basic","basic","basic","basic","basic","basic","basic","basic","basic",
+                             "basic","basic","basic","basic","fast","fast","fast","fast","armor","armor"]}
             ]
         ]    
 }
