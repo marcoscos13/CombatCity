@@ -25,10 +25,11 @@ var LevelAnimationScene = {
         levelText.stroke = '#000000';
         levelText.strokeThickness = 8;
 
-        Enter = this.game.input.keyboard.addKey([ Phaser.Keyboard.ENTER ]);
-        Enter.onDown.add(function(){
-                this.game.state.start('play', true, false, currentLevel);
-        }, this);
+        this.game.time.events.add(Phaser.Timer.SECOND * 2.2, goToLevel, this);
+        // Enter = this.game.input.keyboard.addKey([ Phaser.Keyboard.ENTER ]);
+        // Enter.onDown.add(function(){
+        //         this.game.state.start('play', true, false, currentLevel);
+        // }, this);
     },
     
     update: function(){
@@ -41,3 +42,7 @@ var LevelAnimationScene = {
 };
 
 module.exports = LevelAnimationScene;
+
+function goToLevel(){
+    this.game.state.start('play', true, false, currentLevel);
+}

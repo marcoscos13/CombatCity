@@ -1,0 +1,268 @@
+{"frames": [
+
+{
+	"filename": "CombatCity_Logo_1",
+	"frame": {"x":3,"y":3,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_2",
+	"frame": {"x":183,"y":59,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_3",
+	"frame": {"x":123,"y":143,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_4",
+	"frame": {"x":63,"y":171,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_5",
+	"frame": {"x":123,"y":171,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_6",
+	"frame": {"x":183,"y":171,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_7",
+	"frame": {"x":3,"y":199,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_8",
+	"frame": {"x":63,"y":199,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_9",
+	"frame": {"x":123,"y":199,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_10",
+	"frame": {"x":63,"y":3,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_11",
+	"frame": {"x":123,"y":3,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_12",
+	"frame": {"x":183,"y":3,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_13",
+	"frame": {"x":3,"y":31,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_14",
+	"frame": {"x":63,"y":31,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_15",
+	"frame": {"x":123,"y":31,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_16",
+	"frame": {"x":183,"y":31,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_17",
+	"frame": {"x":3,"y":59,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_18",
+	"frame": {"x":63,"y":59,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_19",
+	"frame": {"x":123,"y":59,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_20",
+	"frame": {"x":3,"y":87,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_21",
+	"frame": {"x":63,"y":87,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_22",
+	"frame": {"x":123,"y":87,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_23",
+	"frame": {"x":183,"y":87,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_24",
+	"frame": {"x":3,"y":115,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_25",
+	"frame": {"x":63,"y":115,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_26",
+	"frame": {"x":123,"y":115,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_27",
+	"frame": {"x":183,"y":115,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_28",
+	"frame": {"x":3,"y":143,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_29",
+	"frame": {"x":63,"y":143,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_30",
+	"frame": {"x":183,"y":143,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_31",
+	"frame": {"x":3,"y":171,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+},
+{
+	"filename": "CombatCity_Logo_32",
+	"frame": {"x":3,"y":3,"w":56,"h":24},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":56,"h":24},
+	"sourceSize": {"w":64,"h":32}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "logo_atlas.png",
+	"format": "RGBA8888",
+	"size": {"w":242,"h":242},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:ae3c6a9a0d44a44096d7c5a148e96118:58c24e6328705f09f68e22b151c3f7c7:8e2de46413ffbd6527ef2482df55f853$"
+}
+}

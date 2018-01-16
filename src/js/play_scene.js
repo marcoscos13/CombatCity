@@ -301,7 +301,7 @@ var PlayScene = {
 
         if (this.game.input.keyboard.isDown(Phaser.Keyboard.L) || enemyKilledCount >= 20){
             if (!loadingLevel){
-                this.game.time.events.add(Phaser.Timer.SECOND * 1, nextLevel, this);
+                this.game.time.events.add(Phaser.Timer.SECOND * 2.5, nextLevel, this);
                 loadingLevel = true;
             }
         }

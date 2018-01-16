@@ -36,9 +36,16 @@ var MenuScene = {
         fullscreenButton.scale.setTo(6,6);
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-        menuLogo = this.game.add.sprite(this.game.world.centerX, this.game.height + 120,'menu_logo');
+        menuLogo = this.game.add.sprite(this.game.world.centerX, this.game.height + 120,'logo_atlas', 'CombatCity_Logo_1');
         menuLogo.anchor.setTo(0.5,0.5);
-        menuLogo.scale.setTo(0.6,0.6);
+        menuLogo.scale.setTo(12,12);
+        menuLogo.smoothed = false;
+        menuLogo.animations.add('logoAnim');
+        menuLogo.animations.play('logoAnim', 32, false);
+
+        var logoLoop = this.game.time.create(false);
+        logoLoop.loop(4000, logoAnimLoop, this);
+        logoLoop.start();
 
         bottonInfo = this.game.add.text(this.game.world.centerX, this.game.height + 550, "!© 2018 HALF TRY STUDIOS_\nALL RIGHTS NOT RESERVED");
         bottonInfo.anchor.setTo(0.5,0.5);
@@ -144,4 +151,8 @@ function fullscreenToggle(){
     {
         this.game.scale.startFullScreen(false);
     }
+}
+
+function logoAnimLoop(){
+    menuLogo.animations.play('logoAnim', 32, false);
 }
