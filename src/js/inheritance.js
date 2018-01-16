@@ -384,6 +384,8 @@ var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     this._changeCalled = false;
     this._timer = this.game.time.create(false);
     this._timerbullets = this.game.time.create(true);
+    this._game = game;
+    this.isfrozen = false;
     // this.body.onCollide = new Phaser.Signal();
     // this.body.onCollide.add(function(){
     //     if (this._velocity._x !== 0 || this._velocity._y !== 0){
@@ -399,14 +401,32 @@ Enemy.prototype = Object.create(Shooter.prototype);
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.update = function(){
-    if(!this._changeStarted){
-        this._changeStarted = true;
-        this._timer.loop(this.game.rnd.realInRange(2000, 5000), this.change_dir, this);
-        this._timer.start();
-    }
-    if(this._moving){
-        this.body.velocity.x = this._direction._x * this._velocity._x;
-        this.body.velocity.y = this._direction._y * this._velocity._y;
+    if (this._game.timeOn){
+        if(!this._changeStarted){
+            this._changeStarted = true;
+            this._timer.loop(this.game.rnd.realInRange(2000, 5000), this.change_dir, this);
+            this._timer.start();
+        }
+        if(this._moving){
+            this.body.velocity.x = this._direction._x * this._velocity._x;
+            this.body.velocity.y = this._direction._y * this._velocity._y;
+        }
+        if (this.frozen){ 
+            this._changeStarted = false;
+            this._changeCalled = false;
+            this._timerbullets.loop(this.game.rnd.realInRange(400, 600), this.fire_bullet, this);
+            this._timerbullets.start();
+            this.frozen = false;
+        }
+    }else{
+        if (!this.isfrozen){
+            this._timerbullets.stop();
+            this._timer.stop();
+            this.animations.stop();
+            this.frozen = true;
+            this.body.velocity.x = 0;
+            this.body.velocity.y = 0;
+        }
     }
 }
 
@@ -415,55 +435,57 @@ Enemy.prototype.stop = function(){
     this._velocity._y = 0;
 }
 Enemy.prototype.change_dir = function(){
-    this._changeCalled = false;
-    
-    var dirxaux = this._direction._x;
-    var diryaux = this._direction._y;
-    
-    while(dirxaux === this._direction._x && diryaux === this._direction._y){
-        var rnd = this.game.rnd.integerInRange(1, 4);
-        if(rnd === 1){
-            this._direction._x = 1;
-            this._direction._y = 0;
+    if (this._game.timeOn){
+        this._changeCalled = false;
+        
+        var dirxaux = this._direction._x;
+        var diryaux = this._direction._y;
+        
+        while(dirxaux === this._direction._x && diryaux === this._direction._y){
+            var rnd = this.game.rnd.integerInRange(1, 4);
+            if(rnd === 1){
+                this._direction._x = 1;
+                this._direction._y = 0;
+            }
+            else if (rnd === 2){
+                this._direction._x = -1;
+                this._direction._y = 0;
+            }
+            else if (rnd === 3){
+                this._direction._y = 1;
+                this._direction._x = 0;
+            }
+            else if (rnd === 4){
+                this._direction._y = -1;
+                this._direction._x = 0;
+            }
         }
-        else if (rnd === 2){
-            this._direction._x = -1;
-            this._direction._y = 0;
-        }
-        else if (rnd === 3){
-            this._direction._y = 1;
-            this._direction._x = 0;
-        }
-        else if (rnd === 4){
-            this._direction._y = -1;
-            this._direction._x = 0;
-        }
-    }
 
-    if (this._direction._x === 1){
-        this.animations.play('enemy_' + this._typeId + '_right');
-        this.y += this.gapW;
-        this.y = 24 * Math.round(this.y/24) - this.gapW;
-    }
-    else if (this._direction._x === -1){
-        this.animations.play('enemy_' + this._typeId + '_left');
-        this.y += this.gapW;
-        this.y = 24 * Math.round(this.y/24) - this.gapW;
-    }
-    else if (this._direction._y === 1){
-        this.animations.play('enemy_' + this._typeId + '_down');
-        this.x += this.gapH;
-        this.x = 24 * Math.round(this.x/24) - this.gapH;
-    }
-    else if (this._direction._y === -1){
-        this.animations.play('enemy_' + this._typeId + '_up');
-        this.x += this.gapH;
-        this.x = 24 * Math.round(this.x/24) - this.gapH;
-    }
+        if (this._direction._x === 1){
+            this.animations.play('enemy_' + this._typeId + '_right');
+            this.y += this.gapW;
+            this.y = 24 * Math.round(this.y/24) - this.gapW;
+        }
+        else if (this._direction._x === -1){
+            this.animations.play('enemy_' + this._typeId + '_left');
+            this.y += this.gapW;
+            this.y = 24 * Math.round(this.y/24) - this.gapW;
+        }
+        else if (this._direction._y === 1){
+            this.animations.play('enemy_' + this._typeId + '_down');
+            this.x += this.gapH;
+            this.x = 24 * Math.round(this.x/24) - this.gapH;
+        }
+        else if (this._direction._y === -1){
+            this.animations.play('enemy_' + this._typeId + '_up');
+            this.x += this.gapH;
+            this.x = 24 * Math.round(this.x/24) - this.gapH;
+        }
 
-    if (this._velocity._x === 0 && this._velocity._y === 0){
-        this._timer.start();
-        this._velocity._x = this._velxAux;
-        this._velocity._y = this._velyAux;
+        if (this._velocity._x === 0 && this._velocity._y === 0){
+            this._timer.start();
+            this._velocity._x = this._velxAux;
+            this._velocity._y = this._velyAux;
+        }
     }
 }

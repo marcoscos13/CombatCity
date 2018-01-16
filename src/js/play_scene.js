@@ -25,7 +25,7 @@ var bullet;
 var bulletCollider;
 
 //Powerups
-var powerupTypes = ['powerup_star', 'powerup_tank', 'powerup_helmets', 'powerup_grenade', 'powerup_shovel'];
+var powerupTypes = ['powerup_star', 'powerup_tank', 'powerup_helmets', 'powerup_grenade', 'powerup_shovel', 'powerup_timer'];
 
 //Enemies
 var enemy;
@@ -84,6 +84,7 @@ var PlayScene = {
         if (customParam1 > 0)
             levelN = customParam1;
         loadingLevel = false;
+        this.game.timeOn = true;
     },
 
     preload: function(){
@@ -95,6 +96,8 @@ var PlayScene = {
     create: function(){
         levelData = JSON.parse(this.game.cache.getText('levels')); //Parsea el JSON
         
+        this.game.timeOn = true;
+
         //Físicas
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.game.stage.backgroundColor = '#192E38';
@@ -177,17 +180,17 @@ var PlayScene = {
         player.tankLevel = tankL;
         
         if(player.tankLevel >= 1)
-        player.animations.play('player1_level1_right_off');
+        player.animations.play('player1_level1_up');
         if(player.tankLevel >= 2){
             player._bulletVel = 500;
-            player.animations.play('player1_level2_right_off');
+            player.animations.play('player1_level2_up');
         }
         if (player.tankLevel >= 3) {
             playerBullets.add(new Bullet(this.game, new Par(0,0), objectsScale, 500, new Par(0,0), 'bullet'));
-            player.animations.play('player1_level3_right_off');
+            player.animations.play('player1_level3_up');
         }
         if (player.tankLevel >= 4) {
-            player.animations.play('player1_level4_right_off');
+            player.animations.play('player1_level4_up');
         }
         
         player.body.collideWorldBounds = true;        
@@ -289,7 +292,7 @@ var PlayScene = {
         HUD_Level.text = levelN;
         HUD_score.text = "SCORE\n" + score;
 
-        if (this.game.input.keyboard.isDown(Phaser.Keyboard.ENTER) || enemyKilledCount >= 20){
+        if (this.game.input.keyboard.isDown(Phaser.Keyboard.L) || enemyKilledCount >= 20){
             if (!loadingLevel){
                 this.game.time.events.add(Phaser.Timer.SECOND * 1, nextLevel, this);
                 loadingLevel = true;
@@ -612,6 +615,7 @@ function collisionHQ(hq, _bullet){
         boombaseSound.play();
         hq.animations.add('hq_2', ['base_2'], 1, true);
         hq.animations.play('hq_2');
+        new SingleAnimation(this.game, new Par(hq.x, hq.y), objectsScale, "explosion");
         gameOver();
     }
 }
@@ -645,6 +649,7 @@ function collisionChangeDirEnemy (enemy, block){
 
 // Called if a powerup is taken
 function powerupHandler (player, powerup){
+    console.debug(powerup.blockType);
     powerupSound.play();
     if (powerup.blockType === 'powerup_star' && player.tankLevel < 4){
         player.tankLevel++;
@@ -674,7 +679,16 @@ function powerupHandler (player, powerup){
     else if (powerup.blockType === 'powerup_shovel'){
         powerUpShovel();
     }
+    else if (powerup.blockType === 'powerup_timer'){
+        this.game.timeOn = false;
+        this.game.time.events.add(Phaser.Timer.SECOND * 5, timerOff);
+    }
+    
     powerup.kill();
+}
+
+function timerOff(){
+    _game.timeOn = true;
 }
 
 function helmetOff (){
