@@ -334,7 +334,7 @@ Player.prototype.update = function(){
 var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     if (typeId === 'armor'){
         Shooter.apply(this, [game, pos, scale, new Par(70, 70), new Par(0, 1), bulletsGroup, 300, 500, false, 'sprites_atlas']);
-        this._lives = 3;
+        this._lives = 4;
         this.points = 400;
         this.animations.add('enemy_armor_right', ['enemy_armor_right1', 'enemy_armor_right2'], 4, true);
         this.animations.add('enemy_armor_left', ['enemy_armor_left1', 'enemy_armor_left2'], 4, true);

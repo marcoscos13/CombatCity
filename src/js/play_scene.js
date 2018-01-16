@@ -55,6 +55,7 @@ var levelData;
 var levelN = 1;
 var tankL = 1;
 var livesN = 3;
+var loadingLevel = false;
 
 var gameover = false;
 var gameoverSprite;
@@ -82,6 +83,7 @@ var PlayScene = {
     init: function(customParam1) {   
         if (customParam1 > 0)
             levelN = customParam1;
+        loadingLevel = false;
     },
 
     preload: function(){
@@ -288,7 +290,10 @@ var PlayScene = {
         HUD_score.text = "SCORE\n" + score;
 
         if (this.game.input.keyboard.isDown(Phaser.Keyboard.ENTER) || enemyKilledCount >= 20){
-            this.game.time.events.add(Phaser.Timer.SECOND * 1, nextLevel, this);
+            if (!loadingLevel){
+                this.game.time.events.add(Phaser.Timer.SECOND * 1, nextLevel, this);
+                loadingLevel = true;
+            }
         }
 
         enemyGroup.forEach(function (e) { e.body.moves = false; });
