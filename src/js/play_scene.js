@@ -4,6 +4,8 @@ var cursors;
 
 var _game;
 
+var fullscreenButton;
+
 var objectsScale = new Par(3, 3);
 var blockSize = 48;
 
@@ -97,6 +99,11 @@ var PlayScene = {
         levelData = JSON.parse(this.game.cache.getText('levels')); //Parsea el JSON
         
         this.game.timeOn = true;
+
+        fullscreenButton = this.game.add.button(65, this.game.world.height - 70, 'sprites_atlas', fullscreenToggle, this, 'HUD_fullscreen_1', 'HUD_fullscreen_1', 'HUD_fullscreen_1');
+        fullscreenButton.scale.setTo(6,6);
+        fullscreenButton.anchor.setTo(0.5,0.5)
+        this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
         //Físicas
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -432,6 +439,17 @@ var PlayScene = {
 
 module.exports = PlayScene;
 
+function fullscreenToggle(){
+    if (this.game.scale.isFullScreen)
+    {
+        this.game.scale.stopFullScreen();
+    }
+    else
+    {
+        this.game.scale.startFullScreen(false);
+    }
+}
+
 function setBlockGroup(bGroup, bBool){
     if (bBool){
         bGroup.forEach(function (b) { 
@@ -575,6 +593,9 @@ function collisionHitPlayer (_player, enemyBullet) {
         _player._destroySound.play();
         _player.lives--;
         _player.resetPos();
+        _player.helmet = true;
+        playerShield.visible = true;
+        _game.time.events.add(Phaser.Timer.SECOND * 5, helmetOff);
         _player.animations.play('player1_level1_right_off');
     }
 }

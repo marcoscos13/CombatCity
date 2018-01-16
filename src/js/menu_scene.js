@@ -7,6 +7,8 @@ var menuVelocity = 2.5;
 var menuLogo;
 var bottonInfo;
 
+var fullscreenButton;
+
 var buttonsArray = new Array(2);
 var buttonsN = 2; //Numero de botones en el menu
 
@@ -28,6 +30,11 @@ var MenuScene = {
         createButtons(this);
 
         this.game.stage.setBackgroundColor(0x061319);
+
+        var tempSprite = 
+        fullscreenButton = this.game.add.button(40, this.game.world.height + 510, 'sprites_atlas', fullscreenToggle, this, 'HUD_fullscreen_1', 'HUD_fullscreen_1', 'HUD_fullscreen_1');
+        fullscreenButton.scale.setTo(6,6);
+        this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
         menuLogo = this.game.add.sprite(this.game.world.centerX, this.game.height + 120,'menu_logo');
         menuLogo.anchor.setTo(0.5,0.5);
@@ -55,7 +62,9 @@ var MenuScene = {
             buttonsArray[i].strokeThickness = 10;
         }
 
-        selector = this.game.add.sprite(buttonsArray[0].x - 50, buttonsArray[0].y,'sprites_atlas', 'HUD_selector');
+        selector = this.game.add.sprite(buttonsArray[0].x - 50, buttonsArray[0].y,'sprites_atlas', 'HUD_selector_1');
+        selector.animations.add('selector', ['HUD_selector_1', 'HUD_selector_2'], 4, true);
+        selector.animations.play('selector');
         selector.smoothed = false;
         selector.anchor.setTo(0.5,0.5);
         selector.scale.setTo(4,4);
@@ -70,6 +79,7 @@ var MenuScene = {
             }
             selector.y -= menuVelocity;
             bottonInfo.y -= menuVelocity;
+            fullscreenButton.y -= menuVelocity;
         }else menuAnimacion = false;
        }
 
@@ -114,6 +124,7 @@ function createButtons(self){
                 }
                 selector.y -= menuVelocity;
                 bottonInfo.y -= menuVelocity;
+                fullscreenButton.y -= menuVelocity;
             }
             menuAnimacion = false;
         }
@@ -122,4 +133,15 @@ function createButtons(self){
                 self.game.state.start('levelAnimation', true, false, 1);
         }
     }, self);
+}
+
+function fullscreenToggle(){
+    if (this.game.scale.isFullScreen)
+    {
+        this.game.scale.stopFullScreen();
+    }
+    else
+    {
+        this.game.scale.startFullScreen(false);
+    }
 }
