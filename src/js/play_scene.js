@@ -684,13 +684,13 @@ function helmetOff (){
 
 function powerUpShovel(){
     powerUpShovelOn();
-    _game.time.events.add(Phaser.Timer.SECOND * 5, powerUpShovelOff, this);
-    _game.time.events.add(Phaser.Timer.SECOND * 5.5, powerUpShovelOn, this);
-    _game.time.events.add(Phaser.Timer.SECOND * 6, powerUpShovelOff, this);
-    _game.time.events.add(Phaser.Timer.SECOND * 6.5, powerUpShovelOn, this);
-    _game.time.events.add(Phaser.Timer.SECOND * 7, powerUpShovelOff, this);
-    _game.time.events.add(Phaser.Timer.SECOND * 7.5, powerUpShovelOn, this);
-    _game.time.events.add(Phaser.Timer.SECOND * 8, powerUpShovelOff, this);
+    _game.time.events.add(Phaser.Timer.SECOND * 10, powerUpShovelOff, this);
+    _game.time.events.add(Phaser.Timer.SECOND * 10.5, powerUpShovelOn, this);
+    _game.time.events.add(Phaser.Timer.SECOND * 11, powerUpShovelOff, this);
+    _game.time.events.add(Phaser.Timer.SECOND * 11.5, powerUpShovelOn, this);
+    _game.time.events.add(Phaser.Timer.SECOND * 12, powerUpShovelOff, this);
+    _game.time.events.add(Phaser.Timer.SECOND * 12.5, powerUpShovelOn, this);
+    _game.time.events.add(Phaser.Timer.SECOND * 13, powerUpShovelOff, this);
 }
 
 function powerUpShovelOn(){
@@ -780,7 +780,7 @@ function spawnEnemy(){
 }
 
 function spawnPowerup(game){
-    var rnd = game.rnd.integerInRange(0, 3);
+    var rnd = game.rnd.integerInRange(0, powerupTypes.length);
     var id = powerupTypes[rnd];
     var powerup = new Block(game, getCell(game, blockSize, game.rnd.integerInRange(1, 11), game.rnd.integerInRange(1, 11)), objectsScale, 'sprites_atlas', id, id);
     powerup.animations.add('blink', [id, 'empty'], 4, true);
