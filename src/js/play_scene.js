@@ -401,8 +401,6 @@ var PlayScene = {
             new SingleAnimation(this.game, spawnPos[spawnIndex], objectsScale, "enemySpawn");
             this.game.time.events.add(Phaser.Timer.SECOND * 1.5, spawnEnemy, this);
             spawned = true;
-            enemyCount++;
-            spawnCount++;
         }
 
         //Si el jugador se ha quedado sin vidas
@@ -417,24 +415,24 @@ var PlayScene = {
         }
     },
 
-    render: function(){
-        //this.game.debug.text( "Direction X: " + player._direction._x, 50, 80 );
-        //this.game.debug.text( "Direction Y: " + player._direction._y, 50, 100 );
-        //this.game.debug.text( "Player X: " + player.x, 50, 120 );
-        //this.game.debug.text( "Player Y: " + player.y, 50, 140 );
-        //this.game.debug.text(bloquesGroup.length, 50, 140);
-        //this.game.debug.body(player);
-        //this.game.debug.body(bulletCollider);
-        // if (player.lives >= 0){
-        //     this.game.debug.text("Vidas", 10, 60);
-        //     this.game.debug.text("Restantes: " + player.lives, 10, 80);
-        // }
-        //this.game.debug.text("Enemies", 5, 90);
-        //this.game.debug.text("remaining: " + (20-spawnCount), 5, 110);
-        //this.game.debug.text("Enemies", 5, 140);
-        //this.game.debug.text("destroyed: " + enemyKilledCount, 5, 160);
-        //this.game.debug.text("TankLevel: " + player.tankLevel, 5, 190);
-    }
+    // render: function(){
+    //     this.game.debug.text( "Direction X: " + player._direction._x, 50, 80 );
+    //     this.game.debug.text( "Direction Y: " + player._direction._y, 50, 100 );
+    //     this.game.debug.text( "Player X: " + player.x, 50, 120 );
+    //     this.game.debug.text( "Player Y: " + player.y, 50, 140 );
+    //     this.game.debug.text(bloquesGroup.length, 50, 140);
+    //     this.game.debug.body(player);
+    //     this.game.debug.body(bulletCollider);
+    //     if (player.lives >= 0){
+    //         this.game.debug.text("Vidas", 10, 60);
+    //         this.game.debug.text("Restantes: " + player.lives, 10, 80);
+    //     }
+    //     this.game.debug.text("Enemies", 5, 90);
+    //     this.game.debug.text("remaining: " + (20-spawnCount), 5, 110);
+    //     this.game.debug.text("Enemies", 5, 140);
+    //     this.game.debug.text("destroyed: " + enemyKilledCount, 5, 160);
+    //     this.game.debug.text("TankLevel: " + player.tankLevel, 5, 190);
+    // }
 };
 
 module.exports = PlayScene;
@@ -810,12 +808,14 @@ function spawnEnemy(){
     var spawnedEnemy = new Enemy(this.game, spawnPos[spawnIndex], objectsScale, bulletGroup, bNumber, levelData.levels[levelN][13].enemies[spawnCount]);
     enemyGroup.add(spawnedEnemy);
     spawned = false;
+    enemyCount++;
+    spawnCount++;
     spawnIndex++;
     if (spawnIndex >= spawnPos.length) spawnIndex = 0;
 }
 
 function spawnPowerup(game){
-    var rnd = game.rnd.integerInRange(0, powerupTypes.length);
+    var rnd = game.rnd.integerInRange(0, powerupTypes.length - 1);
     var id = powerupTypes[rnd];
     var powerup = new Block(game, getCell(game, blockSize, game.rnd.integerInRange(1, 11), game.rnd.integerInRange(1, 11)), objectsScale, 'sprites_atlas', id, id);
     powerup.animations.add('blink', [id, 'empty'], 4, true);
