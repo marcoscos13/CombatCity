@@ -75,20 +75,22 @@ var MenuScene = {
         selector.smoothed = false;
         selector.anchor.setTo(0.5,0.5);
         selector.scale.setTo(4,4);
+
     },
     
     update: function(){
-       if (menuAnimacion){
-        if(menuLogo.y >= this.game.height/2 - this.game.height/5){
-            menuLogo.y -= menuVelocity;
-            for(var i = 0; i < buttonsArray.length; i++){
-                buttonsArray[i].y -= menuVelocity;
-            }
-            selector.y -= menuVelocity;
-            bottonInfo.y -= menuVelocity;
-            fullscreenButton.y -= menuVelocity;
-        }else menuAnimacion = false;
-       }
+        updateFullscreenIcon(this.game);
+        if (menuAnimacion){
+            if(menuLogo.y >= this.game.height/2 - this.game.height/5){
+                menuLogo.y -= menuVelocity;
+                for(var i = 0; i < buttonsArray.length; i++){
+                    buttonsArray[i].y -= menuVelocity;
+                }
+                selector.y -= menuVelocity;
+                bottonInfo.y -= menuVelocity;
+                fullscreenButton.y -= menuVelocity;
+            }else menuAnimacion = false;
+        }
 
        selector.y = buttonsArray[selectorN].y - 6;
     },
@@ -143,13 +145,22 @@ function createButtons(self){
 }
 
 function fullscreenToggle(){
-    if (this.game.scale.isFullScreen)
-    {
+    if (this.game.scale.isFullScreen) {
         this.game.scale.stopFullScreen();
+        fullscreenButton.setFrames('HUD_fullscreen_1','HUD_fullscreen_1','HUD_fullscreen_1');
     }
-    else
-    {
+    else{
         this.game.scale.startFullScreen(false);
+        fullscreenButton.setFrames('HUD_fullscreen_2','HUD_fullscreen_2','HUD_fullscreen_2');
+    }
+}
+
+function updateFullscreenIcon(_game){
+    if (_game.scale.isFullScreen) {
+        fullscreenButton.setFrames('HUD_fullscreen_2','HUD_fullscreen_2','HUD_fullscreen_2');
+    }
+    else {
+        fullscreenButton.setFrames('HUD_fullscreen_1','HUD_fullscreen_1','HUD_fullscreen_1');
     }
 }
 

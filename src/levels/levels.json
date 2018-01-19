@@ -2,19 +2,37 @@
     "levels":
         [
             [
-                ["BF","MF","GG","WW","II","","","","","","","",""],
-                ["BL","ML","","","","","","","","","","",""],
-                ["BR","MR","","","","","","","","","","",""],
-                ["BU","MU","","","","","","","","","","",""],
-                ["BD","MD","","","","","","","","","","",""],
-                ["","","","","","","","","","","","",""],
-                ["","","","","","","","","","","","",""],
-                ["","","","","","","","","","","","",""],
-                ["","","","","","","","","","","","",""],
-                ["","","","","","","","","","","","",""],
-                ["","","","","","","","","","","","",""],
-                ["","","","","","","","","","","","",""],
-                ["","","","","","","","","","","","",""],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                {"enemies": ["basic","basic","basic","basic","basic","basic","basic","basic","basic","basic",
+                             "basic","basic","basic","basic","basic","basic","basic","basic","basic","basic"]}
+            ],
+
+            [
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["MF","MF","MF","MF","MF","MF","MF","MF","MF","MF","MF","MF","MF"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","II","II","II","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","II","II","II","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","II","II","II","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
                 {"enemies": ["basic","basic","basic","basic","basic","basic","basic","basic","basic","basic",
                              "basic","basic","basic","basic","basic","basic","basic","basic","basic","basic"]}
             ],
@@ -92,7 +110,61 @@
                 {"enemies": ["power","power","power","power","power","power","power","power","power","power",
                              "fast","fast","fast","fast","fast","basic","basic","armor","armor","armor"]}
             ],
+
+            [
+                ["EE","EE","BF","EE","EE","BF","EE","BD","EE","BF","EE","EE","EE"],
+                ["GG","BF","BF","BF","EE","BF","EE","MD","EE","BF","BL","EE","EE"],
+                ["GG","GG","GG","EE","EE","BU","EE","BF","EE","BU","EE","BR","EE"],
+                ["GG","WW","WW","WW","WW","WW","WW","WW","WW","WW","WW","EE","WW"],
+                ["EE","BF","EE","EE","EE","EE","BD","BD","EE","EE","EE","EE","EE"],
+                ["EE","EE","BF","EE","EE","BR","BF","BF","BU","BF","BU","MU","MU"],
+                ["BF","BF","EE","BF","EE","BR","BF","BF","GG","BF","MD","MD","BF"],
+                ["EE","EE","EE","MF","EE","MD","EE","GG","GG","GG","GG","EE","EE"],
+                ["WW","WW","EE","WW","WW","WW","WW","WW","EE","WW","WW","WW","WW"],
+                ["GG","GG","EE","BR","EE","EE","BD","BD","EE","EE","EE","EE","EE"],
+                ["GG","GG","EE","EE","BL","EE","EE","BR","EE","MD","BD","BF","EE"],
+                ["GG","MD","EE","EE","BL","EE","EE","EE","EE","BU","EE","BF","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","BD","EE","BU","EE"],
+                {"enemies": ["power","power","power","power","power","power","power","armor","armor","fast",
+                             "fast","fast","fast","basic","basic","basic","basic","basic","basic","basic"]}
+            ],
 			
+			[
+                ["EE","EE","EE","EE","BD","EE","EE","EE","BD","EE","EE","EE","EE"],
+                ["EE","BF","BF","BF","EE","EE","EE","EE","BF","BF","BF","BF","EE"],
+                ["EE","BF","EE","EE","EE","EE","BF","EE","EE","EE","EE","MF","EE"],
+                ["EE","MF","EE","BF","BU","EE","EE","EE","BU","BF","EE","BF","BF"],
+                ["EE","BF","EE","BL","GG","MD","MF","MD","GG","BR","EE","MF","BF"],
+                ["EE","BU","EE","EE","GG","GG","GG","GG","GG","EE","EE","MU","BF"],
+                ["BF","MD","EE","EE","GG","GG","GG","GG","GG","EE","EE","BD","BF"],
+                ["BF","MF","EE","BL","GG","MU","MF","MU","GG","BR","EE","BF","EE"],
+                ["BF","BF","EE","BF","BD","EE","EE","EE","BD","BF","EE","MF","EE"],
+                ["BF","MF","EE","EE","EE","EE","BF","EE","EE","EE","EE","BF","EE"],
+                ["BF","BF","BF","BF","BF","EE","EE","EE","BF","BF","BF","MF","MF"],
+                ["BF","BF","EE","EE","BU","EE","EE","EE","BU","EE","EE","BF","EE"],
+                ["BF","BF","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                {"enemies": ["power","power","power","power","power","power","power","power","fast","fast",
+                             "fast","fast","fast","fast","fast","fast","armor","armor","armor","armor"]}
+            ],
+            
+            [
+                ["EE","EE","EE","EE","EE","EE","EE","EE","MF","MF","MF","GG","EE"],
+                ["EE","BF","EE","EE","EE","EE","EE","EE","MF","EE","EE","MF","EE"],
+                ["BF","GG","BF","EE","EE","EE","BF","BF","BF","BF","EE","MF","EE"],
+                ["EE","BF","GG","BF","EE","EE","BF","EE","GG","BF","MF","MF","EE"],
+                ["EE","EE","BF","EE","GG","MF","BF","GG","EE","BF","EE","EE","EE"],
+                ["EE","EE","EE","EE","MF","EE","BF","MF","BF","BF","EE","EE","EE"],
+                ["EE","EE","BF","BF","MF","BF","EE","MF","EE","EE","EE","EE","EE"],
+                ["EE","EE","BF","EE","GG","BF","MF","GG","EE","EE","EE","EE","EE"],
+                ["MF","MF","MF","GG","EE","BF","EE","EE","BF","BF","EE","EE","EE"],
+                ["MF","EE","BF","BF","BF","BF","EE","EE","BF","MF","MF","EE","EE"],
+                ["MF","EE","MF","EE","EE","EE","EE","EE","EE","MF","BF","BF","EE"],
+                ["GG","MF","MF","EE","EE","EE","EE","EE","EE","EE","BF","MF","MF"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","MF","MF"],
+                {"enemies": ["armor","armor","armor","armor","basic","basic","power","power","power","power",
+                             "power","power","fast","fast","fast","fast","fast","fast","fast","fast"]}
+            ],
+
 			[
                 ["EE","EE","EE","BD","BD","BD","EE","EE","BD","EE","EE","EE","EE"],
                 ["EE","BD","BF","BF","BF","BF","BF","BF","BF","BF","EE","EE","EE"],
@@ -109,6 +181,79 @@
                 ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
                 {"enemies": ["power","power","power","power","power","power","power","power","fast","fast",
                              "basic","basic","basic","basic","basic","basic","armor","armor","armor","armor"]}
+            ],
+			
+			[
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","MF","MF","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","MF","EE","EE","EE","EE","EE","EE"],
+                ["EE","MF","MF","GG","GG","BF","MF","BF","GG","GG","MF","MF","EE"],
+                ["EE","EE","EE","MF","GG","GG","MF","GG","GG","MF","EE","EE","EE"],
+                ["GG","EE","EE","EE","MF","GG","GG","GG","MF","EE","EE","EE","GG"],
+                ["MF","GG","EE","EE","EE","GG","GG","GG","EE","EE","EE","GG","MF"],
+                ["GG","EE","EE","EE","MD","MU","GG","MU","MD","EE","EE","EE","GG"],
+                ["EE","EE","EE","EE","MF","EE","MD","EE","MF","EE","EE","EE","EE"],
+                ["EE","EE","EE","MF","EE","EE","MF","EE","EE","MF","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["EE","EE","MF","EE","EE","EE","EE","EE","EE","EE","MF","EE","EE"],
+                {"enemies": ["armor","armor","armor","armor","armor","armor","power","power","power","power",
+                             "fast","fast","fast","fast","fast","fast","fast","fast","fast","fast"]}
+            ],
+
+            
+            [
+                ["EE","EE","EE","EE","MF","EE","EE","EE","EE","EE","EE","EE","EE"],
+                ["MF","MF","EE","EE","MF","EE","EE","MF","MF","EE","EE","EE","EE"],
+                ["EE","MF","EE","EE","MF","EE","EE","EE","MF","EE","MF","MF","GG"],
+                ["EE","MF","EE","EE","MF","MF","MF","EE","GG","EE","MF","EE","EE"],
+                ["EE","BF","EE","EE","EE","EE","MF","EE","MF","MF","MF","EE","EE"],
+                ["GG","MF","MF","EE","MF","BF","MF","BF","BF","EE","EE","EE","EE"],
+                ["EE","EE","MF","GG","MF","GG","EE","EE","BF","EE","EE","MF","MF"],
+                ["EE","EE","MF","EE","EE","GG","EE","EE","MF","EE","EE","MF","EE"],
+                ["EE","EE","BF","EE","EE","MF","EE","EE","MF","MF","BF","MF","EE"],
+                ["GG","MF","MF","MF","GG","GG","EE","MF","MF","EE","BF","MF","EE"],
+                ["EE","EE","EE","BF","EE","EE","EE","EE","GG","GG","EE","BF","EE"],
+                ["EE","EE","EE","MF","EE","EE","EE","EE","EE","GG","EE","BF","EE"],
+                ["EE","EE","EE","MF","EE","EE","EE","EE","EE","MF","EE","BF","EE"],
+                {"enemies": ["power","power","armor","armor","armor","armor","armor","armor","armor","armor",
+                             "fast","fast","fast","fast","fast","fast","fast","fast","basic","basic"]}
+            ],
+			
+			[
+                ["EE","EE","EE","WW","EE","EE","EE","EE","WW","EE","EE","EE","EE"],
+                ["WW","WW","EE","WW","EE","WW","WW","WW","WW","EE","WW","WW","WW"],
+                ["GG","GG","BF","EE","EE","BF","EE","EE","WW","EE","WW","GG","WW"],
+                ["GG","WW","WW","WW","WW","EE","MF","EE","EE","BF","GG","GG","GG"],
+                ["GG","GG","EE","WW","EE","EE","WW","EE","WW","WW","WW","WW","GG"],
+                ["WW","WW","EE","WW","EE","WW","WW","EE","EE","WW","EE","EE","EE"],
+                ["EE","EE","BF","GG","BF","EE","BF","GG","EE","WW","EE","EE","WW"],
+                ["EE","WW","WW","GG","WW","WW","WW","WW","EE","GG","BF","EE","WW"],
+                ["BF","EE","EE","BF","EE","EE","WW","EE","GG","GG","WW","EE","WW"],
+                ["WW","WW","EE","WW","WW","EE","WW","BF","WW","WW","WW","EE","EE"],
+                ["EE","EE","BF","EE","GG","GG","EE","EE","GG","WW","EE","EE","WW"],
+                ["EE","WW","WW","WW","GG","EE","EE","EE","EE","WW","EE","WW","WW"],
+                ["EE","WW","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE"],
+                {"enemies": ["power","power","power","fast","fast","fast","fast","fast","fast","fast",
+                             "fast","armor","armor","armor","armor","armor","armor","power","power","power"]}
+            ],
+
+            [
+                ["EE","GG","EE","EE","EE","EE","EE","EE","EE","EE","EE","GG","EE"],
+                ["GG","EE","BL","MR","ML","EE","MF","MR","ML","BR","EE","EE","GG"],
+                ["EE","EE","BR","EE","MF","EE","MF","MR","ML","BR","EE","EE","EE"],
+                ["EE","EE","EE","BL","MR","ML","MF","MR","ML","BR","EE","EE","EE"],
+                ["EE","BR","BU","EE","EE","MF","MF","MF","ML","BR","EE","EE","EE"],
+                ["EE","BR","EE","MD","MF","MF","MF","MF","ML","EE","BL","EE","EE"],
+                ["EE","BR","EE","MF","MU","EE","MU","MF","MF","EE","BR","EE","EE"],
+                ["EE","BR","EE","EE","EE","EE","EE","MF","MF","BF","EE","BL","EE"],
+                ["EE","BR","EE","MF","MD","EE","MD","MF","MF","BF","EE","BL","EE"],
+                ["EE","BR","EE","MU","MF","MF","MF","MF","BF","EU","EE","EE","EE"],
+                ["EE","EE","BU","BD","EE","EE","BF","BF","BU","EE","EE","EE","GG"],
+                ["GG","EE","EE","EE","EE","EE","EE","EE","EE","EE","EE","GG","GG"],
+                ["WW","GG","EE","EE","EE","EE","EE","EE","EE","EE","GG","GG","WW"],
+                {"enemies": ["power","power","power","power","fast","fast","fast","fast","fast","fast",
+                             "fast","fast","fast","fast","armor","armor","armor","armor","armor","armor"]}
             ]
         ]    
 }
