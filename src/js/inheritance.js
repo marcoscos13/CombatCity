@@ -343,7 +343,7 @@ var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
         this.animations.play('enemy_armor_down');
     }
     else if (typeId === 'power'){
-        Shooter.apply(this, [game, pos, scale, new Par(100, 100), new Par(0, 1), bulletsGroup, 400, 500, false, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(100, 100), new Par(0, 1), bulletsGroup, 500, 400, false, 'sprites_atlas']);
         this._lives = 1;
         this.points = 200;
         this.animations.add('enemy_power_right', ['enemy_power_right1', 'enemy_power_right2'], 4, true);
@@ -353,7 +353,7 @@ var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
         this.animations.play('enemy_power_down');
     }
     else if (typeId === 'fast'){
-        Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 400, 500, false, 'sprites_atlas']);
+        Shooter.apply(this, [game, pos, scale, new Par(150, 150), new Par(0, 1), bulletsGroup, 300, 500, false, 'sprites_atlas']);
         this._lives = 1;
         this.points = 300;
         this.animations.add('enemy_fast_right', ['enemy_fast_right1', 'enemy_fast_right2'], 4, true);
@@ -393,7 +393,7 @@ var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     //         this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.change_dir, this);
     //     }
     // }, this);
-    this._timerbullets.loop(this.game.rnd.realInRange(400, 600), this.fire_bullet, this);
+    this._timerbullets.loop(this.game.rnd.realInRange(this._bulletTime, this._bulletTime + 100), this.fire_bullet, this);
     this._timerbullets.start();
 }
 

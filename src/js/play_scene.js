@@ -76,6 +76,8 @@ var HUD_Level;
 
 //Sonidos
 var powerupSound;
+var puappearsSound;
+var boompowerupSound;
 var boombaseSound;
 var bulletmetalSound;
 var bulletbrickSound;
@@ -155,7 +157,7 @@ var PlayScene = {
 
         //Balas y arma del jugador
         bulletVel = 300;
-        bulletTime = 270;
+        bulletTime = 300;
         //Se inicializa el grupo de las balas
         playerBullets = this.game.add.group();
         playerBullets.enableBody = true;
@@ -282,6 +284,8 @@ var PlayScene = {
         
         ///////////////////////Sonidos
         powerupSound = this.game.add.audio('powerup');
+        puappearsSound = this.game.add.audio('powerupappears');
+        boompowerupSound = this.game.add.audio('boomenemy')
         boombaseSound = this.game.add.audio('boombase');
         bulletmetalSound = this.game.add.audio('bulletmetal');
         bulletbrickSound = this.game.add.audio('bulletbrick');
@@ -677,7 +681,7 @@ function collisionChangeDirEnemy (enemy, block){
 
 // Called if a powerup is taken
 function powerupHandler (player, powerup){
-    console.debug(powerup.blockType);
+    //console.debug(powerup.blockType);
     powerupSound.play();
     if (powerup.blockType === 'powerup_star' && player.tankLevel < 4){
         player.tankLevel++;
@@ -694,6 +698,7 @@ function powerupHandler (player, powerup){
         }
     }
     else if (powerup.blockType === 'powerup_grenade'){
+        boompowerupSound.play();
         killEnemiesAlive()
     }
     else if (powerup.blockType === 'powerup_tank'){
@@ -824,6 +829,7 @@ function spawnEnemy(){
 }
 
 function spawnPowerup(game){
+    puappearsSound.play();
     var rnd = game.rnd.integerInRange(0, powerupTypes.length - 1);
     var id = powerupTypes[rnd];
     var powerup = new Block(game, getCell(game, blockSize, game.rnd.integerInRange(1, 11), game.rnd.integerInRange(1, 11)), objectsScale, 'sprites_atlas', id, id);
