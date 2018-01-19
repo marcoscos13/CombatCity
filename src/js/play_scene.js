@@ -323,6 +323,7 @@ var PlayScene = {
         this.game.physics.arcade.collide(player, wallsGroup);
         this.game.physics.arcade.collide(player, baseGroup);
         this.game.physics.arcade.collide(player, baseMetalGroup);
+        player.onIce = false;
         this.game.physics.arcade.overlap(player, iceGroup, iceCollision, null, this);
 
         //Enemy Collisions
@@ -606,9 +607,9 @@ function collisionHitPlayer (_player, enemyBullet) {
 //Called if the bullet hits one of the block sprites
 function iceCollision (pl, block) {
     if (block.blockType === 'Ice'){
-        console.debug("https://www.filmaffinity.com/es/film641104.html");
+        //console.debug("Ice");
+        player.onIce = true;
     }
-   
 }
 
 // Called if two bullets collide;

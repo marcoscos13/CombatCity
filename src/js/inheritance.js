@@ -182,6 +182,11 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this._direction._y = -1;
     this.animations.play('player1_level' + this.tankLevel + '_up');
     this.animations.stop();
+
+    this.onIce = false;
+    this.slide = false;
+    this.slideSince = 0;
+    this.slideTime = 1000;
 }
 
 //Player.prototype = Object.create(Shooter.prototype);
@@ -213,7 +218,18 @@ Player.prototype.resetPos = function(){
     this.tankLevel = 1;
 }
 
+Player.prototype.resetSlide = function(){
+    this.slideSince = this._game.time.now + this.slideTime;
+    this.slide = true;
+}
+
 Player.prototype.update = function(){
+    //console.debug(this._game.time.now + " " + this.slideSince);
+    if (this.slide && this._game.time.now > this.slideSince){
+        this.slide = false;
+        console.debug("stop sliding")
+    }
+
     if (this.canMove){
         if (!this._cursors.left.isDown && !this._cursors.right.isDown && !this._cursors.down.isDown && !this._cursors.up.isDown)
             this.dirChar = ' ';
@@ -246,24 +262,28 @@ Player.prototype.update = function(){
         }, this);
         this._cursors.left.onUp.add(function(){
             if(this.boolL){
+                this.resetSlide();
                 this.dirStack.remove('l');
                 this.boolL = false;
             }
         }, this);
         this._cursors.right.onUp.add(function(){
             if(this.boolR){
+                this.resetSlide();
                 this.dirStack.remove('r');
                 this.boolR = false;
             }
         }, this);
         this._cursors.down.onUp.add(function(){
             if(this.boolD){
+                this.resetSlide();
                 this.dirStack.remove('d');
                 this.boolD = false;
             }
         }, this);
         this._cursors.up.onUp.add(function(){
             if(this.boolU){
+                this.resetSlide();
                 this.dirStack.remove('u');
                 this.boolU = false;
             }
@@ -315,7 +335,7 @@ Player.prototype.update = function(){
             this._direction._y = -1;
             this.animations.play('player1_level' + this.tankLevel + '_up')
         }
-        else{
+        else if (!this.slide || !this.onIce){
             this.body.velocity.x = 0;
             this.body.velocity.y = 0;
             this.animations.stop();
@@ -325,7 +345,7 @@ Player.prototype.update = function(){
         if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
             this.fire_bullet(true);
         }
-    }else{
+    }else if (!this.slide || !this.onIce){
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
     }
