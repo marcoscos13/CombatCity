@@ -8,6 +8,7 @@ var menuLogo;
 var bottonInfo;
 
 var fullscreenButton;
+var muteButton;
 
 var buttonsArray = new Array(2);
 var buttonsN = 2; //Numero de botones en el menu
@@ -31,10 +32,16 @@ var MenuScene = {
 
         this.game.stage.setBackgroundColor(0x061319);
 
-        var tempSprite = 
+        //Fullscreen Button
         fullscreenButton = this.game.add.button(40, this.game.world.height + 510, 'sprites_atlas', fullscreenToggle, this, 'HUD_fullscreen_1', 'HUD_fullscreen_1', 'HUD_fullscreen_1');
         fullscreenButton.scale.setTo(6,6);
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+        //Mute Button
+        muteButton = this.game.add.button(40, this.game.world.height + 420, 'sprites_atlas', muteToggle, this, 'HUD_fullscreen_1', 'HUD_fullscreen_1', 'HUD_fullscreen_1');
+        muteButton.scale.setTo(6,6);
+        if (this.game.sound.mute)
+            muteButton.setFrames('HUD_fullscreen_2','HUD_fullscreen_2','HUD_fullscreen_2');
 
         menuLogo = this.game.add.sprite(this.game.world.centerX, this.game.height + 120,'logo_atlas', 'CombatCity_Logo_1');
         menuLogo.anchor.setTo(0.5,0.5);
@@ -43,6 +50,7 @@ var MenuScene = {
         menuLogo.animations.add('logoAnim');
         menuLogo.animations.play('logoAnim', 32, false);
 
+        //Loop for the logo animation
         var logoLoop = this.game.time.create(false);
         logoLoop.loop(4000, logoAnimLoop, this);
         logoLoop.start();
@@ -88,6 +96,7 @@ var MenuScene = {
                 selector.y -= menuVelocity;
                 bottonInfo.y -= menuVelocity;
                 fullscreenButton.y -= menuVelocity;
+                muteButton.y -= menuVelocity;
             }else menuAnimacion = false;
         }
 
@@ -134,6 +143,7 @@ function createButtons(self){
                 selector.y -= menuVelocity;
                 bottonInfo.y -= menuVelocity;
                 fullscreenButton.y -= menuVelocity;
+                muteButton.y -= menuVelocity;
             }
             menuAnimacion = false;
         }
@@ -142,6 +152,16 @@ function createButtons(self){
                 self.game.state.start('levelAnimation', true, false, 1);
         }
     }, self);
+}
+
+function muteToggle() {
+    if (!this.game.sound.mute) {
+        this.game.sound.mute = true;
+        muteButton.setFrames('HUD_fullscreen_2','HUD_fullscreen_2','HUD_fullscreen_2');
+    } else {
+        this.game.sound.mute = false;
+        muteButton.setFrames('HUD_fullscreen_1','HUD_fullscreen_1','HUD_fullscreen_1');
+    }
 }
 
 function fullscreenToggle(){

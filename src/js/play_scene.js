@@ -5,6 +5,7 @@ var cursors;
 var _game;
 
 var fullscreenButton;
+var muteButton;
 
 var objectsScale = new Par(3, 3);
 var blockSize = 48;
@@ -102,10 +103,18 @@ var PlayScene = {
         
         this.game.timeOn = true;
 
-        fullscreenButton = this.game.add.button(65, this.game.world.height - 70, 'sprites_atlas', fullscreenToggle, this, 'HUD_fullscreen_1', 'HUD_fullscreen_1', 'HUD_fullscreen_1');
+        //Fullscreen Button
+        fullscreenButton = this.game.add.button(68, this.game.world.height - 72, 'sprites_atlas', fullscreenToggle, this, 'HUD_fullscreen_1', 'HUD_fullscreen_1', 'HUD_fullscreen_1');
         fullscreenButton.scale.setTo(6,6);
         fullscreenButton.anchor.setTo(0.5,0.5)
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+        //Mute Button
+        muteButton = this.game.add.button(68, this.game.world.height - 162, 'sprites_atlas', muteToggle, this, 'HUD_fullscreen_1', 'HUD_fullscreen_1', 'HUD_fullscreen_1');
+        muteButton.scale.setTo(6,6);
+        muteButton.anchor.setTo(0.5,0.5)
+        if (this.game.sound.mute)
+            muteButton.setFrames('HUD_fullscreen_2','HUD_fullscreen_2','HUD_fullscreen_2');
 
         //Físicas
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -303,11 +312,15 @@ var PlayScene = {
         HUD_Level.text = levelN;
         HUD_score.text = "SCORE\n" + score;
 
-        if (this.game.input.keyboard.isDown(Phaser.Keyboard.L) || enemyKilledCount >= 20){
+        if (enemyKilledCount >= 20){
             if (!loadingLevel){
                 this.game.time.events.add(Phaser.Timer.SECOND * 2.5, nextLevel, this);
                 loadingLevel = true;
             }
+        }
+
+        if (this.game.input.keyboard.isDown(Phaser.Keyboard.L)){
+            nextLevel();
         }
 
         enemyGroup.forEach(function (e) { e.body.moves = false; });
@@ -467,7 +480,7 @@ function nextLevel(){
 
     livesN = player.lives;
     tankL = player.tankLevel;
-    this.game.state.start('levelAnimation', true, false, levelN);
+    _game.state.start('levelAnimation', true, false, levelN);
 }
 
 function goToMenu(){
@@ -844,5 +857,15 @@ function updateFullscreenIcon(_game){
     }
     else if (!_game.scale.isFullScreen && fullscreenButton.frameName == 'HUD_fullscreen_2'){
         fullscreenButton.setFrames('HUD_fullscreen_1','HUD_fullscreen_1','HUD_fullscreen_1');
+    }
+}
+
+function muteToggle() {
+    if (!this.game.sound.mute) {
+        this.game.sound.mute = true;
+        muteButton.setFrames('HUD_fullscreen_2','HUD_fullscreen_2','HUD_fullscreen_2');
+    } else {
+        this.game.sound.mute = false;
+        muteButton.setFrames('HUD_fullscreen_1','HUD_fullscreen_1','HUD_fullscreen_1');
     }
 }
