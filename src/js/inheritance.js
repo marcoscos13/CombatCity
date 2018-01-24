@@ -58,6 +58,18 @@ var Block = function (game, pos, scale, sprite, spriteID, bType, nPoints = 0){
 Block.prototype = Object.create(Collider.prototype);
 Block.prototype.constructor = Block;
 
+////Clase Powerup y sus métodos
+var Powerup = function(game, pos, scale, sprite, spriteID, bType, time){
+    Block.apply(this, [game, pos, scale, sprite, spriteID, bType, 0]);
+    game.time.events.add(Phaser.Timer.SECOND * time, this.dissapear, this);
+}
+
+Powerup.prototype = Object.create(Block.prototype);
+Powerup.prototype.constructor = Powerup;
+Powerup.prototype.dissapear = function(){
+    this.destroy();
+}
+
 ////Clase Movable y sus métodos
 var Movable = function (game, pos, scale, vel, dir, sprite){
     Collider.apply(this, [game, pos, scale, sprite]);
@@ -185,7 +197,7 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.onIce = false;
     this.slide = false;
     this.slideSince = 0;
-    this.slideTime = 1000;
+    this.slideTime = 750;
     this.firstKeyPressed = "None";
 }
 

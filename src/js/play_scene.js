@@ -835,7 +835,7 @@ function spawnPowerup(game){
     puappearsSound.play();
     var rnd = game.rnd.integerInRange(0, powerupTypes.length - 1);
     var id = powerupTypes[rnd];
-    var powerup = new Block(game, getCell(game, blockSize, game.rnd.integerInRange(1, 11), game.rnd.integerInRange(1, 11)), objectsScale, 'sprites_atlas', id, id);
+    var powerup = new Powerup(game, getCell(game, blockSize, game.rnd.integerInRange(1, 11), game.rnd.integerInRange(1, 11)), objectsScale, 'sprites_atlas', id, id, 10);
     powerup.animations.add('blink', [id, 'empty'], 4, true);
     powerup.animations.play('blink');
     powerupsGroup.add(powerup);
