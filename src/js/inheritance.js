@@ -144,7 +144,6 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     Shooter.apply(this, [game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulletTime, true, sprite]);
     this._cursors = cursors;
     this.angle = 0;
-    this.dirStack = new SmartStack();
     this.dirChar = ' ';
     this.tankLevel = 1;
     this.boolL = false;
@@ -187,6 +186,7 @@ var Player = function(game, pos, scale, vel, dir, bulletsGroup, bulletVel, bulle
     this.slide = false;
     this.slideSince = 0;
     this.slideTime = 1000;
+    this.firstKeyPressed = "None";
 }
 
 //Player.prototype = Object.create(Shooter.prototype);
@@ -224,123 +224,57 @@ Player.prototype.resetSlide = function(){
 }
 
 Player.prototype.update = function(){
-    //console.debug(this._game.time.now + " " + this.slideSince);
     if (this.slide && this._game.time.now > this.slideSince){
         this.slide = false;
-        console.debug("stop sliding")
     }
 
     if (this.canMove){
-        if (!this._cursors.left.isDown && !this._cursors.right.isDown && !this._cursors.down.isDown && !this._cursors.up.isDown)
-            this.dirChar = ' ';
-        else if (this.dirStack.size > 0)
-            this.dirChar = this.dirStack.top.data;
-
-        this._cursors.left.onDown.add(function(){
-            if(!this.boolL){
-                this.dirStack.push('l');
-                this.boolL = true;
+        if (!this._cursors.up.isDown && !this._cursors.down.isDown && !this._cursors.left.isDown && !this._cursors.right.isDown){
+            this.firstKeyPressed = "None";
+        }else if (this.firstKeyPressed == "None"){
+            if (this._cursors.up.isDown){
+                this.firstKeyPressed = "Up";
             }
-        }, this);
-        this._cursors.right.onDown.add(function(){
-            if(!this.boolR){
-                this.dirStack.push('r');
-                this.boolR = true;
+            else if (this._cursors.down.isDown){
+                this.firstKeyPressed = "Down";
             }
-        }, this);
-        this._cursors.down.onDown.add(function(){
-            if(!this.boolD){
-                this.dirStack.push('d');
-                this.boolD = true;
+            else if (this._cursors.left.isDown){
+                this.firstKeyPressed = "Left";
             }
-        }, this);
-        this._cursors.up.onDown.add(function(){
-            if(!this.boolU){
-                this.dirStack.push('u');
-                this.boolU = true;
+            else if (this._cursors.right.isDown){
+                this.firstKeyPressed = "Right";
             }
-        }, this);
-        this._cursors.left.onUp.add(function(){
-            if(this.boolL){
-                this.resetSlide();
-                this.dirStack.remove('l');
-                this.boolL = false;
-            }
-        }, this);
-        this._cursors.right.onUp.add(function(){
-            if(this.boolR){
-                this.resetSlide();
-                this.dirStack.remove('r');
-                this.boolR = false;
-            }
-        }, this);
-        this._cursors.down.onUp.add(function(){
-            if(this.boolD){
-                this.resetSlide();
-                this.dirStack.remove('d');
-                this.boolD = false;
-            }
-        }, this);
-        this._cursors.up.onUp.add(function(){
-            if(this.boolU){
-                this.resetSlide();
-                this.dirStack.remove('u');
-                this.boolU = false;
-            }
-        }, this);
-
-        ////////////////////////////////////////////////////////
-
-        if (this.dirChar === 'l'){
-            if (this._direction._x !== 0){
-                this.y += this.gapW;
-                this.y = 24 * Math.round(this.y/24) - this.gapW;
-            }
-            this.body.velocity.y = 0;
-            this.body.velocity.x = -this._velocity._x;
-            this._direction._x = -1;
-            this._direction._y = 0;
-            this.animations.play('player1_level' + this.tankLevel + '_left')
-        }
-        else if (this.dirChar === 'r'){
-            if (this._direction._x !== 0){
-                this.y += this.gapW;
-                this.y = 24 * Math.round(this.y/24) - this.gapW;
-            }
-            this.body.velocity.y = 0;
-            this.body.velocity.x = this._velocity._x;
-            this._direction._x = 1;
-            this._direction._y = 0;
-            this.animations.play('player1_level' + this.tankLevel + '_right')
-        }
-        else if (this.dirChar === 'd'){
-            if (this._direction._y !== 0){
-                this.x += this.gapH;
-                this.x = 24 * Math.round(this.x/24) - this.gapH;
-            }
-            this.body.velocity.x = 0;
-            this.body.velocity.y = this._velocity._y;
-            this._direction._x = 0;
-            this._direction._y = 1;
-            this.animations.play('player1_level' + this.tankLevel + '_down')
-        }
-        else if (this.dirChar === 'u'){
-            if (this._direction._y !== 0){
-                this.x += this.gapH;
-                this.x = 24 * Math.round(this.x/24) - this.gapH;
-            }
-            this.body.velocity.x = 0;
-            this.body.velocity.y = -this._velocity._y;
-            this._direction._x = 0;
-            this._direction._y = -1;
-            this.animations.play('player1_level' + this.tankLevel + '_up')
-        }
-        else if (!this.slide || !this.onIce){
-            this.body.velocity.x = 0;
-            this.body.velocity.y = 0;
-            this.animations.stop();
         }
 
+        if (this._cursors.up.isDown && this.firstKeyPressed == "Up"){
+            if (this._cursors.left.isDown) this.move_left();
+            else if (this._cursors.right.isDown) this.move_right();
+            else this.move_up();
+        }
+        else if (this._cursors.down.isDown && this.firstKeyPressed == "Down"){
+            if (this._cursors.left.isDown) this.move_left();
+            else if (this._cursors.right.isDown) this.move_right();
+            else this.move_down(); 
+        }
+        else if (this._cursors.left.isDown && this.firstKeyPressed == "Left"){
+            if (this._cursors.up.isDown) this.move_up();
+            else if (this._cursors.down.isDown) this.move_down();
+            else this.move_left(); 
+        }
+        else if (this._cursors.right.isDown && this.firstKeyPressed == "Right"){
+            if (this._cursors.up.isDown) this.move_up();
+            else if (this._cursors.down.isDown) this.move_down();
+            else this.move_right(); 
+        }
+        else {
+            this.firstKeyPressed = "None";
+            if (!this.slide || !this.onIce){
+                this.body.velocity.x = 0;
+                this.body.velocity.y = 0;
+                this.animations.stop();
+            }
+        }   
+        
         //Disparo
         if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
             this.fire_bullet(true);
@@ -348,7 +282,64 @@ Player.prototype.update = function(){
     }else if (!this.slide || !this.onIce){
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
+        this.animations.stop();
     }
+}
+
+Player.prototype.move_left = function(){
+    if (this._direction._x !== 0){
+        this.y += this.gapW;
+        this.y = 24 * Math.round(this.y/24) - this.gapW;
+    }
+    this.body.velocity.y = 0;
+    this.body.velocity.x = -this._velocity._x;
+    this._direction._x = -1;
+    this._direction._y = 0;
+    this.animations.play('player1_level' + this.tankLevel + '_left');
+    if (this.onIce)
+    this.resetSlide();
+}
+
+Player.prototype.move_right = function(){
+    if (this._direction._x !== 0){
+        this.y += this.gapW;
+        this.y = 24 * Math.round(this.y/24) - this.gapW;
+    }
+    this.body.velocity.y = 0;
+    this.body.velocity.x = this._velocity._x;
+    this._direction._x = 1;
+    this._direction._y = 0;
+    this.animations.play('player1_level' + this.tankLevel + '_right');
+    if (this.onIce)
+        this.resetSlide();
+}
+
+Player.prototype.move_down = function(){
+    if (this._direction._y !== 0){
+        this.x += this.gapH;
+        this.x = 24 * Math.round(this.x/24) - this.gapH;
+    }
+    this.body.velocity.x = 0;
+    this.body.velocity.y = this._velocity._y;
+    this._direction._x = 0;
+    this._direction._y = 1;
+    this.animations.play('player1_level' + this.tankLevel + '_down');
+    if (this.onIce)
+    this.resetSlide();
+}
+
+Player.prototype.move_up = function(){
+    if (this._direction._y !== 0){
+        this.x += this.gapH;
+        this.x = 24 * Math.round(this.x/24) - this.gapH;
+    }
+    this.body.velocity.x = 0;
+    this.body.velocity.y = -this._velocity._y;
+    this._direction._x = 0;
+    this._direction._y = -1;
+    this.animations.play('player1_level' + this.tankLevel + '_up');
+    if (this.onIce)
+    this.resetSlide();
 }
 
 var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
@@ -406,13 +397,6 @@ var Enemy = function(game, pos, scale, bulletsGroup, bulletN, typeId){
     this._timerbullets = this.game.time.create(true);
     this._game = game;
     this.isfrozen = false;
-    // this.body.onCollide = new Phaser.Signal();
-    // this.body.onCollide.add(function(){
-    //     if (this._velocity._x !== 0 || this._velocity._y !== 0){
-    //         this.stop();
-    //         this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.change_dir, this);
-    //     }
-    // }, this);
     this._timerbullets.loop(this.game.rnd.realInRange(this._bulletTime, this._bulletTime + 100), this.fire_bullet, this);
     this._timerbullets.start();
 }
@@ -431,7 +415,7 @@ Enemy.prototype.update = function(){
             this.body.velocity.x = this._direction._x * this._velocity._x;
             this.body.velocity.y = this._direction._y * this._velocity._y;
         }
-        if (this.frozen){ 
+        if (this.frozen){
             this._changeStarted = false;
             this._changeCalled = false;
             this._timerbullets.loop(this.game.rnd.realInRange(400, 600), this.fire_bullet, this);
@@ -457,10 +441,10 @@ Enemy.prototype.stop = function(){
 Enemy.prototype.change_dir = function(){
     if (this._game.timeOn){
         this._changeCalled = false;
-        
+
         var dirxaux = this._direction._x;
         var diryaux = this._direction._y;
-        
+
         while(dirxaux === this._direction._x && diryaux === this._direction._y){
             var rnd = this.game.rnd.integerInRange(1, 4);
             if(rnd === 1){
