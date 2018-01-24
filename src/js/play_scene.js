@@ -94,7 +94,6 @@ var PlayScene = {
 
     preload: function(){
         _game = this.game;
-        this.load.text('levels', 'levels/levels.json');
         resetScene();
     },
 

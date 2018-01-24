@@ -24,7 +24,7 @@ var MenuScene = {
     },
 
     preload: function(){
-        
+        this.load.text('levels', 'levels/levels.json');
     },
 
     create: function(){
@@ -149,7 +149,7 @@ function createButtons(self){
         }
         else {
             if(selectorN == 0)
-                self.game.state.start('levelAnimation', true, false, 1);
+                self.game.state.start('levelAnimation', true, false, 1, true);
         }
     }, self);
 }
