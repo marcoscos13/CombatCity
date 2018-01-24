@@ -401,6 +401,22 @@
 	"sourceSize": {"w":16,"h":16}
 },
 {
+	"filename": "HUD_mute_1",
+	"frame": {"x":179,"y":32,"w":11,"h":11},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":11,"h":11},
+	"sourceSize": {"w":11,"h":11}
+},
+{
+	"filename": "HUD_mute_2",
+	"frame": {"x":37,"y":182,"w":11,"h":11},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":11,"h":11},
+	"sourceSize": {"w":11,"h":11}
+},
+{
 	"filename": "HUD_selector_1",
 	"frame": {"x":1,"y":87,"w":16,"h":16},
 	"rotated": false,
@@ -791,6 +807,6 @@
 	"format": "RGBA8888",
 	"size": {"w":195,"h":195},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:204c9f012a4a0fcdce915d157aff4d07:ac4dcb671225fd370be55b0e0bba741a:b659fdce4908c1d217ce07db64a905c8$"
+	"smartupdate": "$TexturePacker:SmartUpdate:7507c623e2780daa72b2d7de5422c5f4:4add5eacaf411159ce120d24da6156f5:b659fdce4908c1d217ce07db64a905c8$"
 }
 }

@@ -109,11 +109,11 @@ var PlayScene = {
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
         //Mute Button
-        muteButton = this.game.add.button(68, this.game.world.height - 162, 'sprites_atlas', muteToggle, this, 'HUD_fullscreen_1', 'HUD_fullscreen_1', 'HUD_fullscreen_1');
+        muteButton = this.game.add.button(68, this.game.world.height - 162, 'sprites_atlas', muteToggle, this, 'HUD_mute_1', 'HUD_mute_1', 'HUD_mute_1');
         muteButton.scale.setTo(6,6);
         muteButton.anchor.setTo(0.5,0.5)
         if (this.game.sound.mute)
-            muteButton.setFrames('HUD_fullscreen_2','HUD_fullscreen_2','HUD_fullscreen_2');
+            muteButton.setFrames('HUD_mute_2','HUD_mute_2','HUD_mute_2');
 
         //Físicas
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -862,9 +862,9 @@ function updateFullscreenIcon(_game){
 function muteToggle() {
     if (!this.game.sound.mute) {
         this.game.sound.mute = true;
-        muteButton.setFrames('HUD_fullscreen_2','HUD_fullscreen_2','HUD_fullscreen_2');
+        muteButton.setFrames('HUD_mute_2','HUD_mute_2','HUD_mute_2');
     } else {
         this.game.sound.mute = false;
-        muteButton.setFrames('HUD_fullscreen_1','HUD_fullscreen_1','HUD_fullscreen_1');
+        muteButton.setFrames('HUD_mute_1','HUD_mute_1','HUD_mute_1');
     }
 }
