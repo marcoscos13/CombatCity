@@ -419,6 +419,7 @@ var PlayScene = {
             else
                 gameoverSprite.body.velocity.y = 0;
         }
+        updateFullscreenIcon(this.game);
     },
 
     // render: function(){
@@ -442,17 +443,6 @@ var PlayScene = {
 };
 
 module.exports = PlayScene;
-
-function fullscreenToggle(){
-    if (this.game.scale.isFullScreen)
-    {
-        this.game.scale.stopFullScreen();
-    }
-    else
-    {
-        this.game.scale.startFullScreen(false);
-    }
-}
 
 function setBlockGroup(bGroup, bBool){
     if (bBool){
@@ -837,4 +827,22 @@ function spawnPowerup(game){
     powerup.animations.add('blink', [id, 'empty'], 4, true);
     powerup.animations.play('blink');
     powerupsGroup.add(powerup);
+}
+
+function fullscreenToggle(){
+    if (this.game.scale.isFullScreen) {
+        this.game.scale.stopFullScreen();
+    }
+    else{
+        this.game.scale.startFullScreen(false);
+    }
+}
+
+function updateFullscreenIcon(_game){
+    if (_game.scale.isFullScreen && fullscreenButton.frameName == 'HUD_fullscreen_1') {
+        fullscreenButton.setFrames('HUD_fullscreen_2','HUD_fullscreen_2','HUD_fullscreen_2');
+    }
+    else if (!_game.scale.isFullScreen && fullscreenButton.frameName == 'HUD_fullscreen_2'){
+        fullscreenButton.setFrames('HUD_fullscreen_1','HUD_fullscreen_1','HUD_fullscreen_1');
+    }
 }

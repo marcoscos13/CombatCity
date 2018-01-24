@@ -79,7 +79,6 @@ var MenuScene = {
     },
     
     update: function(){
-        updateFullscreenIcon(this.game);
         if (menuAnimacion){
             if(menuLogo.y >= this.game.height/2 - this.game.height/5){
                 menuLogo.y -= menuVelocity;
@@ -93,6 +92,7 @@ var MenuScene = {
         }
 
        selector.y = buttonsArray[selectorN].y - 6;
+       updateFullscreenIcon(this.game);
     },
 
     render: function(){
@@ -147,19 +147,17 @@ function createButtons(self){
 function fullscreenToggle(){
     if (this.game.scale.isFullScreen) {
         this.game.scale.stopFullScreen();
-        fullscreenButton.setFrames('HUD_fullscreen_1','HUD_fullscreen_1','HUD_fullscreen_1');
     }
     else{
         this.game.scale.startFullScreen(false);
-        fullscreenButton.setFrames('HUD_fullscreen_2','HUD_fullscreen_2','HUD_fullscreen_2');
     }
 }
 
 function updateFullscreenIcon(_game){
-    if (_game.scale.isFullScreen) {
+    if (_game.scale.isFullScreen && fullscreenButton.frameName == 'HUD_fullscreen_1') {
         fullscreenButton.setFrames('HUD_fullscreen_2','HUD_fullscreen_2','HUD_fullscreen_2');
     }
-    else {
+    else if (!_game.scale.isFullScreen && fullscreenButton.frameName == 'HUD_fullscreen_2'){
         fullscreenButton.setFrames('HUD_fullscreen_1','HUD_fullscreen_1','HUD_fullscreen_1');
     }
 }
