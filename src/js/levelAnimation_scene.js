@@ -61,7 +61,8 @@ var LevelAnimationScene = {
     },
     
     update: function(){
-        levelText.text = "◄ LEVEL " + currentLevel + " ►";
+        if (chooseLevel)
+            levelText.text = "◄ LEVEL " + currentLevel + " ►";
     },
 
     render: function(){
