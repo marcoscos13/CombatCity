@@ -1,7 +1,7 @@
 # Combat City
 Game Design Document
 
-### **Half Try Studios_**
+## **Half Try Studios_**
 Marcos García García	 marcos13@ucm.es <br>
 Kelvin Comper Dias		kelvinco@ucm.es
 
@@ -13,10 +13,10 @@ El gameplay consiste en proteger un fuerte de una oleada de enemigos de diferent
 Tiene un número de niveles finito, si te pasas el último nivel volverás al primero pero conservando tus vidas y mejoras del tanque, como en el juego original.
 
 ### **Controles**
-Enter para interactuar en los menús.
-Flechas de dirección para moverte.
-Espacio para disparar.
+_Enter_ para interactuar en los menús.<br>
+_Flechas_ de dirección para moverte.<br>
+_Espacio_ para disparar.
 
 ### **¿Por qué jugar?**
-Battle City es un clásico de la Snes. Si has jugado al original, podrás revivir aquella experiencia con Combat City, pues es un videojuego muy similar. Si no, la diversión está igualmente asegurada con este juego arcade que requiere reflejos, habilidad y, sobre todo, las ganas de destruir unos tanques sin tener que pensar en mucho más. 
+Battle City es un clásico de la Snes. Si has jugado al original, podrás revivir aquella experiencia con Combat City, pues es un videojuego muy similar. Si no, la diversión está igualmente asegurada con este juego arcade que requiere reflejos, habilidad y, sobre todo, las ganas de destruir unos tanques sin tener que pensar en mucho más.<br>
 Sin duda, Combat City revive el espíritu arcade de los videojuegos de los 80 y permite al jugador pasar un buen rato y divertirse como se hubiese divertido un niño estrenando Battle City en su Super Nintendo.
