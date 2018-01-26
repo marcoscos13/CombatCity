@@ -771,10 +771,6 @@ var PlayScene = {
             }
         }
 
-        if (this.game.input.keyboard.isDown(Phaser.Keyboard.L)){
-            nextLevel();
-        }
-
         enemyGroup.forEach(function (e) { e.body.moves = false; });
         
         this.game.physics.arcade.collide(player, enemyGroup);
